@@ -1,0 +1,94 @@
+body {
+	min-height: 95%;
+	background: black;
+	font-family: Courier New, Courier, monospace;
+	color: #ADADAD;
+}
+
+#username {
+	background-color: #151515;
+	color: #ADADAD;
+}
+
+#password {
+	background: #151515;
+	color: #ADADAD;
+}
+
+.center {
+	text-align: center;
+}
+
+#login {
+	margin:       0;
+	margin-left:  40%;
+	margin-right: 40%;
+	margin-top:   50px;
+	padding-top:  10px;
+	width:        20%;
+	height:       150px;
+	position:     absolute;
+	z-index:      9;
+	font-family:  arial;
+}
+
+#rememberText {
+	font-size: 11px;
+}
+
+.remember {
+	width:20%;
+	float:center;
+}
+
+#loginButton {
+	width: 100%;
+	background-color: #4E4E4E;
+	color: #ccc;
+}
+
+input {
+	background: black;
+	color: #ADADAD;
+	width: 100%;
+	border: 0;
+	font-family: monospace;
+}
+
+.ui-widget.ui-widget-content {
+	border-color: #000 !important
+}
+
+.console {
+	margin-top: 20px;
+	margin-left: -30px;
+	font-family: "lucida console", monospace;
+	font-size: 14;
+	height: 86%;
+}
+
+#tabButtons {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	left: 0px;
+	padding: 0 0 0 !important;
+	background-color: #23272A;
+    border-color: #4C5058;
+}
+
+.ui-state-hover {
+	background-color: #595A61 !important;
+}
+.ui-state-default:not(.ui-state-hover):not(.ui-state-active) {
+	background-color: #43444B !important;
+}
+.ui-tab {
+	border-color: #4C5058 !important;
+}
+.ui-tab a {
+	color: #E6E6E6 !important;
+}
+.ui-state-active {
+	background-color: #64656C !important;
+}

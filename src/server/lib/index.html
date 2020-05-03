@@ -1,0 +1,667 @@
+
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="ansi_up.js" type="text/javascript"></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<title>Console</title>
+		<style>
+			#username {
+				background-color: #151515;
+				color: #ADADAD;
+			}
+
+			#password {
+				background: #151515;
+				color: #ADADAD;
+			}
+
+			#login {
+				margin:       0;
+				margin-left:  40%;
+				margin-right: 40%;
+				margin-top:   50px;
+				padding-top:  10px;
+				width:        20%;
+				height:       150px;
+				position:     absolute;
+				z-index:      9;
+				font-family:  arial;
+			}
+
+			input {
+				background: black;
+				color: #ADADAD;
+				width: 100%;
+				border: 0;
+				font-family: monospace;
+			}
+
+			.ui-widget.ui-widget-content {
+				border-color: #000 !important
+			}
+
+			#tabButtons {
+				position: fixed;
+				top: 0px;
+			}
+
+			.console {
+				margin-top: 20px;
+				margin-left: -30px;
+				font-family: "lucida console", monospace;
+				font-size: 14;
+				height: 86%;
+			}
+
+			#tabButtons {
+				width: 100%;
+				left: 0px;
+				padding: 0 0 0 !important;
+			}
+		</style>
+	</head>
+	<body style="min-height: 95%; background: black; font-family: Courier New, Courier, monospace; color: #ADADAD;">
+		<div id="login" style="visibility: visible"> 
+			<center>Username:</center>
+			<center><input name="username" id="username" size="14" /></center>
+			<center>Password:</center>
+			<center><input name="password" type="password" id="password" size="14" /></center>
+		</div>
+		<div id="tabs" style="background: black;">
+			<ul id="tabButtons">
+			</ul>
+			<div id="tabBodies">
+			</div>
+		</div>
+	</body>
+	<script>
+		var webSocket;
+
+		var commands = {};
+
+		var codes = [
+			{ // Black
+				'css'  : 'color: Black;',
+				'code' : '\u001b[0;30;22m'
+
+			}, { // Dark Blue
+				'css'  : 'color: DarkBlue;',
+				'code' : '\u001b[0;34;22m'
+
+			}, { // Dark Green
+				'css'  : 'color: DarkGreen;',
+				'code' : '\u001b[0;32;22m'
+
+			}, { // Dark Aqua
+				'css'  : 'color: DarkCyan;',
+				'code' : '\u001b[0;36;22m'
+
+			}, { // Dark Red
+				'css'  : 'color: #800000;',
+				'code' : '\u001b[0;31;22m'
+
+			}, { // Dark Purple
+				'css'  : 'color: DarkMagenta;',
+				'code' : '\u001b[0;35;22m'
+
+			}, { // Orange
+				'css'  : 'color: #808000;',
+				'code' : '\u001b[0;33;22m'
+
+			}, { // Gray
+				'css'  : 'color: #ADADAD;',
+				'code' : '\u001b[0;37;22m'
+
+			}, { // Dark Gray
+				'css'  : 'color: #737373;',
+				'code' : '\u001b[0;30;1m'
+
+			}, { // Blue
+				'css'  : 'color: Blue;',
+				'code' : '\u001b[0;34;1m'
+
+			}, { // Green
+				'css'  : 'color: Green;',
+				'code' : '\u001b[0;32;1m'
+
+			}, { // Aqua
+				'css'  : 'color: Cyan;',
+				'code' : '\u001b[0;36;1m'
+
+			}, { // Red
+				'css'  : 'color: #FF0000;',
+				'code' : '\u001b[0;31;1m'
+
+			}, { // Purple
+				'css'  : 'color: Fuchsia;',
+				'code' : '\u001b[0;35;1m'
+
+			}, { // Yellow
+				'css'  : 'color: Yellow;',
+				'code' : '\u001b[0;33;1m'
+
+			}, { // White
+				'css'  : 'color: White;',
+				'code' : '\u001b[0;37;1m'
+
+
+			}, { // Bold
+				'css'  : 'font-weight: bold;',
+				'code' : '\u001b[1m'
+
+			}, { // Strikethrough
+				'css'  : 'text-decoration: line-through;',
+				'code' : '\u001b[9m'
+
+			}, { // Underline
+				'css'  : 'text-decoration: underline;',
+				'code' : '\u001b[4m'
+
+			}, { // Italic
+				'css'  : 'font-style: italic;',
+				'code' : '\u001b[3m'
+
+			}, { // Reset
+				'css'  : 'display: inline-block; font-weight: normal; color: #ADADAD; font-style: normal;',
+				'code' : '\u001b[m'
+			}
+		];
+
+		var UI = {};
+
+		UI.index = 0;
+
+		UI.tabs = {};
+
+		UI.getTabs = function () {
+
+			return this.tabs;
+		};
+
+		UI.getTabCount = function () {
+
+			return Object.keys( this.tabs ).length;
+		};
+
+		UI.addTab = function ( name ) {
+
+			if ( !UI.tabs[ name ] ) {
+				console.log( 'Creating new Tab: ' + name );
+
+				var tabs = $( '#tabs' ).tabs();
+
+				UI.index++;
+
+				var li = document.createElement( 'li' );
+				var a  = document.createElement( 'a' );
+
+				a.href        = '#tabs-' + ( UI.index );
+				a.textContent = name;
+				li.setAttribute( 'serverName', name );
+
+				li.appendChild( a );
+
+				document.getElementById( 'tabButtons' ).appendChild( li );
+
+				var div   = document.createElement( 'div' );
+				var div2  = document.createElement( 'div' );
+				var form  = document.createElement( 'form' );
+				var input = document.createElement( 'input' );
+
+				div.id   = 'tabs-' + UI.index;
+				div2.id  = 'console-' + name;
+				form.id  = 'inputForm-' + UI.index;
+				input.id = 'input-' + UI.index;
+
+				if ( !commands[ name ] ) {
+					commands[ name ] = {
+						'current' : 0
+					};
+				}
+
+				div2.classList.add( 'console' );
+
+				input.addEventListener( 'keydown', function ( event ) {
+
+					// Up
+					if ( event.keyCode == 38 ) {
+						event.preventDefault();
+
+						var newIndex = commands[ name ].current - 1;
+
+						if ( newIndex > -1 ) {
+							commands[ name ].current = newIndex;
+
+							var newValue = commands[ name ][ newIndex ];
+
+							if ( newValue ) {
+								input.value = newValue;
+							}
+						}
+
+					// Down
+					} else if ( event.keyCode == 40 ) {
+						event.preventDefault();
+
+						var newIndex = commands[ name ].current + 1;
+
+						if ( newIndex < Object.keys( commands[ name ] ).length - 1 ) {
+							commands[ name ].current = newIndex;
+
+							var newValue = commands[ name ][ newIndex ];
+
+							if ( newValue ) {
+								input.value = newValue;
+							}
+
+						} else {
+							input.value = '';
+
+							commands[ name ].current = Object.keys( commands[ name ] ).length - 1;
+						}
+					}
+				} );
+
+				div2.addEventListener( 'mouseup', function () {
+
+					var getSelectionText = function () {
+
+						var text = '';
+
+						if ( window.getSelection ) {
+							text = window.getSelection().toString();
+
+						} else if ( document.selection
+						&&   document.selection.type != 'Control' ) {
+
+							text = document.selection.createRange().text;
+						}
+
+						return text;
+					};
+
+					if ( !getSelectionText() ) {
+						input.select();
+					}
+				} );
+
+				li.addEventListener( 'click', function () {
+
+					window.scrollTo( window.pageXOffset, document.body.scrollHeight );
+
+					webSocket.send( JSON.stringify( {
+						'clientType' : 'user',
+						'action'     : 'serverSelect',
+						'data'       : name
+					} ) );
+				} );
+
+				input.addEventListener( 'focus', function () {
+
+					webSocket.send( JSON.stringify( {
+						'clientType' : 'user',
+						'action'     : 'serverSelect',
+						'data'       : name
+					} ) );
+				} );
+
+				form.addEventListener( 'submit', function ( element, event ) {
+
+					event.preventDefault();
+
+					var command = element.value;
+					var size    = Object.keys( commands[ name ] ).length - 1;
+
+					commands[ name ][ size ] = command;
+					commands[ name ].current = size + 1;
+
+					element.value	= '';
+
+					if ( command !== '' ) {
+						webSocket.send( JSON.stringify( {
+							'clientType' : 'user',
+							'action'     : 'serverCommand',
+							'data'       : command
+						} ) );
+					}
+				}.bind( null, input ) );
+
+				var autofocus    = document.createAttribute( 'autofocus' );
+				var autocomplete = document.createAttribute( 'autocomplete' );
+				var lpIgnore     = document.createAttribute( 'data-lpignore' );
+
+				lpIgnore.value = true;
+
+				autocomplete.value = 'off';
+
+				input.setAttributeNode( lpIgnore );
+				input.setAttributeNode( autofocus );
+				input.setAttributeNode( autocomplete );
+
+				input.style.position = 'fixed';
+				input.style.left     = 4;
+				input.style.bottom   = 1;
+				input.style.background = '#151515';
+
+				form.style.color    = 'ADADAD';
+				form.style.position = 'fixed';
+				form.style.bottom   = 0;
+
+				form.appendChild( input );
+
+				div.appendChild( div2 );
+				div.appendChild( form );
+				document.getElementById( 'tabBodies' ).appendChild( div );
+
+				li.addEventListener( 'click', function () {
+
+					input.select();
+				} );
+
+				UI.tabs[ name ] = {
+					'button' : li,
+					'body'   : div,
+					'lines'  : []
+				};
+
+				tabs.tabs( 'refresh' );
+
+				tabs.find( '.ui-tabs-nav' ).sortable( {
+					'axis' : 'x',
+					'stop' : function () {
+
+						tabs.tabs( 'refresh' );
+					}
+				} );
+
+				if ( name === 'Console' ) {
+					$( '#tabs' ).tabs( 'option', 'active', 0 );
+					input.select();
+				}
+			}
+
+			var selectedTab = $( '.ui-state-active' )[ 0 ];
+
+			if ( selectedTab ) {
+				webSocket.send( JSON.stringify( {
+					'clientType' : 'user',
+					'action'     : 'serverSelect',
+					'data'       : selectedTab.getAttribute( 'serverName' )
+				} ) );
+			}
+		};
+
+		UI.removeTab = function (name) {
+
+			if (this.tabs[name]) {
+				console.log('Removing tab: ' + name)
+
+				this.tabs[name].button.remove()
+				this.tabs[name].body.remove()
+
+				delete this.tabs[name]
+			}
+
+			var checkForSelectedTab = $('.ui-state-active')[0]
+
+			try {
+				if (checkForSelectedTab) {
+					var selectedTab = checkForSelectedTab.getAttribute('serverName')
+
+					if (selectedTab) {
+						webSocket.send(JSON.stringify({
+							'clientType' : 'user',
+							'action'     : 'serverSelect',
+							'data'       : selectedTab.getAttribute('serverName')
+						}))
+					}
+				}
+			} catch (exception) {}
+		}
+
+		var listener = function (event) {
+
+			if ( !event ) {
+				event = window.event;
+			}
+
+			var keyCode = event.keyCode || event.which;
+
+			if ( keyCode == '13' ) {
+				var username = document.getElementById( 'username' ).value;
+				var password = document.getElementById( 'password' ).value;
+
+				document.getElementById( 'password' ).value = '';
+
+				document.getElementById( 'login' ).style.visibility = 'hidden';
+				document.getElementById( 'username' ).style.visibility = 'hidden';
+				document.getElementById( 'password' ).style.visibility = 'hidden';
+
+				var tabs = $( '#tabs' ).tabs();
+
+				tabs.find( '.ui-tabs-nav' ).sortable({
+					'axis' : 'x',
+					'stop' : function () {
+
+						tabs.tabs( 'refresh' );
+					}
+				} );
+
+				// Create WebSocket connection.
+				webSocket = new WebSocket( 'wss://' + window.location.hostname + ':9000' );
+
+				// Connection opened
+				webSocket.addEventListener( 'open', function ( event ) {
+
+					
+				} );
+
+				// Listen for messages
+				webSocket.addEventListener( 'message', function ( rawData ) {
+
+					var data = {};
+
+					try {
+						data = JSON.parse( rawData.data );
+
+					} catch ( error ) {
+						console.error( 'Invalid JSON recieved: ' + rawData.data );
+					}
+
+					switch ( data.action ) {
+						case 'ready' : {
+
+			
+							webSocket.send( JSON.stringify( {
+								'clientType' : 'user',
+								'action'     : 'login',
+								'username'   : username,
+								'password'   : password
+							} ) );
+
+							break;
+						}
+
+						case 'serverConnect' : {
+							UI.addTab( data.serverName );
+
+							break;
+						}
+
+						case 'serverDisconnect' : {
+							UI.removeTab( data.serverName );
+
+							break;
+						}
+
+						case 'resetData' : {
+							var targetConsole = document.getElementById( 'console-' + data.server );
+
+							while ( targetConsole.firstChild ) {
+								targetConsole.removeChild( targetConsole.firstChild );
+							}
+						}
+
+						case 'data' : {
+
+							var getDocHeight = function () {
+
+								return Math.max(
+									document.body.scrollHeight, document.documentElement.scrollHeight,
+									document.body.offsetHeight, document.documentElement.offsetHeight,
+									document.body.clientHeight, document.documentElement.clientHeight
+								);
+							};
+
+							var scroll = false;
+							var height = window.innerHeight
+								||  html.clientHeight
+								||  body.clientHeight
+								||  screen.availHeight;
+
+							var position = window.pageYOffset + height;
+
+							if ( getDocHeight() - position < 20 ) {
+								var scroll = true;
+							}
+
+							var targetConsole = document.getElementById( 'console-' + data.server );
+							var children      = targetConsole.children;
+							var consoleY      = Math.round( targetConsole.getBoundingClientRect().y );
+							
+							if ( children.length > 0 ) {
+								var lastChildY = Math.round( children[ children.length - 1 ].getBoundingClientRect().y );
+
+								if ( consoleY === lastChildY ) {
+									scroll = true;
+								}
+							}
+
+							var buffer = document.getElementById( 'buffer-' + data.server );
+
+							if ( buffer ) {
+								buffer.remove()
+							}
+
+							for ( var i in data.data ) {
+								var whole = data.data[ i ];
+								var div = document.createElement( 'div' );
+
+								var htmlLines = [];
+								var lines = whole.split( '\r\n' );
+
+								for ( var i in lines ) {
+									var line = lines[ i ];
+
+									var htmlLine = line.replace( />/g, '&gt;' )
+										.replace( /</g, '&lt;' )
+										.replace( / /g, '&#160;' )
+										.replace( /\r\n/g, '<br>' )
+										.replace( /\n/g, '<br>' );
+
+									var added = false
+									for (var j in codes) {
+										var code       = codes[j]
+										var splitLine  = htmlLine.split(code.code)
+										var lineString = ''
+
+										if (added) {
+											lineString = '</span>'
+										}
+
+										if (splitLine.length) {
+											lineString += '<span style="' + code.css + '">'
+
+											added    = true
+											htmlLine = splitLine.join(lineString) + '</span>'
+										}
+									}
+
+									htmlLines.push(htmlLine + '\n')
+
+									lines[i] = line;
+								}
+
+								div.style.color = '#ADADAD'
+								div.innerHTML   = ansi_up.ansi_to_html(htmlLines.join('<br>\n'))
+
+								targetConsole.appendChild(div)
+								UI.tabs[data.server].lines.push(div)
+							}
+
+							var buffer = document.createElement('div')
+
+							buffer.id = 'buffer-' + data.server;
+							buffer.style.color  = '000000';
+							buffer.style.height = '25px';
+
+							var br = document.createElement( 'br' );
+
+							buffer.appendChild( br );
+
+							targetConsole.appendChild( buffer );
+
+							UI.tabs[ data.server ].lines.push( br );
+							UI.tabs[ data.server ].lines.push( buffer );
+
+							while ( UI.tabs[ data.server ].lines.length > 1000 ) {
+								UI.tabs[ data.server ].lines[ 0 ].remove();
+								UI.tabs[ data.server ].lines.shift();
+							}
+
+							var selectedTab = $( '.ui-state-active' )[ 0 ].getAttribute( 'serverName' )
+
+							if (scroll
+							&&  data.server === selectedTab) {
+								window.scrollTo( window.pageXOffset, document.body.scrollHeight );
+							}
+						}
+					}
+				} );
+
+				webSocket.addEventListener( 'close', function () {
+
+					commands = {};
+
+					var tabs = UI.getTabs();
+
+					for ( var i in tabs ) {
+						UI.removeTab( i );
+					}
+
+					document.getElementById( 'login' ).style.visibility    = 'visible';
+					document.getElementById( 'username' ).style.visibility = 'visible';
+					document.getElementById( 'password' ).style.visibility = 'visible';
+					document.getElementById( 'password' ).select();
+				} );
+			}
+		};
+
+		document.addEventListener( 'click', function ( event ) {
+
+			if ( document.getElementById( 'login' ).style.visibility === 'visible'
+			&&   document.activeElement !== document.getElementById( 'username' )
+			&&   document.activeElement !== document.getElementById( 'password' ) ) {
+
+				if ( document.getElementById( 'username' ).value ) {
+					document.getElementById( 'password' ).select();
+
+				} else {
+					document.getElementById( 'username' ).select();
+				}
+			}
+		} );
+
+		document.getElementById( 'username' ).addEventListener( 'keypress', listener );
+		document.getElementById( 'password' ).addEventListener( 'keypress', listener );
+
+		if ( document.getElementById( 'username' ).value ) {
+			document.getElementById( 'password' ).select();
+
+		} else {
+			document.getElementById( 'username' ).select();
+		}
+	</script>
+</html>

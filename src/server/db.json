@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "test",
+      "hash": "$2a$10$6wM6/EGm5CPt20.FlHvBSuYdDEcygL7dgU9MYR0autj8RMkI8qGPa",
+      "permissions": {
+        "console.view.test": true
+      },
+      "roles": []
+    }
+  ],
+  "servers": [],
+  "roles": {}
+}
