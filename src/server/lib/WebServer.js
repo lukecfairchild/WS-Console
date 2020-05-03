@@ -14,23 +14,23 @@ class WebServer {
 			const files    = {
 				'' : {
 					type : 'text/html',
-					path : './html/index.html'
+					path : Path.join(__dirname, '../html/index.html')
 				},
 				'index.css' : {
 					type : 'text/css',
-					path : './html/index.css'
+					path : Path.join(__dirname, '../html/index.css')
 				},
 				'index.js' : {
 					type : 'application/javascript',
-					path : './html/index.js'
+					path : Path.join(__dirname, '../html/index.js')
 				},
 				'require.js' : {
 					type : 'application/javascript',
-					path : './html/require.js'
+					path : Path.join(__dirname, '../html/require.js')
 				},
 				'ansi_up.js' : {
 					type : 'application/javascript',
-					path : './html/ansi_up.js'
+					path : Path.join(__dirname, '../html/ansi_up.js')
 				}
 			};
 

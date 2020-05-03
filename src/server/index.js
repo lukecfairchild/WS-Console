@@ -13,12 +13,3 @@ class  WSConsoleServer {
 }
 
 module.exports = WSConsoleServer;
-
-new WSConsoleServer({
-	webSocketPort : 9000,
-	webServerPort : 8081,
-	cacheSize     : 300,
-	ssl           : false,
-	sslKey        : '/path/to/key',
-	sslCert       : '/path/to/cert'
-});
