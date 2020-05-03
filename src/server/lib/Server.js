@@ -83,6 +83,13 @@ class Server {
 
 			this.options.webSocketServer.addServer(this);
 
+			this.webSocket.send(JSON.stringify({
+				action : 'settingsSync',
+				data   : {
+					cacheSize : this.options.cacheSize
+				}
+			}));
+
 			const users = this.options.webSocketServer.getUsers();
 
 			for (const i in users) {

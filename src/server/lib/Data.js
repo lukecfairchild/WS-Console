@@ -2,12 +2,13 @@
 
 const bcrypt   = require('bcryptjs');
 const FileSync = require('lowdb/adapters/FileSync');
-const lowDB    = require('lowdb');
+const LowDB    = require('lowdb');
+const Path     = require('path');
 const Utils    = require('./Utils');
 
 class Data {
 	constructor () {
-		this.database = lowDB(new FileSync('db.json'));
+		this.database = LowDB(new FileSync(Path.join(__dirname, '../db.json')));
 
 		this.database.defaults({
 			users   : [],
