@@ -1,10 +1,13 @@
 'use strict';
 
-const Data      = require('./Data');
-const Server    = require('./Server');
-const User      = require('./User');
-const Utils     = require('./Utils');
-const WebSocket = require('ws');
+const Data       = require('./Database');
+const FileSystem = require('http');
+const HTTP       = require('http');
+const HTTPS      = require('https');
+const Server     = require('./Server');
+const User       = require('./User');
+const Utils      = require('./Utils');
+const WebSocket  = require('ws');
 
 class WebSocketServer {
 	constructor (options) {
@@ -15,8 +18,18 @@ class WebSocketServer {
 		this.servers = {};
 		this.users   = {};
 
+		if (this.options.ssl) {
+			this.webServer = HTTPS.createServer({
+				cert : FileSystem.readFileSync(this.options.sslCert),
+				key  : FileSystem.readFileSync(this.options.sslKey)
+			});
+
+		} else {
+			this.webServer = HTTP.createServer();
+		}
+
 		this.webSocketServer = new WebSocket.Server({
-			port : this.options.webSocketPort
+			server : this.webServer
 		});
 
 		this.webSocketServer.on('listening', () => {
@@ -42,6 +55,15 @@ class WebSocketServer {
 		this.webSocketServer.on('connection', (webSocket) => {
 			this.webSocketListener(webSocket);
 		});
+
+	}
+
+	start () {
+		this.webServer.listen(this.options.webSocketPort);
+	}
+
+	stop () {
+		this.webServer.close();
 	}
 
 	webSocketListener (webSocket) {

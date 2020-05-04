@@ -2,6 +2,7 @@
 
 const FileSystem = require('fs');
 const HTTP       = require('http');
+const HTTPS      = require('https');
 const Path       = require('path');
 const Url        = require('url');
 
@@ -9,7 +10,17 @@ class WebServer {
 	constructor (options) {
 		this.options = options;
 
-		this.WebServer = HTTP.createServer((request, response) => {
+		if (this.options.ssl) {
+			this.webServer = HTTPS.createServer({
+				cert : FileSystem.readFileSync(this.options.sslCert),
+				key  : FileSystem.readFileSync(this.options.sslKey)
+			});
+
+		} else {
+			this.webServer = HTTP.createServer();
+		}
+
+		this.webServer.on('request', (request, response) => {
 			const filename = Path.basename(Url.parse(request.url).pathname);
 			const files    = {
 				'' : {
@@ -52,17 +63,23 @@ class WebServer {
 			response.end(responseBody);
 		});
 
-		this.WebServer.on('clientError', (error, socket) => {
+		this.webServer.on('clientError', (error, socket) => {
 			socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 		});
+	}
 
-		this.WebServer.listen(this.options.webServerPort, (error) => {
+	start () {
+		this.webServer.listen(this.options.webServerPort, (error) => {
 			if (error) {
 				return console.error(error);
 			}
 
 			console.log('WebServer listening on port: ' + this.options.webServerPort);
 		});
+	}
+
+	stop () {
+		this.webServer.close();
 	}
 }
 
