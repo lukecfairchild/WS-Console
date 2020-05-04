@@ -1,8 +1,8 @@
 'use strict';
 
-const bcrypt = require('bcryptjs');
-const Data   = require('./Data');
-const Utils  = require('./Utils');
+const bcrypt   = require('bcryptjs');
+const Database = require('./Database');
+const Utils    = require('./Utils');
 
 class User {
 	constructor (options) {
@@ -79,7 +79,7 @@ class User {
 	}
 
 	authenticate (data) {
-		const user = Data.getUser(data.username);
+		const user = Database.getUser(data.username);
 
 		if (user
 		&&  data.username !== undefined
@@ -102,8 +102,8 @@ class User {
 						const server = servers[i];
 
 						if (server.getName() === 'Console'
-						||  Data.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
-						||  Data.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
+						||  Database.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
+						||  Database.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
 
 							this.getWebSocket().send(JSON.stringify({
 								action     : 'serverConnect',
@@ -159,8 +159,8 @@ class User {
 			const server = servers[i];
 
 			if (server.getName() === 'Console'
-			||   Data.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
-			||   Data.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
+			||  Database.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
+			||  Database.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
 
 				this.getWebSocket().send(JSON.stringify({
 					action     : 'serverConnect',

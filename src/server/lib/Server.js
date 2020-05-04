@@ -1,7 +1,7 @@
 'use strict';
 
-const Cache = require('./Cache');
-const Data  = require('./Data');
+const Cache    = require('./Cache');
+const Database = require('./Database');
 
 class Server {
 	constructor (options) {
@@ -62,7 +62,7 @@ class Server {
 	}
 
 	authenticate (data) {
-		const server = Data.getServer(data.name);
+		const server = Database.getServer(data.name);
 
 		if (server
 		&&  data.name !== undefined

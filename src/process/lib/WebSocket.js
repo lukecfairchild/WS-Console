@@ -17,9 +17,13 @@ class WebSocket {
 	connect (callback = () => {}) {
 		this.webSocket = new WS(this.path);
 
-		this.webSocket.on('close', this.terminate);
+		this.webSocket.on('close', () => {
+			this.terminate();
+		});
 		this.webSocket.on('error', () => {}); // Die Silently
-		this.webSocket.on('connection', callback);
+		this.webSocket.on('connection', () => {
+			callback();
+		});
 
 		for (const i in this.events) {
 			for (const j in this.events[i]) {
@@ -55,16 +59,20 @@ class WebSocket {
 	}
 
 	terminate () {
-		this.webSocket.terminate();
-		this.webSocket.removeAllListeners();
-		this.webSocket.close();
-		this.webSocket = undefined;
+		if (this.webSocket) {
+			this.webSocket.terminate();
+			this.webSocket.removeAllListeners();
+			this.webSocket.close();
+			this.webSocket = undefined;
+		}
 
 		this.reconnect();
 	}
 
 	reconnect () {
-		setTimeout(this.connect, this.options.reconnectDelay);
+		setTimeout(() => {
+			this.connect();
+		}, this.options.reconnectDelay);
 	}
 
 	status () {

@@ -3,14 +3,16 @@
 const Path      = require('path');
 const WSConsole = require('../src');
 
-new WSConsole.server({
+const server = new WSConsole.server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
 	cacheSize     : 300,
-	ssl           : false,
-	sslKey        : '/path/to/key',
-	sslCert       : '/path/to/cert'
+//	ssl           : false,
+//	sslKey        : '/path/to/key',
+//	sslCert       : '/path/to/cert'
 });
+
+server.start();
 
 new WSConsole.process({
 	path          : 'ws:localhost:9000',

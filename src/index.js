@@ -1,3 +1,3 @@
 
-module.exports.server  = require('./server');
+module.exports.server  = require('./server/WSServer');
 module.exports.process = require('./process');
