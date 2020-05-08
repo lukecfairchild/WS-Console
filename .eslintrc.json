@@ -9,13 +9,9 @@
 	"globals" : {
 		"process" : "readonly"
 	},
-	"plugins": [
-		"align-assignments"
-	],
-	"extends"       : [
-		"eslint:recommended"
-	],
-	"parser": "babel-eslint",
+	"plugins" : ["align-assignments"],
+	"extends" : ["eslint:recommended"],
+	"parser"  : "babel-eslint",
 	"parserOptions" : {
 		"ecmaFeatures" : {
 			"jsx" : true
@@ -24,51 +20,35 @@
 		"sourceType"  : "module"
 	},
 	"rules" : {
-		"no-useless-escape" : "off",
-		"no-console"        : "off",
-		"indent"            : ["error", "tab", {
-			"SwitchCase"       : 1,
-			"MemberExpression" : 0
-		}],
-		"linebreak-style"   : ["error", "unix"],
-		"quotes"            : ["error", "single"],
-		"key-spacing"       : ["error", {
-			"singleLine" : {
-				"beforeColon" : true,
-				"afterColon"  : true
-			},
-			"multiLine" : {
-				"beforeColon" : true,
-				"afterColon"  : true
-			},
-			"align" : {
-				"beforeColon" : true,
-				"afterColon"  : true,
-				"on"          : "colon"
-			}
-		}],
-		"keyword-spacing": ["error", {
-			"before" : true,
-			"after"  : true
-		}],
-		"one-var-declaration-per-line" : ["error", "always"],
-		"one-var"                      : ["error", "never"],
-		"space-before-function-paren"  : ["error", "always"],
-		"comma-dangle"                 : ["error", "never"],
-		"align-assignments/align-assignments": ["error", {
-			"requiresOnly" : false
-		}],
-		"semi"                      : ["error", "always"],
-		"curly"                     : "error",
-		"brace-style"               : "error",
-		"no-case-declarations"      : "off",
-		"no-empty"                  : "off",
-		"no-fallthrough"            : "off",
-		"quote-props"               : ["error", "as-needed"],
-		"space-in-parens"           : ["error", "never"],
-		"object-curly-spacing"      : ["error", "never"],
-		"array-bracket-spacing"     : ["error", "never"],
-		"computed-property-spacing" : ["error", "never"],
-		"no-var"                    : "error"
+		"no-useless-escape"                   : "off",
+		"no-console"                          : "off",
+		"indent"                              : ["error", "tab", {"SwitchCase" : 1, "MemberExpression" : 0}],
+		"linebreak-style"                     : ["error", "unix"],
+		"quotes"                              : ["error", "single"],
+		"keyword-spacing"                     : ["error", {"before" : true, "after" : true}],
+		"one-var-declaration-per-line"        : ["error", "always"],
+		"one-var"                             : ["error", "never"],
+		"space-before-function-paren"         : ["error", "always"],
+		"comma-dangle"                        : ["error", "never"],
+		"align-assignments/align-assignments" : ["error", {"requiresOnly" : false}],
+		"semi"                                : ["error", "always"],
+		"curly"                               : "error",
+		"brace-style"                         : "error",
+		"no-case-declarations"                : "off",
+		"no-empty"                            : "off",
+		"no-fallthrough"                      : "off",
+		"quote-props"                         : ["error", "as-needed"],
+		"space-in-parens"                     : ["error", "never"],
+		"object-curly-spacing"                : ["error", "never"],
+		"array-bracket-spacing"               : ["error", "never"],
+		"computed-property-spacing"           : ["error", "never"],
+		"no-var"                              : "error",
+		"space-before-blocks"                 : "error",
+		"arrow-spacing"                       : "error",
+		"key-spacing"                         : ["error", {
+			"singleLine" : {"beforeColon" : true, "afterColon" : true},
+			"multiLine"  : {"beforeColon" : true, "afterColon" : true},
+			"align"      : {"beforeColon" : true, "afterColon" : true, "on" : "colon"}
+		}]
 	}
 }
