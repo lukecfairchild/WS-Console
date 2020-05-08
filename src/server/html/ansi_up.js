@@ -1,3 +1,4 @@
+/* eslint-disable */
 // ansi_up.js
 // version : 1.3.0
 // author : Dru Nelson

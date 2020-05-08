@@ -6,10 +6,10 @@ const WSConsole = require('../src');
 const server = new WSConsole.server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
-	cacheSize     : 300,
-//	ssl           : false,
-//	sslKey        : '/path/to/key',
-//	sslCert       : '/path/to/cert'
+	cacheSize     : 300
+	//ssl           : false,
+	//sslKey        : '/path/to/key',
+	//sslCert       : '/path/to/cert'
 });
 
 server.start();

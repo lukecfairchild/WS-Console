@@ -1,0 +1,11 @@
+{
+	"globals" : {
+		"$"       : "readonly",
+		"html"    : "readonly",
+		"body"    : "readonly",
+		"ansi_up" : "readonly"
+	},
+	"rules" : {
+		"no-unused-vars" : "off"
+	}
+}

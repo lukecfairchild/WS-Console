@@ -1,10 +1,10 @@
 const getCookie = (cname) => {
-	var name          = cname + '=';
-	var decodedCookie = decodeURIComponent(document.cookie);
-	var ca            = decodedCookie.split(';');
+	let name          = cname + '=';
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca            = decodedCookie.split(';');
 
-	for (var i = 0; i <ca.length; i++) {
-		var c = ca[i];
+	for (let i = 0; i <ca.length; i++) {
+		let c = ca[i];
 
 		while (c.charAt(0) == ' ') {
 			c = c.substring(1);
@@ -27,11 +27,11 @@ const getSelectedText = function () {
 	}
 };
 
-var webSocket;
+let webSocket;
 
-var commands = {};
+let commands = {};
 
-var codes = [
+let codes = [
 	{ // Black
 		css  : 'color: Black;',
 		code : '\u001b[0;30;22m'
@@ -119,7 +119,7 @@ var codes = [
 ];
 
 // Select input on Select-All
-document.addEventListener('selectionchange', function (event) {
+document.addEventListener('selectionchange', function () {
 	const selection = window.getSelection();
 
 	if (selection.anchorNode
@@ -171,11 +171,11 @@ document.addEventListener('keydown', (event) => {
 				// Up
 				if (event.keyCode == 38) {
 					event.preventDefault();
-					var newIndex = commands[name].current - 1;
+					let newIndex = commands[name].current - 1;
 
 					if (newIndex > -1) {
 						commands[name].current = newIndex;
-						var newValue           = commands[name].history[newIndex];
+						let newValue           = commands[name].history[newIndex];
 
 						if (newValue) {
 							input.value = newValue;
@@ -313,12 +313,12 @@ class UI {
 
 	addTab (name) {
 		if (!this.tabs[name]) {
-			var tabs = $('#tabs').tabs();
+			let tabs = $('#tabs').tabs();
 
 			this.index++;
 
-			var li = document.createElement('li');
-			var a  = document.createElement('a');
+			let li = document.createElement('li');
+			let a  = document.createElement('a');
 
 			a.href        = '#tabs-' + this.index;
 			a.textContent = name;
@@ -329,9 +329,9 @@ class UI {
 
 			document.getElementById('tabButtons').appendChild(li);
 
-			var div   = document.createElement('div');
-			var div2  = document.createElement('div');
-			var form  = document.createElement('form');
+			let div   = document.createElement('div');
+			let div2  = document.createElement('div');
+			let form  = document.createElement('form');
 			let input = document.createElement('input');
 
 			div.id   = 'tabs-' + this.index;
@@ -379,7 +379,7 @@ class UI {
 			form.addEventListener('submit', function (element, event) {
 				event.preventDefault();
 
-				var command = input.value;
+				let command = input.value;
 
 				input.value	= '';
 
@@ -394,9 +394,9 @@ class UI {
 				}
 			}.bind(null, input));
 
-			var autofocus    = document.createAttribute('autofocus');
-			var autocomplete = document.createAttribute('autocomplete');
-			var lpIgnore     = document.createAttribute('data-lpignore');
+			let autofocus    = document.createAttribute('autofocus');
+			let autocomplete = document.createAttribute('autocomplete');
+			let lpIgnore     = document.createAttribute('data-lpignore');
 
 			lpIgnore.value = true;
 
@@ -446,7 +446,7 @@ class UI {
 			}
 		}
 
-		var selectedTab = $('.ui-state-active')[0];
+		let selectedTab = $('.ui-state-active')[0];
 
 		if (selectedTab) {
 			webSocket.send(JSON.stringify({
@@ -467,10 +467,10 @@ class UI {
 			delete this.tabs[name];
 		}
 
-		var checkForSelectedTab = $('.ui-state-active')[0];
+		let checkForSelectedTab = $('.ui-state-active')[0];
 
 		if (checkForSelectedTab) {
-			var selectedTab = checkForSelectedTab.getAttribute('wrapperName');
+			let selectedTab = checkForSelectedTab.getAttribute('wrapperName');
 
 			if (selectedTab && WebSocket.readyState === 1) {
 				webSocket.send(JSON.stringify({
@@ -486,8 +486,8 @@ class UI {
 const ui = new UI();
 
 const startListener = function () {
-	var username = document.getElementById('username').value;
-	var password = document.getElementById('password').value;
+	let username = document.getElementById('username').value;
+	let password = document.getElementById('password').value;
 
 	document.getElementById('password').value = '';
 
@@ -495,7 +495,7 @@ const startListener = function () {
 	document.getElementById('username').style.visibility = 'hidden';
 	document.getElementById('password').style.visibility = 'hidden';
 
-	var tabs = $('#tabs').tabs();
+	let tabs = $('#tabs').tabs();
 
 	tabs.find('.ui-tabs-nav').sortable({
 		axis : 'x',
@@ -509,14 +509,11 @@ const startListener = function () {
 	webSocket = new WebSocket('ws' + (document.location.protocol === 'https:' ? 's' : '') + '://' + window.location.hostname + ':' + getCookie('port'));
 
 	// Connection opened
-	webSocket.addEventListener('open', function (event) {
-
-	});
+	webSocket.addEventListener('open', function () {});
 
 	// Listen for messages
 	webSocket.addEventListener('message', function (rawData) {
-
-		var data = {};
+		let data = {};
 
 		try {
 			data = JSON.parse(rawData.data);
@@ -550,7 +547,7 @@ const startListener = function () {
 			}
 
 			case 'resetData' : {
-				var targetConsole = document.getElementById('console-' + data.server);
+				const targetConsole = document.getElementById('console-' + data.server);
 
 				while (targetConsole.firstChild) {
 					targetConsole.removeChild(targetConsole.firstChild);
@@ -559,7 +556,7 @@ const startListener = function () {
 
 			case 'data' : {
 
-				var getDocHeight = function () {
+				let getDocHeight = function () {
 
 					return Math.max(
 						document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -568,7 +565,7 @@ const startListener = function () {
 					);
 				};
 
-				var getPosition = function () {
+				let getPosition = function () {
 					return window.pageYOffset + (window.innerHeight
 						||  html.clientHeight
 						||  body.clientHeight
@@ -582,45 +579,45 @@ const startListener = function () {
 					scroll = true;
 				}
 
-				var targetConsole = document.getElementById('console-' + data.server);
-				var children      = targetConsole.children;
-				var consoleY      = Math.round(targetConsole.getBoundingClientRect().y);
+				const targetConsole = document.getElementById('console-' + data.server);
+				let children        = targetConsole.children;
+				let consoleY        = Math.round(targetConsole.getBoundingClientRect().y);
 
 				if (children.length > 0) {
-					var lastChildY = Math.round(children[children.length - 1].getBoundingClientRect().y);
+					let lastChildY = Math.round(children[children.length - 1].getBoundingClientRect().y);
 
 					if (consoleY === lastChildY) {
 						scroll = true;
 					}
 				}
 
-				var buffer = document.getElementById('buffer-' + data.server);
+				let buffer = document.getElementById('buffer-' + data.server);
 
 				if (buffer) {
 					buffer.remove();
 				}
 
-				for (var i in data.data) {
-					var whole = data.data[i];
-					var div   = document.createElement('div');
+				for (const i in data.data) {
+					let whole = data.data[i];
+					let div   = document.createElement('div');
 
-					var htmlLines = [];
-					var lines     = whole.split(/(?:\r\n|\n)/);
+					let htmlLines = [];
+					let lines     = whole.split(/(?:\r\n|\n)/);
 
-					for (var i in lines) {
-						var line = lines[i];
+					for (const j in lines) {
+						let line = lines[j];
 
-						var htmlLine = line
+						let htmlLine = line
 						.replace(/>/g, '&gt;')
 						.replace(/</g, '&lt;')
 						.replace(/ /g, '&#160;');
 
-						var spans = 0;
+						let spans = 0;
 
-						for (var j in codes) {
-							var code       = codes[j];
-							var splitLine  = htmlLine.split(code.code);
-							var lineString = '';
+						for (let j in codes) {
+							let code       = codes[j];
+							let splitLine  = htmlLine.split(code.code);
+							let lineString = '';
 
 							if (splitLine.length) {
 								lineString += '<span style="' + code.css + '">';
@@ -650,7 +647,7 @@ const startListener = function () {
 					ui.tabs[data.server].lines.shift();
 				}
 
-				var selectedTab = $('.ui-state-active')[0].getAttribute('wrapperName');
+				let selectedTab = $('.ui-state-active')[0].getAttribute('wrapperName');
 
 				if (scroll
 				&&  data.server === selectedTab) {
@@ -665,9 +662,9 @@ const startListener = function () {
 	webSocket.addEventListener('close', () => {
 		commands = {};
 
-		var tabs = ui.getTabs();
+		let tabs = ui.getTabs();
 
-		for (var i in tabs) {
+		for (let i in tabs) {
 			ui.removeTab(i);
 		}
 
@@ -678,13 +675,13 @@ const startListener = function () {
 	});
 };
 
-var listener = function (event) {
+let listener = function (event) {
 	if (!event) {
 		event = window.event || {};
 	}
 
-	var EnterKey = '13';
-	var keyCode  = event.keyCode || event.which;
+	let EnterKey = '13';
+	let keyCode  = event.keyCode || event.which;
 
 	// Enter key pressed
 	if (event.type === 'keypress'
@@ -702,12 +699,10 @@ const usernameElement   = document.getElementById('username');
 const passwordElement   = document.getElementById('password');
 const loginButtoElement = document.getElementById('loginButton');
 
-document.addEventListener('click', function (event) {
-
+document.addEventListener('click', function () {
 	if (loginElement.style.visibility === 'visible'
 	&&  document.activeElement !== usernameElement
 	&&  document.activeElement !== passwordElement) {
-
 		if (usernameElement.value) {
 			passwordElement.select();
 

@@ -1,3 +1,4 @@
+
 const require = (url) => {
 	const maskedEval = (code) => {
 		// set up an object to serve as the context for the code being evaluated.
@@ -34,7 +35,7 @@ const require = (url) => {
 	}
 
 	return new Promise(resolve => {
-		var xhttp = new XMLHttpRequest();
+		const xhttp = new XMLHttpRequest();
 
 		xhttp.onreadystatechange = async function () {
 			if (this.readyState == 4 && this.status == 200) {
