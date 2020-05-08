@@ -10,9 +10,9 @@ class Data {
 		this.database = LowDB(new FileSync(options.dbPath));
 
 		this.database.defaults({
-			users   : [],
-			servers : [],
-			roles   : {}
+			users     : [],
+			processes : [],
+			roles     : {}
 		}).write();
 	}
 
@@ -33,8 +33,7 @@ class Data {
 	}
 
 	getServers () {
-
-		return this.database.get('servers').map('name').value();
+		return this.database.get('processes').map('name').value();
 	}
 
 	getUser (username) {
@@ -44,7 +43,7 @@ class Data {
 	}
 
 	getServer (name) {
-		return this.database.get('servers').find({
+		return this.database.get('processes').find({
 			name : name
 		}).value();
 	}
@@ -102,7 +101,7 @@ class Data {
 		if (!this.getServer(name)) {
 			let uuid = Utils.getUUID();
 
-			this.database.get('servers').push({
+			this.database.get('processes').push({
 				name     : name,
 				password : uuid
 			}).write();
@@ -130,7 +129,7 @@ class Data {
 	}
 
 	setServerPassword (name, password) {
-		this.database.get('servers').find({
+		this.database.get('processes').find({
 			name : name
 		}).set('password', password).write();
 	}
@@ -147,7 +146,7 @@ class Data {
 
 	deleteServer (name) {
 		if (this.getServer(name)) {
-			this.database.get('servers').remove({
+			this.database.get('processes').remove({
 				name : name
 			}).write();
 
