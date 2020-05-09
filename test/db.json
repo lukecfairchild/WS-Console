@@ -16,5 +16,6 @@
       "password": "test"
     }
   ],
-  "roles": {}
+  "roles": {},
+  "processes": []
 }
