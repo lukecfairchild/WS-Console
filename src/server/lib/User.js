@@ -5,12 +5,15 @@ const Database = require('./Database');
 const Utils    = require('./Utils');
 
 class User {
+	#connections;
+
 	constructor (options) {
 		this.options = options;
 
-		this.authenticated = false;
-		this.UUID          = Utils.getUUID();
-		this.webSocket     = {
+		this.connections = [];
+
+		this.UUID      = Utils.getUUID();
+		this.webSocket = {
 			terminate : () => {
 
 				if (this.options.webSocket) {
@@ -131,10 +134,7 @@ class User {
 		return this.username;
 	}
 
-	getWebSocket () {
-		return this.webSocket;
-	}
-
+/*
 	setServer (serverName) {
 		const server = this.options.webSocketServer.getServer(serverName);
 
@@ -181,6 +181,25 @@ class User {
 				}));
 			}
 		}
+	}
+*/
+	delete () {
+		for (const i in this.#connections) {
+			this.#connections[i].disconnect();
+		}
+
+		this.database.database.get('users').remove({
+			username : this.username
+		}).write();
+	}
+
+	addConnection (connection) {
+		this.#connections.push(connection);
+		connection.on('close',() => {
+			if (this.#connections.includes(connection)) {
+				this.#connections.splice(this.#connections.indexOf(connection), 1);
+			}
+		});
 	}
 }
 

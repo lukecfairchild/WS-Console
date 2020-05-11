@@ -3,17 +3,19 @@
 const bcrypt   = require('bcryptjs');
 const FileSync = require('lowdb/adapters/FileSync');
 const LowDB    = require('lowdb');
-const Utils    = require('./Utils');
+const Path     = require('path');
 
-class Data {
+class Database {
 	constructor (options) {
-		this.database = LowDB(new FileSync(options.dbPath));
+		const database = LowDB(new FileSync(Path.resolve(options.dbPath)));
 
-		this.database.defaults({
+		database.defaults({
 			users     : [],
 			processes : [],
 			roles     : {}
 		}).write();
+
+		return database;
 	}
 
 	setUserPermissions (username, permissions) {
@@ -84,32 +86,6 @@ class Data {
 		return false;
 	}
 
-	createUser (username) {
-		if (!this.getUser(username)) {
-			this.database.get('users').push({
-				username    : username,
-				hash        : null,
-				permissions : {},
-				roles       : []
-			}).write();
-
-			return true;
-		}
-	}
-
-	createServer (name) {
-		if (!this.getServer(name)) {
-			let uuid = Utils.getUUID();
-
-			this.database.get('processes').push({
-				name     : name,
-				password : uuid
-			}).write();
-
-			return uuid;
-		}
-	}
-
 	setUserPassword (username, password) {
 		if (this.getUser(username)) {
 			let database = this.database;
@@ -134,16 +110,6 @@ class Data {
 		}).set('password', password).write();
 	}
 
-	deleteUser (username) {
-		if (this.getUser(username)) {
-			this.database.get('users').remove({
-				username : username
-			}).write();
-
-			return true;
-		}
-	}
-
 	deleteServer (name) {
 		if (this.getServer(name)) {
 			this.database.get('processes').remove({
@@ -155,4 +121,4 @@ class Data {
 	}
 }
 
-module.exports = Data;
+module.exports = Database;

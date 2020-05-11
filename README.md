@@ -35,6 +35,11 @@ WSConsole
 			.send(command)
 			.setPassword(password)
 
+		Connection
+			.diconnect()
+			.send(message)
+			.on(
+
 	process
 		connect()
 		disconnect()
