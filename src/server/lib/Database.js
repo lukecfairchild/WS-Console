@@ -18,12 +18,6 @@ class Database {
 		return database;
 	}
 
-	setUserPermissions (username, permissions) {
-		this.database.get('users').find({
-			username : username
-		}).set('permissions', permissions).write();
-	}
-
 	setUserRoles (username, roles) {
 		this.database.get('users').find({
 			username : username
@@ -84,24 +78,6 @@ class Database {
 		}
 
 		return false;
-	}
-
-	setUserPassword (username, password) {
-		if (this.getUser(username)) {
-			let database = this.database;
-
-			bcrypt.genSalt(10, function (error, salt) {
-
-				bcrypt.hash(password, salt, function (error, hash) {
-
-					database.get('users').find({
-						username : username
-					}).set('hash', hash).write();
-				});
-			});
-
-			return true;
-		}
 	}
 
 	setServerPassword (name, password) {

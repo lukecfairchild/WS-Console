@@ -9,36 +9,28 @@ WSConsole
 		.getProcesse(name) Process
 
 		User
-			.on(event, callback)
-				data {
-					Process,
-					data
-				}
-				connect
-				disconnect
-
-			.getPermissions()
+			.addConnection(connection)
 			.addPermission(permission)
-			.removePermission(permission)
-			.setPassword(password)
-			.disconnect()
 			.delete()
+			.disconnect()
+			.getPermissions()
+			.getUsername()
+			.on(event, callback)
+			.removePermission(permission)
 			.send(data)
-				{
-					process,
-					data
-				}
+			.setPassword(password)
 
 		Process
-			.disconnect()
 			.delete()
+			.disconnect()
 			.send(command)
 			.setPassword(password)
 
 		Connection
 			.diconnect()
 			.send(message)
-			.on(
+			.isAuthenticated()
+			.on()
 
 	process
 		connect()
