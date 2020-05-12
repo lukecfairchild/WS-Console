@@ -2,9 +2,38 @@
 
 class Connection {
 	constructor (webSocket) {
-		this.webSocket = webSocket;
-
 		this.authenticated = false;
+		this.events        = {
+			login   : [],
+			data    : [],
+			command : []
+		};
+		this.webSocket     = webSocket;
+		this.webSocket.on('message', (message) => {
+			let data = {};
+
+			try {
+				data = JSON.parse(message);
+
+			} catch (error) {
+				this.webSocket.terminate();
+			}
+
+			for (const i in this.events[data.action]) {
+				this.events[data.action][i](data);
+			}
+		});
+		this.send({
+			action : 'ready'
+		});
+	}
+
+	isAuthenticated () {
+		return this.authenticated;
+	}
+
+	setAuthenticated (state) {
+		this.authenticated = state;
 	}
 
 	disconnect () {
@@ -21,6 +50,9 @@ class Connection {
 		}
 	}
 	on (event, callback) {
+
+		
+		
 		return this.webSocket.on(event, callback);
 	}
 }

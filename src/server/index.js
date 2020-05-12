@@ -7,14 +7,11 @@ const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/WebSocketServer');
 
 class  WSServer {
-	#users;
-	#processes;
-
 	constructor (settings) {
 		this.settings = settings;
 
-		this.#users     = {};
-		this.#processes = {};
+		this.users     = {};
+		this.processes = {};
 
 		this.database        = new Database(this.settings);
 		this.webServer       = new WebServer(this.settings);
@@ -40,7 +37,10 @@ class  WSServer {
 				roles       : []
 			}).write();
 
-			this.#users[username] = new User();
+			this.users[username] = new User({
+				database : this.database,
+				username : username
+			});
 		}
 	}
 
@@ -58,9 +58,22 @@ class  WSServer {
 	}
 
 	getUser (username) {
-		return this.database.get('users').find({
+		if (this.users[username]) {
+			return this.users[username];
+		}
+
+		const user = this.database.get('users').find({
 			username : username
 		}).value();
+
+		if (!user) {
+			return;
+		}
+
+		return new User({
+			database : this.database,
+			username : user.username
+		});
 	}
 
 	getProcess () {
