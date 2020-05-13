@@ -6,17 +6,17 @@ class User {
 	#passwordHash;
 
 	constructor (options) {
-		this.database = options.database;
-		this.username = options.username;
+		this.connections = [];
+		this.database    = options.database;
 
 		const user = this.database.get('users').find({
-			username : username
+			username : options.username
 		}).value();
 
-		this.connections   = [];
+		this.username      = user.username;
 		this.permissions   = user.permissions;
 		this.#passwordHash = user.hash;
-		this.roles         = user.roles
+		this.roles         = user.roles;
 	}
 
 	addPermission (permission) {
@@ -39,53 +39,47 @@ class User {
 		}
 	}
 
-	authenticate (credentials) {
+	authenticate (data) {
 		const user = this.database.getUser(data.username);
 
-		if (user
-		&&  credentials.username !== undefined
-		&&  credentials.password !== undefined
-		&&  user.hash) {
-			bcrypt.compare(credentials.password, user.hash, (error, result) => {
-				if (result) {
-					clearTimeout(this.timeout);
-
-					delete this.timeout;
-
-					this.username      = credentials.username;
-					this.authenticated = true;
-
-					this.options.webSocketServer.addUser(this);
-
-					const servers = this.options.webSocketServer.getServers();
-
-					for (const i in servers) {
-						const server = servers[i];
-
-						if (server.getName() === 'Console'
-						||  Database.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
-						||  Database.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
-
-							this.getWebSocket().send(JSON.stringify({
-								action     : 'serverConnect',
-								serverName : server.getName()
-							}));
-							this.getWebSocket().send(JSON.stringify({
-								server : server.getName(),
-								data   : server.getCache(),
-								action : 'data'
-							}));
-						}
-					}
-
-				} else {
-					this.logout();
-				}
-			});
-
-		} else {
-			this.getWebSocket().terminate();
+		if (!user
+		||  data.username === undefined
+		||  data.password === undefined
+		||  !user.hash) {
+			return;
 		}
+
+		bcrypt.compare(data.password, user.hash, (error, result) => {
+			if (!result) {
+				return;
+			}
+
+			this.username      = data.username;
+			this.authenticated = true;
+
+			this.options.webSocketServer.addUser(this);
+
+			const servers = this.options.webSocketServer.getServers();
+
+			for (const i in servers) {
+				const server = servers[i];
+
+				if (server.getName() === 'Console'
+				||  Database.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
+				||  Database.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
+
+					this.getWebSocket().send(JSON.stringify({
+						action     : 'serverConnect',
+						serverName : server.getName()
+					}));
+					this.getWebSocket().send(JSON.stringify({
+						server : server.getName(),
+						data   : server.getCache(),
+						action : 'data'
+					}));
+				}
+			}
+		});
 	}
 
 	addConnection (connection) {
@@ -126,6 +120,30 @@ class User {
 
 	getUsername () {
 		return this.username;
+	}
+
+	hasPermission (permission) {
+		if (this.permissions.includes(permission)
+		||  this.permissions.includes('*')) {
+			return true;
+		}
+
+		const splitPermission = permission.split('.');
+
+		let wholePermission = '';
+
+		for (const i in splitPermission) {
+			const permissionPart = splitPermission[i];
+
+			if (permissionPart !== '*'
+			&&  this.permissions.includes(wholePermission + permissionPart + '.*')) {
+				return true;
+			}
+
+			wholePermission += permissionPart + '.';
+		}
+
+		return false;
 	}
 
 	on (event, callback) {
