@@ -8,12 +8,13 @@ class User {
 	constructor (options) {
 		this.connections = [];
 		this.database    = options.database;
+		this.type        = 'user';
 
-		const user = this.database.get('users').find({
-			username : options.username
+		const user = this.database.get(this.type).find({
+			name : options.name
 		}).value();
 
-		this.username      = user.username;
+		this.name          = user.name;
 		this.permissions   = user.permissions;
 		this.#passwordHash = user.hash;
 		this.roles         = user.roles;
@@ -23,8 +24,8 @@ class User {
 		if (!this.permissions.includes(permission)) {
 			this.permissions.push(permission);
 
-			this.database.get('users').find({
-				username : this.username
+			this.database.get(this.type).find({
+				name : this.name
 			}).set('permissions', this.permissions).write();
 		}
 	}
@@ -33,17 +34,17 @@ class User {
 		if (!this.roles.includes(role)) {
 			this.roles.push(role);
 
-			this.database.get('users').find({
-				username : this.username
+			this.database.get(this.type).find({
+				name : this.name
 			}).set('roles', this.roles).write();
 		}
 	}
 
 	authenticate (data) {
-		const user = this.database.getUser(data.username);
+		const user = this.database.getUser(data.name);
 
 		if (!user
-		||  data.username === undefined
+		||  data.name === undefined
 		||  data.password === undefined
 		||  !user.hash) {
 			return;
@@ -54,7 +55,7 @@ class User {
 				return;
 			}
 
-			this.username      = data.username;
+			this.name      = data.name;
 			this.authenticated = true;
 
 			this.options.webSocketServer.addUser(this);
@@ -93,7 +94,7 @@ class User {
 
 		connection.on('login', (event) => {
 			this.authenticate({
-				username : event.username,
+				name : event.name,
 				password : event.password
 			});
 		});
@@ -103,8 +104,8 @@ class User {
 	delete () {
 		this.disconnect();
 
-		this.database.database.get('users').remove({
-			username : this.username
+		this.database.database.get(this.type).remove({
+			name : this.name
 		}).write();
 	}
 
@@ -118,8 +119,12 @@ class User {
 		return this.permissions;
 	}
 
+	getRoles () {
+		return this.roles;
+	}
+
 	getUsername () {
-		return this.username;
+		return this.name;
 	}
 
 	hasPermission (permission) {
@@ -155,8 +160,8 @@ class User {
 			this.permissions.splice(this.permissions.indexOf(permission), 1);
 
 
-			this.database.get('users').find({
-				username : this.username
+			this.database.get(this.type).find({
+				name : this.name
 			}).set('permissions', this.permissions).write();
 		}
 	}
@@ -165,9 +170,8 @@ class User {
 		if (this.roles.includes(role)) {
 			this.roles.splice(this.roles.indexOf(role), 1);
 
-
-			this.database.get('users').find({
-				username : this.username
+			this.database.get(this.type).find({
+				name : this.name
 			}).set('roles', this.roles).write();
 		}
 	}
@@ -179,21 +183,14 @@ class User {
 	}
 
 	setPassword (password) {
-		bcrypt.genSalt(10, (error, salt) => {
-			if (error) {
-				console.error('error generating salt', error);
-			}
+		const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(password, salt);
 
-			bcrypt.hash(password, salt, (error, hash) => {
-				if (error) {
-					console.error('error hashing password', error);
-				}
+		this.#passwordHash = hash;
 
-				this.database.get('users').find({
-					username : this.username
-				}).set('hash', hash).write();
-			});
-		});
+		this.database.get(this.type).find({
+			name : this.name
+		}).set('hash', hash).write();
 	}
 }
 

@@ -4,7 +4,7 @@ const Data       = require('./Database');
 const FileSystem = require('http');
 const HTTP       = require('http');
 const HTTPS      = require('https');
-const Server     = require('./Server');
+const Process    = require('./Process');
 const User       = require('./User');
 const Utils      = require('./Utils');
 const WebSocket  = require('ws');
@@ -33,7 +33,7 @@ class WebSocketServer {
 		});
 
 		this.webSocketServer.on('listening', () => {
-			this.server = new Server(this.options);
+			this.server = new Process(this.options);
 			this.user   = new User(this.options);
 
 			console.log('WebSocketServer listening on port: ' + this.options.webSocketPort);
@@ -85,7 +85,7 @@ class WebSocketServer {
 
 			if (data.clientType === 'server') {
 				if (!connection) {
-					connection = new Server({
+					connection = new Process({
 						webSocket : webSocket,
 						...this.options
 					});

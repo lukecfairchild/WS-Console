@@ -50,9 +50,6 @@ class Connection {
 		}
 	}
 	on (event, callback) {
-
-		
-		
 		return this.webSocket.on(event, callback);
 	}
 }
