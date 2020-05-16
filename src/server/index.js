@@ -16,6 +16,37 @@ class  WSServer {
 		this.database        = new Database(this.settings);
 		this.webServer       = new WebServer(this.settings);
 		this.WebSocketServer = new WebSocketServer(this.settings);
+
+		this.webSocketServer.on('connection', (connection) => {
+			connection.on('login', (event) => {
+				switch (event.type) {
+					case 'user' : {
+						const user = this.getUser(event.name);
+
+						if (!user) {
+							return connection.disconnect();
+						}
+
+						this.getUser(event.name).authenticate({
+							name     : event.name,
+							password : event.password
+						});
+					}
+					case 'process' : {
+						const wsprocess = this.getProcess(event.name);
+
+						if (!wsprocess) {
+							return connection.disconnect();
+						}
+
+						wsprocess.authenticate({
+							name     : event.name,
+							password : event.password
+						});
+					}
+				}
+			});
+		});
 	}
 
 	start () {

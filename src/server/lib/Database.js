@@ -11,7 +11,7 @@ class Database {
 		database.defaults({
 			user    : [],
 			process : [],
-			roles   : {}
+			role    : {}
 		}).write();
 
 		return database;
