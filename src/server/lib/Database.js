@@ -1,6 +1,5 @@
 'use strict';
 
-const bcrypt   = require('bcryptjs');
 const FileSync = require('lowdb/adapters/FileSync');
 const LowDB    = require('lowdb');
 const Path     = require('path');
@@ -10,32 +9,12 @@ class Database {
 		const database = LowDB(new FileSync(Path.resolve(options.dbPath)));
 
 		database.defaults({
-			users     : [],
-			processes : [],
-			roles     : {}
+			user    : [],
+			process : [],
+			roles   : {}
 		}).write();
 
 		return database;
-	}
-
-	setUserRoles (username, roles) {
-		this.database.get('users').find({
-			username : username
-		}).set('roles', roles).write();
-	}
-
-	getUsers () {
-		return this.database.get('users').map('username').value();
-	}
-
-	getServers () {
-		return this.database.get('processes').map('name').value();
-	}
-
-	getUser (username) {
-		return this.database.get('users').find({
-			username : username
-		}).value();
 	}
 
 	getServer (name) {

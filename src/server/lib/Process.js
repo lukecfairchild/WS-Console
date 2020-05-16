@@ -3,7 +3,7 @@
 const Cache    = require('./Cache');
 const Database = require('./Database');
 
-class Server {
+class Process {
 	constructor (options) {
 		this.options = options;
 
@@ -125,4 +125,4 @@ class Server {
 	}
 }
 
-module.exports = Server;
+module.exports = Process;
