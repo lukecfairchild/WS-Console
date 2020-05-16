@@ -1,11 +1,11 @@
 'use strict';
 
-const bcrypt = require('bcryptjs');
+const Account = require('./Account');
 
-class User {
-	#passwordHash;
-
+class User extends Account {
 	constructor (options) {
+		super(options);
+
 		this.connections = [];
 		this.database    = options.database;
 		this.type        = 'user';
@@ -40,91 +40,12 @@ class User {
 		}
 	}
 
-	authenticate (data) {
-		const user = this.database.getUser(data.name);
-
-		if (!user
-		||  data.name === undefined
-		||  data.password === undefined
-		||  !user.hash) {
-			return;
-		}
-
-		bcrypt.compare(data.password, user.hash, (error, result) => {
-			if (!result) {
-				return;
-			}
-
-			this.name      = data.name;
-			this.authenticated = true;
-
-			this.options.webSocketServer.addUser(this);
-
-			const servers = this.options.webSocketServer.getServers();
-
-			for (const i in servers) {
-				const server = servers[i];
-
-				if (server.getName() === 'Console'
-				||  Database.userHasPermission(this.getUsername(), 'console.view.' + server.getName())
-				||  Database.userHasPermission(this.getUsername(), 'console.command.' + server.getName())) {
-
-					this.getWebSocket().send(JSON.stringify({
-						action     : 'serverConnect',
-						serverName : server.getName()
-					}));
-					this.getWebSocket().send(JSON.stringify({
-						server : server.getName(),
-						data   : server.getCache(),
-						action : 'data'
-					}));
-				}
-			}
-		});
-	}
-
-	addConnection (connection) {
-		this.connections.push(connection);
-
-		connection.webSocket.on('close',() => {
-			if (this.connections.includes(connection)) {
-				this.connections.splice(this.connections.indexOf(connection), 1);
-			}
-		});
-
-		connection.on('login', (event) => {
-			this.authenticate({
-				name : event.name,
-				password : event.password
-			});
-		});
-
-	}
-
-	delete () {
-		this.disconnect();
-
-		this.database.database.get(this.type).remove({
-			name : this.name
-		}).write();
-	}
-
-	disconnect () {
-		for (const i in this.connections) {
-			this.connections[i].disconnect();
-		}
-	}
-
 	getPermissions () {
 		return this.permissions;
 	}
 
 	getRoles () {
 		return this.roles;
-	}
-
-	getUsername () {
-		return this.name;
 	}
 
 	hasPermission (permission) {
@@ -174,23 +95,6 @@ class User {
 				name : this.name
 			}).set('roles', this.roles).write();
 		}
-	}
-
-	send (message) {
-		for (const i in this.connections) {
-			this.connections[i].send(message);
-		}
-	}
-
-	setPassword (password) {
-		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(password, salt);
-
-		this.#passwordHash = hash;
-
-		this.database.get(this.type).find({
-			name : this.name
-		}).set('hash', hash).write();
 	}
 }
 
