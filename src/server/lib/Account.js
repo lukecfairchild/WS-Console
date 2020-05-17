@@ -10,7 +10,6 @@ class Account {
 		this.events      = {};
 		this.database    = options.database;
 		this.name        = options.name;
-		this.type        = options.type;
 	}
 
 	addConnection (connection) {

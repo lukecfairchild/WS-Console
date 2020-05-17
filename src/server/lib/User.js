@@ -7,14 +7,12 @@ class User extends Account {
 		super(options);
 
 		this.connections = [];
-		this.database    = options.database;
 		this.type        = 'user';
 
 		const user = this.database.get(this.type).find({
 			name : options.name
 		}).value();
 
-		this.name          = user.name;
 		this.permissions   = user.permissions;
 		this.#passwordHash = user.hash;
 		this.roles         = user.roles;
