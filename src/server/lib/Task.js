@@ -4,13 +4,17 @@ const Account = require('./Account');
 
 class Task extends Account {
 	constructor (options) {
+		options.type = 'task';
 		super(options);
 
-		this.events = {
-			connect    : [],
-			disconnect : [],
-			log        : []
-		};
+		this.on('login', (event) => {
+			event.connection.send({
+				action : 'settingsSync',
+				data   : {
+					cacheSize : this.options.cacheSize
+				}
+			});
+		});
 	}
 }
 
