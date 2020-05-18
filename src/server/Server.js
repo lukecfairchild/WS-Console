@@ -1,7 +1,6 @@
 'use strict';
 
 const Database        = require('./lib/Database');
-const Randomize       = require('randomatic');
 const User            = require('./lib/User');
 const Task            = require('./lib/Task');
 const WebServer       = require('./lib/WebServer');

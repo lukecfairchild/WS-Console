@@ -8,7 +8,7 @@ class User extends Account {
 		super(options);
 
 		const data = this.database.get(this.type).find({
-			name : options.name
+			name : this.name
 		}).value();
 
 		this.permissions = data.permissions;
