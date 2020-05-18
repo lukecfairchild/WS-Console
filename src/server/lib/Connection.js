@@ -1,13 +1,11 @@
 'use strict';
 
 class Connection {
+	#events;
+
 	constructor (webSocket) {
 		this.authenticated = false;
-		this.events        = {
-			login   : [],
-			data    : [],
-			command : []
-		};
+		this.#events       = {};
 		this.webSocket     = webSocket;
 		this.webSocket.on('message', (message) => {
 			let data = {};
@@ -19,8 +17,8 @@ class Connection {
 				this.webSocket.terminate();
 			}
 
-			for (const i in this.events[data.action]) {
-				this.events[data.action][i](data);
+			if (data.action === 'login') {
+				this.trigger('login', data);
 			}
 		});
 		this.send({
@@ -51,6 +49,19 @@ class Connection {
 	}
 	on (event, callback) {
 		return this.webSocket.on(event, callback);
+	}
+
+	trigger (event, data) {
+		if (!event
+		||  !data) {
+			return;
+		}
+
+		if (this.#events[event]) {
+			for (const i in this.#events[event]) {
+				this.#events[event][i](data);
+			}
+		}
 	}
 }
 

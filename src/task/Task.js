@@ -4,18 +4,17 @@ const Cache     = require('./lib/Cache');
 const Spawn     = require('child_process').spawn;
 const WebSocket = require('./lib/WebSocket');
 
-class Process {
+class Task {
 	constructor (options) {
-
 		this.cache   = new Cache(options.cacheSize);
 		this.options = options;
 
-		this.startWebSocket();
-		this.startProcess();
-		this.startCmdlineListener();
+		this.#startWebSocket();
+		this.#startTask();
+		this.#startCmdlineListener();
 	}
 
-	startWebSocket () {
+	#startWebSocket = () => {
 		this.websocket = new WebSocket(this.options);
 
 		this.websocket.on('open', () => {
@@ -63,7 +62,7 @@ class Process {
 							data       : message
 						}));
 
-						this.process.stdin.write(data.data + '\n');
+						this.task.stdin.write(data.data + '\n');
 						break;
 					}
 
@@ -75,9 +74,9 @@ class Process {
 		}
 	}
 
-	startProcess () {
+	#startTask = () => {
 		// Start Process
-		this.process = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
+		this.task = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
 			shell : true,
 			stdio : [
 				'pipe',
@@ -87,12 +86,12 @@ class Process {
 		});
 
 		// Exit if Process closes
-		this.process.on('close', () => {
+		this.task.on('close', () => {
 			process.exit();
 		});
 
 		// Relay Process data to Hub
-		this.process.stdout.on('data', (rawData) => {
+		this.task.stdout.on('data', (rawData) => {
 			const data = rawData.toString();
 
 			this.cache.push(data);
@@ -106,7 +105,7 @@ class Process {
 		});
 	}
 
-	startCmdlineListener () {
+	#startCmdlineListener = () => {
 		// Allow local command input
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
@@ -121,9 +120,9 @@ class Process {
 				data       : data
 			}));
 
-			this.process.stdin.write(data);
+			this.task.stdin.write(data);
 		});
 	}
 }
 
-module.exports = Process;
+module.exports = Task;

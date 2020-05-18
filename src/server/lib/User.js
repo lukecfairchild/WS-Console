@@ -4,20 +4,15 @@ const Account = require('./Account');
 
 class User extends Account {
 	constructor (options) {
+		options.type = 'user';
 		super(options);
 
-		this.connections = [];
-		this.database    = options.database;
-		this.type        = 'user';
-
-		const user = this.database.get(this.type).find({
+		const data = this.database.get(this.type).find({
 			name : options.name
 		}).value();
 
-		this.name          = user.name;
-		this.permissions   = user.permissions;
-		this.#passwordHash = user.hash;
-		this.roles         = user.roles;
+		this.permissions = data.permissions;
+		this.roles       = data.roles;
 	}
 
 	addPermission (permission) {
@@ -70,10 +65,6 @@ class User extends Account {
 		}
 
 		return false;
-	}
-
-	on (event, callback) {
-
 	}
 
 	removePermission (permission) {
