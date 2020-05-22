@@ -17,5 +17,8 @@
     }
   ],
   "roles": {},
-  "processes": []
+  "processes": [],
+  "user": [],
+  "process": [],
+  "role": {}
 }

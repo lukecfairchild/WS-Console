@@ -262,7 +262,7 @@ document.addEventListener('keypress', (event) => {
 				commands[name].current = commands[name].history.length;
 				webSocket.send(JSON.stringify({
 					clientType : 'user',
-					action     : 'serverCommand',
+					action     : 'command',
 					data       : command
 				}));
 			}
@@ -359,21 +359,6 @@ class UI {
 			li.addEventListener('click', () => {
 
 				window.scrollTo(window.pageXOffset, document.body.scrollHeight);
-
-				webSocket.send(JSON.stringify({
-					clientType : 'user',
-					action     : 'serverSelect',
-					data       : name
-				}));
-			});
-
-			input.addEventListener('focus', () => {
-
-				webSocket.send(JSON.stringify({
-					clientType : 'user',
-					action     : 'serverSelect',
-					data       : name
-				}));
 			});
 
 			form.addEventListener('submit', function (element, event) {
@@ -386,11 +371,6 @@ class UI {
 				if (command !== '') {
 					commands[name].history.push(command);
 					commands[name].current = commands[name].history.length;
-					webSocket.send(JSON.stringify({
-						clientType : 'user',
-						action     : 'serverSelect',
-						data       : command
-					}));
 				}
 			}.bind(null, input));
 
@@ -445,16 +425,6 @@ class UI {
 				input.select();
 			}
 		}
-
-		let selectedTab = $('.ui-state-active')[0];
-
-		if (selectedTab) {
-			webSocket.send(JSON.stringify({
-				clientType : 'user',
-				action     : 'serverSelect',
-				data       : selectedTab.getAttribute('wrapperName')
-			}));
-		}
 	}
 
 	removeTab (name) {
@@ -465,20 +435,6 @@ class UI {
 			this.tabs[name].body.remove();
 
 			delete this.tabs[name];
-		}
-
-		let checkForSelectedTab = $('.ui-state-active')[0];
-
-		if (checkForSelectedTab) {
-			let selectedTab = checkForSelectedTab.getAttribute('wrapperName');
-
-			if (selectedTab && WebSocket.readyState === 1) {
-				webSocket.send(JSON.stringify({
-					clientType : 'user',
-					action     : 'serverSelect',
-					data       : selectedTab
-				}));
-			}
 		}
 	}
 }
