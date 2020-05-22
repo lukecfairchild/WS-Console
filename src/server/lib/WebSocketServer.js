@@ -6,33 +6,32 @@ const HTTP       = require('http');
 const HTTPS      = require('https');
 const Process    = require('./Process');
 const User       = require('./User');
-const Utils      = require('./Utils');
 const WebSocket  = require('ws');
 
 class WebSocketServer {
+	#events;
+	#webServer;
+	#webSocketServer;
+
 	constructor (options) {
 		this.options = options;
-
-		this.options.webSocketServer = this;
-
-		this.servers = {};
-		this.users   = {};
+		this.#events = {};
 
 		if (this.options.ssl) {
-			this.webServer = HTTPS.createServer({
+			this.#webServer = HTTPS.createServer({
 				cert : FileSystem.readFileSync(this.options.sslCert),
 				key  : FileSystem.readFileSync(this.options.sslKey)
 			});
 
 		} else {
-			this.webServer = HTTP.createServer();
+			this.#webServer = HTTP.createServer();
 		}
 
-		this.webSocketServer = new WebSocket.Server({
-			server : this.webServer
+		this.#webSocketServer = new WebSocket.Server({
+			server : this.#webServer
 		});
 
-		this.webSocketServer.on('listening', () => {
+		this.#webSocketServer.on('listening', () => {
 			this.server = new Process(this.options);
 			this.user   = new User(this.options);
 
@@ -42,7 +41,6 @@ class WebSocketServer {
 			process.stdin.resume();
 			process.stdin.setEncoding('utf8');
 			process.stdin.on('data', (data) => {
-
 				this.server.getWebSocket().send(JSON.stringify({
 					data     : data,
 					action   : 'command',
@@ -52,18 +50,18 @@ class WebSocketServer {
 			});
 		});
 
-		this.webSocketServer.on('connection', (webSocket) => {
+		this.#webSocketServer.on('connection', (webSocket) => {
+			this.trigger('connection', webSocket);
 			this.webSocketListener(webSocket);
 		});
-
 	}
 
 	start () {
-		this.webServer.listen(this.options.webSocketPort);
+		this.#webServer.listen(this.options.webSocketPort);
 	}
 
 	stop () {
-		this.webServer.close();
+		this.#webServer.close();
 	}
 
 	webSocketListener (webSocket) {
@@ -78,61 +76,17 @@ class WebSocketServer {
 
 			try {
 				data = JSON.parse(rawData);
+				this.trigger(data.action, data);
 
 			} catch (error) {
 				webSocket.terminate();
 			}
+		});
 
-			if (data.clientType === 'server') {
-				if (!connection) {
-					connection = new Process({
-						webSocket : webSocket,
-						...this.options
-					});
-				}
+		(function (data) {
+			this.trigger('message', data);
 
-				switch (data.action) {
-					case 'login' : {
-						connection.authenticate({
-							name     : data.name,
-							password : data.password
-						});
-
-						break;
-					}
-
-					case 'data' : {
-						connection.pushCache(data.data);
-
-						const users = this.getUsers();
-
-						for (const i in users) {
-							const user = users[i];
-
-							if (connection.getName() === 'Console'
-							||  Data.userHasPermission(user.getUsername(), 'console.view.' + connection.getName())
-							||  Data.userHasPermission(user.getUsername(), 'console.command.' + connection.getName())) {
-								user.getWebSocket().send(JSON.stringify({
-									server : connection.getName(),
-									data   : [data.data],
-									action : 'data'
-								}));
-							}
-						}
-
-						break;
-					}
-				}
-
-			} else if (data.clientType === 'user') {
-
-				if (!connection) {
-					connection = new User({
-						webSocket : webSocket,
-						...this.options
-					});
-				}
-
+			if (data.clientType === 'user') {
 				switch (data.action) {
 					case 'login' : {
 						connection.authenticate({
@@ -142,12 +96,7 @@ class WebSocketServer {
 						break;
 					}
 
-					case 'serverSelect' : {
-						connection.setServer(data.data);
-						break;
-					}
-
-					case 'serverCommand' : {
+					case 'command' : {
 						try {
 							const server = connection.getServer().getName();
 
@@ -175,44 +124,6 @@ class WebSocketServer {
 				}
 			}
 		});
-	}
-
-	getServers () {
-		return this.servers;
-	}
-
-	getServer (name) {
-		return this.servers[name];
-	}
-
-	getUsers () {
-		return this.users;
-	}
-
-	getUser (username) {
-		for (let i in this.users) {
-			const user = this.users[i];
-
-			if (user.getUsername() === username) {
-				return user;
-			}
-		}
-	}
-
-	addServer (server) {
-		this.servers[server.getName()] = server;
-	}
-
-	addUser (user) {
-		this.users[user.getUUID()] = user;
-	}
-
-	removeServer (server) {
-		delete this.servers[server.getName()];
-	}
-
-	removeUser (user) {
-		delete this.users[user.getUUID()];
 	}
 
 	consoleCommand (data) {
@@ -731,14 +642,14 @@ class WebSocketServer {
 						switch (command[2]) {
 							case 'password' : {
 								if (Data.userHasPermission(data.username, 'user.edit')) {
-									const uuid = Utils.getUUID();
+									//const uuid = Utils.getUUID();
 
 									Data.setUserPassword(command[3], uuid);
 
 									this.users[data.uuid].getWebSocket().send(JSON.stringify({
 										server : 'Console',
 										action : 'data',
-										data   : ['Password: ' + uuid]
+										//data   : ['Password: ' + uuid]
 									}));
 
 								} else {
@@ -924,7 +835,7 @@ class WebSocketServer {
 							case 'password' : {
 								if (Data.userHasPermission(data.username, 'server.edit')) {
 									if (Data.getServer(command[3])) {
-										const uuid = Utils.getUUID();
+										//const uuid = Utils.getUUID();
 
 										Data.setServerPassword(command[3], uuid);
 
@@ -933,7 +844,7 @@ class WebSocketServer {
 											action : 'data',
 											data   : [
 												'Server "' + command[3] + '" created.',
-												'Server password: ' + uuid
+										//		'Server password: ' + uuid
 											]
 										}));
 
@@ -966,6 +877,48 @@ class WebSocketServer {
 					data   : ['Invalid command. Type "help".'],
 					action : 'data'
 				}));
+			}
+		}
+	}
+
+	on (event, callback) {
+		if (!event
+		||  !callback) {
+			return;
+		}
+
+		if (!this.#events[event]) {
+			this.#events[event] = [];
+		}
+
+		if (this.#events[event].includes(callback)) {
+			return;
+		}
+
+		this.#events[event].push(callback);
+	}
+
+	removeEventListener (event, callback) {
+		if (!event
+		||  !callback
+		||  !this.#events[event]) {
+			return;
+		}
+
+		if (this.#events[event].includes(callback)) {
+			this.#events[event].splice(this.#events[event].indexOf(callback), 1);
+		}
+	}
+
+	trigger (event, data) {
+		if (!event
+		||  !data) {
+			return;
+		}
+
+		if (this.#events[event]) {
+			for (const i in this.#events[event]) {
+				this.#events[event][i](data);
 			}
 		}
 	}
