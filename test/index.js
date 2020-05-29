@@ -15,12 +15,13 @@ const server = new WSConsole.server({
 
 server.start();
 
-new WSConsole.process({
-	path          : 'ws:localhost:9000',
-	name          : 'test',
-	password      : 'test',
-	allowCommands : true,
-	command       : [
+new WSConsole.task({
+	path             : 'ws:localhost:9000',
+	name             : 'test',
+	password         : 'test',
+	useStdin         : true,
+	allowRemoteInput : true,
+	command          : [
 		'node',
 		Path.join(__dirname, 'test_process.js')
 	]
