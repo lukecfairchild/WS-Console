@@ -11,7 +11,10 @@ class Task {
 
 		this.#startWebSocket();
 		this.#startTask();
-		this.#startCmdlineListener();
+
+		if (options.useStdin) {
+			this.#startCmdlineListener();
+		}
 	}
 
 	#startWebSocket = () => {
@@ -41,7 +44,7 @@ class Task {
 		});
 
 		// Remote commands
-		if (this.options.allowCommands) {
+		if (this.options.allowRemoteInput) {
 			this.websocket.on('message', (rawData) => {
 				let data = {};
 
@@ -75,7 +78,7 @@ class Task {
 	}
 
 	#startTask = () => {
-		// Start Process
+		// Start Task
 		this.task = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
 			shell : true,
 			stdio : [
@@ -85,12 +88,12 @@ class Task {
 			]
 		});
 
-		// Exit if Process closes
+		// Exit if Task closes
 		this.task.on('close', () => {
 			process.exit();
 		});
 
-		// Relay Process data to Hub
+		// Relay Task data to Hub
 		this.task.stdout.on('data', (rawData) => {
 			const data = rawData.toString();
 
@@ -120,7 +123,7 @@ class Task {
 				data       : data
 			}));
 
-			this.task.stdin.write(data);
+			process.stdin.write(data);
 		});
 	}
 }

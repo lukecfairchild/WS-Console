@@ -32,22 +32,9 @@ class WebSocketServer {
 		});
 
 		this.#webSocketServer.on('listening', () => {
-			this.server = new Process(this.options);
-			this.user   = new User(this.options);
+			this.trigger('listening', {});
 
 			console.log('WebSocketServer listening on port: ' + this.options.webSocketPort);
-
-			// Allow local command input
-			process.stdin.resume();
-			process.stdin.setEncoding('utf8');
-			process.stdin.on('data', (data) => {
-				this.server.getWebSocket().send(JSON.stringify({
-					data     : data,
-					action   : 'command',
-					username : 'Console',
-					uuid     : this.user.getUUID()
-				}));
-			});
 		});
 
 		this.#webSocketServer.on('connection', (webSocket) => {
@@ -83,6 +70,7 @@ class WebSocketServer {
 			}
 		});
 
+		/*
 		(function (data) {
 			this.trigger('message', data);
 
@@ -124,6 +112,7 @@ class WebSocketServer {
 				}
 			}
 		});
+		*/
 	}
 
 	consoleCommand (data) {
