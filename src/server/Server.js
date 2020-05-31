@@ -20,7 +20,7 @@ class  Server {
 		this.webServer       = new WebServer(this.settings);
 		this.WebSocketServer = new WebSocketServer(this.settings);
 
-		this.webSocketServer.on('connection', (connection) => {
+		this.WebSocketServer.on('connection', (connection) => {
 			connection.on('login', (event) => {
 				let account;
 
@@ -40,6 +40,19 @@ class  Server {
 				account.addConnection(connection);
 			});
 		});
+
+		if (options.useStdin) {
+			this.#startCmdlineListener();
+		}
+	}
+
+	#startCmdlineListener = () => {
+		process.stdin.resume();
+		process.stdin.setEncoding('utf8');
+		process.stdin.on('data', (data) => {
+			// Do stuff
+		});
+
 	}
 
 	start () {
