@@ -43,6 +43,28 @@ WSConsole
 			.isAuthenticated()
 			.on()
 
+		Permissions
+			help (globalize)
+			logout (globalize)
+			password (globalize)
+			server.create
+			server.delete
+			server.list
+			server.logout
+			server.password
+			user.create
+			user.delete
+			user.list
+			user.logout
+			user.password
+			user.permission.add
+			user.permission
+			user.permission.list
+			user.permission.remove
+
+			console.[name]
+			console.[name].command
+
 	process
 		connect()
 		disconnect()
