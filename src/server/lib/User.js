@@ -11,8 +11,12 @@ class User extends Account {
 			name : this.name
 		}).value();
 
-		this.permissions = data.permissions;
-		this.roles       = data.roles;
+		this.permissions = [
+			'help',
+			'logout',
+			'password'
+		].concat(data.permissions);
+		this.roles = data.roles;
 	}
 
 	addPermission (permission) {
