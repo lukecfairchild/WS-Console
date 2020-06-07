@@ -52,7 +52,6 @@ class  Server {
 		process.stdin.on('data', (data) => {
 			// Do stuff
 		});
-
 	}
 
 	start () {
@@ -126,7 +125,7 @@ class  Server {
 		return user;
 	}
 
-	getTask () {
+	getTask (name) {
 
 	}
 

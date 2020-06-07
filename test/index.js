@@ -7,7 +7,8 @@ const server = new WSConsole.server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
 	cacheSize     : 300,
-	dbPath        : Path.join(__dirname, 'db.json')
+	dbPath        : Path.join(__dirname, 'db.json'),
+	useStdin      : true
 	//ssl           : false,
 	//sslKey        : '/path/to/key',
 	//sslCert       : '/path/to/cert'
@@ -19,7 +20,7 @@ new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'test',
 	password         : 'test',
-	useStdin         : true,
+	useStdin         : false,
 	allowRemoteInput : true,
 	command          : [
 		'node',
