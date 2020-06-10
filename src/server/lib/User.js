@@ -16,7 +16,7 @@ class User extends Account {
 			'logout',
 			'password'
 		].concat(data.permissions);
-		this.roles = data.roles;
+		this.roles       = data.roles;
 	}
 
 	addPermission (permission) {
