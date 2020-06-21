@@ -17,15 +17,16 @@ class Commands {
 	}
 
 	run (commandRaw) {
-		const command = commandRaw.trim();
+		const commandTrimmed = commandRaw.trim();
 
-		for (const i in command.split(' ')) {
-			const commandParts = command.split(' ');
-			const check        = commandParts.splice(0, commandParts.length - i).join(' ');
+		for (const i in commandTrimmed.split(' ')) {
+			const commandParts = commandTrimmed.split(' ');
+			const command      = commandParts.splice(0, commandParts.length - i).join(' ');
 
-			if (this.#commands[check]
-			&&  this.#user.hasPermission(this.#commands[command].permissions)) {
-
+			if (this.#commands[command]
+			&&  (!this.#commands[command].permissions
+			||   this.#user.hasPermission(this.#commands[command].permissions))) {
+				this.#commands[command].handler(...commandParts);
 			}
 		}
 	}
