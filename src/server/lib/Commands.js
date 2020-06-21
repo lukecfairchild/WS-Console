@@ -4,6 +4,7 @@ const Path       = require('path');
 
 class Commands {
 	#commands = {};
+	#user;
 	constructor () {
 		const files = FileSystem.readdirSync(Path.join(__dirname, 'commands'));
 
@@ -15,14 +16,15 @@ class Commands {
 		});
 	}
 
-	run (rawCommand) {
-		const command = rawCommand.trim();
+	run (commandRaw) {
+		const command = commandRaw.trim();
 
 		for (const i in command.split(' ')) {
 			const commandParts = command.split(' ');
 			const check        = commandParts.splice(0, commandParts.length - i).join(' ');
 
-			if (this.#commands[check]) {
+			if (this.#commands[check]
+			&&  this.#user.hasPermission(this.#commands[command].permissions)) {
 
 			}
 		}
