@@ -29,6 +29,10 @@ class Account {
 			}
 		});
 
+		connection.webSocket.on('message',() => {
+			// do stuffs
+		});
+
 		this.trigger('login', {
 			connection,
 			...this
