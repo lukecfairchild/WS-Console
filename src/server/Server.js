@@ -1,5 +1,6 @@
 'use strict';
 
+const Commands        = require('./lib/Commands');
 const Database        = require('./lib/Database');
 const User            = require('./lib/User');
 const Task            = require('./lib/Task');
@@ -16,6 +17,7 @@ class  Server {
 		this.#users = {};
 		this.#tasks = {};
 
+		this.commands        = new Commands(this.settings);
 		this.database        = new Database(this.settings);
 		this.webServer       = new WebServer(this.settings);
 		this.WebSocketServer = new WebSocketServer(this.settings);
