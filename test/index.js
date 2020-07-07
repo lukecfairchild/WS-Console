@@ -16,6 +16,16 @@ const server = new WSConsole.server({
 
 server.start();
 
+const help = server.commands.get('help');
+
+server.commands.add('help', {
+	handler : async (...args) => {
+		console.log('new', args);
+		return await help(...args);
+	}
+});
+
+
 new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'test',
