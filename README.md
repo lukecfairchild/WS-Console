@@ -3,26 +3,51 @@ WSConsole
 	server
 		.start()
 		.stop()
-		.getUser(name) User
-		.getUsers() [User]
-		.getProcesses() [Process]
-		.getProcesse(name) Process
+		.users
+			.get(username) User
+			.getAll() [User]
+			.create() User
+			.exists(username) Boolean
+			.delete(username) Boolean
+		.tasks
+			.get(taskname) Task
+			.getAll() [Task]
+			.create() Task
+			.exists(taskname) Boolean
+			.delete(taskname) Boolean
 
 		User
+			.permissions
+				.add(permission)
+				.getAll()
+				.has(permission)
+				.remove(permission)
+			.connections
+				.add(connection)
+				.remove(connection)
+			.roles
+				.add(role)
+				.getAll()
+				.has(role)
+				.remove(role)
+
 			.addConnection(connection)
-			.addPermission(permission)
+
 			.addRole()
+			.getRoles()
+			.removeRole(role)
+
+			.addPermission(permission)
+			.getPermissions()
+			.hasPermission(permission)
+			.removePermission(permission)
+
 			.authenticate()
 			.delete()
 			.disconnect()
 			.getName()
-			.getPermissions()
-			.getRoles()
-			.hasPermission(permission)
 			.on(event, callback)
 			.removeEventListener(event, callback)
-			.removePermission(permission)
-			.removeRole(role)
 			.send(data)
 			.setPassword(password)
 

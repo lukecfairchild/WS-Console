@@ -2,23 +2,22 @@
 
 const Commands        = require('./lib/Commands');
 const Database        = require('./lib/Database');
-const User            = require('./lib/User');
+const Users           = require('./lib/Users');
 const Task            = require('./lib/Task');
+const Tasks           = require('./lib/Tasks');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/WebSocketServer');
 
 class  Server {
-	#users;
 	#tasks;
 
 	constructor (settings) {
 		this.settings = settings;
 
-		this.#users = {};
-		this.#tasks = {};
-
-		this.commands        = new Commands(this.settings);
-		this.database        = new Database(this.settings);
+		this.commands        = new Commands();
+		this.database        = new Database(this);
+		this.users           = new Users(this.database);
+		this.tasks           = new Tasks(this.database);
 		this.webServer       = new WebServer(this.settings);
 		this.WebSocketServer = new WebSocketServer(this.settings);
 
@@ -27,8 +26,8 @@ class  Server {
 				let account;
 
 				switch (event.type) {
-					case 'user'    : account = this.getUser(event.name); break;
-					case 'process' : account = this.getTask(event.name); break;
+					case 'user' : account = this.users.get(event.name); break;
+					case 'task' : account = this.tasks.get(event.name); break;
 					default : {
 						return connection.disconnect();
 					}
@@ -68,87 +67,6 @@ class  Server {
 	stop () {
 		this.webServer.stop();
 		this.WebSocketServer.stop();
-	}
-
-	createUser (name) {
-		if (this.userExists(name)) {
-			return;
-		}
-
-		this.database.get('user').push({
-			name        : name,
-			hash        : null,
-			permissions : {},
-			roles       : []
-		}).write();
-
-		const user = new User({
-			database : this.database,
-			name     : name
-		});
-
-		this.#users[name] = user;
-
-		return user;
-	}
-
-	createTask (name) {
-		if (this.taskExists(name)) {
-			return;
-		}
-
-		this.database.get('task').push({
-			name : name,
-			hash : null
-		}).write();
-
-		const task = new Task({
-			database : this.database,
-			name     : name
-		});
-
-		this.#tasks[name] = task;
-
-		return task;
-	}
-
-	getUser (name) {
-		if (this.#users[name]) {
-			return this.#users[name];
-		}
-
-		if (!this.userExists(name)) {
-			return;
-		}
-
-		const user = new User({
-			database : this.database,
-			name     : name
-		});
-
-		this.#users[name] = user;
-
-		return user;
-	}
-
-	getTask (name) {
-
-	}
-
-	taskExists (name) {
-		const data = this.database.get('task').find({
-			name : name
-		}).value();
-
-		return Boolean(data);
-	}
-
-	userExists (name) {
-		const data = this.database.get('user').find({
-			name : name
-		}).value();
-
-		return Boolean(data);
 	}
 }
 
