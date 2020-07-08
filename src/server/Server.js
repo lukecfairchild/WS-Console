@@ -43,7 +43,7 @@ class  Server {
 			});
 		});
 
-		if (options.useStdin) {
+		if (this.settings.useStdin) {
 			this.#startCmdlineListener();
 		}
 	}
@@ -51,8 +51,12 @@ class  Server {
 	#startCmdlineListener = () => {
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
-		process.stdin.on('data', (data) => {
-			// Do stuff
+		process.stdin.on('data', async (data) => {
+			const response = await this.commands.get(data).handler();
+
+			if (response) {
+				console.log(response);
+			}
 		});
 	}
 
