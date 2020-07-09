@@ -5,8 +5,8 @@ class Users {
 	#database;
 	#users = {};
 
-	constructor (database) {
-		this.#database = database;
+	constructor (options) {
+		this.parent = options.parent;
 	}
 
 	create (name) {
@@ -14,7 +14,7 @@ class Users {
 			return this.get(name);
 		}
 
-		this.#database.get('user').push({
+		this.parent.database.get('user').push({
 			name        : name,
 			hash        : null,
 			permissions : {},
@@ -22,7 +22,7 @@ class Users {
 		}).write();
 
 		const user = new User({
-			database : this.#database,
+			database : this.parent.database,
 			name     : name
 		});
 
@@ -32,7 +32,14 @@ class Users {
 	}
 
 	delete (name) {
+		if (this.exists(name)) {
+			this.#users[name].disconnect();
 
+			delete this.#users[name];
+			this.parent.database.get('user').remove({
+				name : name
+			}).write();
+		}
 	}
 
 	get (name) {
@@ -45,7 +52,7 @@ class Users {
 		}
 
 		const user = new User({
-			database : this.#database,
+			database : this.parent.database,
 			name     : name
 		});
 
@@ -63,7 +70,7 @@ class Users {
 			return true;
 		}
 
-		const data = this.#database.get('user').find({
+		const data = this.parent.database.get('user').find({
 			name : name
 		}).value();
 

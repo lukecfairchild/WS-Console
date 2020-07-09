@@ -3,23 +3,20 @@
 const Commands        = require('./lib/Commands');
 const Database        = require('./lib/Database');
 const Users           = require('./lib/Users');
-const Task            = require('./lib/Task');
 const Tasks           = require('./lib/Tasks');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/WebSocketServer');
 
 class  Server {
-	#tasks;
-
 	constructor (settings) {
 		this.settings = settings;
 
 		this.commands        = new Commands();
-		this.database        = new Database(this);
-		this.users           = new Users(this.database);
-		this.tasks           = new Tasks(this.database);
-		this.webServer       = new WebServer(this.settings);
-		this.WebSocketServer = new WebSocketServer(this.settings);
+		this.database        = new Database({parent : this});
+		this.tasks           = new Tasks({parent : this});
+		this.users           = new Users({parent : this});
+		this.webServer       = new WebServer({parent : this});
+		this.WebSocketServer = new WebSocketServer({parent : this});
 
 		this.WebSocketServer.on('connection', (connection) => {
 			connection.on('login', (event) => {
