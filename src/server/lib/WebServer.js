@@ -8,12 +8,12 @@ const Url        = require('url');
 
 class WebServer {
 	constructor (options) {
-		this.options = options;
+		this.parent  = options.parent;
 
-		if (this.options.ssl) {
+		if (this.parent.options.ssl) {
 			this.webServer = HTTPS.createServer({
-				cert : FileSystem.readFileSync(this.options.sslCert),
-				key  : FileSystem.readFileSync(this.options.sslKey)
+				cert : FileSystem.readFileSync(this.parent.options.sslCert),
+				key  : FileSystem.readFileSync(this.parent.options.sslKey)
 			});
 
 		} else {
@@ -57,7 +57,7 @@ class WebServer {
 
 			response.writeHead(200, {
 				'Content-Type' : file.type,
-				'Set-Cookie'   : `port=${this.options.webSocketPort}`
+				'Set-Cookie'   : `port=${this.parent.options.webSocketPort}`
 			});
 
 			response.end(responseBody);
@@ -69,12 +69,12 @@ class WebServer {
 	}
 
 	start () {
-		this.webServer.listen(this.options.webServerPort, (error) => {
+		this.webServer.listen(this.parent.options.webServerPort, (error) => {
 			if (error) {
 				return console.error(error);
 			}
 
-			console.log('WebServer listening on port: ' + this.options.webServerPort);
+			console.log('WebServer listening on port: ' + this.parent.options.webServerPort);
 		});
 	}
 

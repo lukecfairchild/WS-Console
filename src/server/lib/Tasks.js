@@ -2,11 +2,10 @@
 const Task = require('./Task');
 
 class Tasks {
-	#database;
 	#tasks = {};
 
-	constructor (database) {
-		this.#database = database;
+	constructor (options) {
+		this.parent = options.parent;
 	}
 
 	create (name) {
@@ -14,13 +13,13 @@ class Tasks {
 			return this.get(name);
 		}
 
-		this.#database.get('task').push({
+		this.parent.database.get('task').push({
 			name : name,
 			hash : null
 		}).write();
 
 		const task = new Task({
-			database : this.#database,
+			database : this.parent.database,
 			name     : name
 		});
 
@@ -30,7 +29,14 @@ class Tasks {
 	}
 
 	delete (name) {
-		
+		if (this.exists(name)) {
+			this.#users[name].disconnect();
+
+			delete this.#users[name];
+			this.parent.database.get('task').remove({
+				name : name
+			}).write();
+		}
 	}
 
 	get (name) {
@@ -43,7 +49,7 @@ class Tasks {
 		}
 
 		const task = new Task({
-			database : this.#database,
+			database : this.parent.database,
 			name     : name
 		});
 
@@ -61,7 +67,7 @@ class Tasks {
 			return true;
 		}
 
-		const data = this.#database.get('task').find({
+		const data = this.parent.database.get('task').find({
 			name : name
 		}).value();
 

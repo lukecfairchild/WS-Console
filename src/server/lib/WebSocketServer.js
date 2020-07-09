@@ -4,8 +4,6 @@ const Data       = require('./Database');
 const FileSystem = require('http');
 const HTTP       = require('http');
 const HTTPS      = require('https');
-const Process    = require('./Process');
-const User       = require('./User');
 const WebSocket  = require('ws');
 
 class WebSocketServer {
@@ -14,13 +12,13 @@ class WebSocketServer {
 	#webSocketServer;
 
 	constructor (options) {
-		this.options = options;
+		this.parent  = options.parent;
 		this.#events = {};
 
-		if (this.options.ssl) {
+		if (this.parent.settings.ssl) {
 			this.#webServer = HTTPS.createServer({
-				cert : FileSystem.readFileSync(this.options.sslCert),
-				key  : FileSystem.readFileSync(this.options.sslKey)
+				cert : FileSystem.readFileSync(this.parent.settings.sslCert),
+				key  : FileSystem.readFileSync(this.parent.settings.sslKey)
 			});
 
 		} else {
@@ -34,7 +32,7 @@ class WebSocketServer {
 		this.#webSocketServer.on('listening', () => {
 			this.trigger('listening', {});
 
-			console.log('WebSocketServer listening on port: ' + this.options.webSocketPort);
+			console.log('WebSocketServer listening on port: ' + this.parent.settings.webSocketPort);
 		});
 
 		this.#webSocketServer.on('connection', (webSocket) => {
@@ -44,7 +42,7 @@ class WebSocketServer {
 	}
 
 	start () {
-		this.#webServer.listen(this.options.webSocketPort);
+		this.#webServer.listen(this.parent.settings.webSocketPort);
 	}
 
 	stop () {

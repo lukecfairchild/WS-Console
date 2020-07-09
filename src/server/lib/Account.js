@@ -52,14 +52,6 @@ class Account {
 		return true;
 	}
 
-	delete () {
-		this.disconnect();
-
-		this.database.get(this.type).remove({
-			name : this.name
-		}).write();
-	}
-
 	disconnect () {
 		for (const i in this.connections) {
 			this.connections[i].disconnect();
