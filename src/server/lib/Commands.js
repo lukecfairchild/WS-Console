@@ -24,6 +24,30 @@ class Commands {
 		delete this.#commands[command];
 	}
 
+	getAll () {
+		const commands = [];
+
+		for (const i in this.#commands) {
+			const commandParts = commandTrimmed.split(' ');
+			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
+
+			if (this.#commands[commandName]) {
+				const command = this.#commands[i];
+
+				commands.push({
+					help        : command.help        || '',
+					permissions : command.permissions || [],
+					run         : async (...args) => {
+						console.log('this', this);
+						return await command.handler(...args); //.apply(this, args);
+					}
+				});
+			}
+		}
+
+		return commands;
+	}
+
 	get (commandRaw) {
 		const commandTrimmed = commandRaw.trim();
 
@@ -34,27 +58,30 @@ class Commands {
 			if (this.#commands[commandName]) {
 				const command = this.#commands[commandName];
 
-				const returns = async (...args) => {
-					return await command.handler(...args);
+				return {
+					help        : command.help        || '',
+					permissions : command.permissions || [],
+					run         : async (...rawArgs) => {
+						let args = commandParts;
+
+						if (rawArgs.length) {
+							args = rawArgs;
+						}
+						console.log('this', this);
+
+						return await command.handler(...args); //.apply(this, args);
+					}
 				};
-
-				returns.handler     = command.handler;
-				returns.permissions = command.permissions;
-
-				return returns;
 			}
 		}
 
 		return {
-			handler : () => {
+			help        : '',
+			permissions : [],
+			run         : () => {
 				return 'Command not found.';
-			},
-			permissions : []
+			}
 		};
-	}
-
-	run (commandRaw) {
-		this.get(commandRaw).handler();
 	}
 }
 

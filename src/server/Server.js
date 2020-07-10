@@ -48,7 +48,7 @@ class  Server {
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
 		process.stdin.on('data', async (data) => {
-			const response = await this.commands.get(data).handler();
+			const response = await this.commands.get(data).run();
 
 			if (response) {
 				console.log(response);
