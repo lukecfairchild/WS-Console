@@ -11,7 +11,7 @@ class  Server {
 	constructor (settings) {
 		this.settings = settings;
 
-		this.commands        = new Commands();
+		this.commands        = new Commands({parent : this});
 		this.database        = new Database({parent : this});
 		this.tasks           = new Tasks({parent : this});
 		this.users           = new Users({parent : this});
