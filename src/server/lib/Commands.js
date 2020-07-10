@@ -5,7 +5,9 @@ const Path       = require('path');
 class Commands {
 	#commands = {};
 
-	constructor () {
+	constructor (options) {
+		this.parent = options.parent;
+
 		const files = FileSystem.readdirSync(Path.join(__dirname, 'commands'));
 
 		files.forEach(fileName => {
@@ -28,7 +30,7 @@ class Commands {
 		const commands = [];
 
 		for (const i in this.#commands) {
-			const commandParts = commandTrimmed.split(' ');
+			const commandParts = this.#commands[i].split(' ');
 			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
 
 			if (this.#commands[commandName]) {
@@ -38,8 +40,7 @@ class Commands {
 					help        : command.help        || '',
 					permissions : command.permissions || [],
 					run         : async (...args) => {
-						console.log('this', this);
-						return await command.handler(...args); //.apply(this, args);
+						return await command.handler(this, args);
 					}
 				});
 			}
@@ -67,9 +68,8 @@ class Commands {
 						if (rawArgs.length) {
 							args = rawArgs;
 						}
-						console.log('this', this);
 
-						return await command.handler(...args); //.apply(this, args);
+						return await command.handler(this, ...args);
 					}
 				};
 			}
