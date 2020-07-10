@@ -2,7 +2,6 @@
 const User = require('./User');
 
 class Users {
-	#database;
 	#users = {};
 
 	constructor (options) {
@@ -66,7 +65,7 @@ class Users {
 	}
 
 	exists (name) {
-		if (this.#tasks[name]) {
+		if (this.#users[name]) {
 			return true;
 		}
 

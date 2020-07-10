@@ -30,9 +30,9 @@ class Tasks {
 
 	delete (name) {
 		if (this.exists(name)) {
-			this.#users[name].disconnect();
+			this.#tasks[name].disconnect();
 
-			delete this.#users[name];
+			delete this.#tasks[name];
 			this.parent.database.get('task').remove({
 				name : name
 			}).write();
