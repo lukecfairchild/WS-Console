@@ -1,14 +1,17 @@
 
-class Help {
+const Command = require('../Command');
+
+class Help extends Command {
 	constructor (options) {
-		this.parent = options.parent;
+		super(options);
 
 		this.description = '';
 		this.permissions = [];
 	}
 
 	run (...args) {
-		console.log('original:', args, this.parent);
+		console.log('args:', args);
+		console.log('this.parent:', this.parent);
 		return args;
 	}
 

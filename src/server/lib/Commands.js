@@ -30,20 +30,7 @@ class Commands {
 		const commands = [];
 
 		for (const i in this.#commands) {
-			const commandParts = this.#commands[i].split(' ');
-			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
-
-			if (this.#commands[commandName]) {
-				const command = this.#commands[i];
-
-				commands.push({
-					help        : command.help        || '',
-					permissions : command.permissions || [],
-					run         : async (...args) => {
-						return await command.handler(this, args);
-					}
-				});
-			}
+			commands.push(this.get(this.#commands[i]));
 		}
 
 		return commands;
@@ -57,7 +44,9 @@ class Commands {
 			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
 
 			if (this.#commands[commandName]) {
-				const command = this.#commands[commandName];
+				const command = new this.#commands[commandName]({
+					parent : this
+				});
 
 				return {
 					help        : command.help        || '',
@@ -69,7 +58,7 @@ class Commands {
 							args = rawArgs;
 						}
 
-						return await command.handler(this, ...args);
+						return await command.run(...args);
 					}
 				};
 			}
