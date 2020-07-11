@@ -6,6 +6,12 @@ class Users {
 
 	constructor (options) {
 		this.parent = options.parent;
+
+		this.#users.Console = new User({
+			name        : 'Console',
+			parent      : this,
+			permissions : ['*']
+		});
 	}
 
 	create (name) {
@@ -21,8 +27,8 @@ class Users {
 		}).write();
 
 		const user = new User({
-			database : this.parent.database,
-			name     : name
+			name   : name,
+			parent : this
 		});
 
 		this.#users[name] = user;
