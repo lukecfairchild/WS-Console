@@ -9,13 +9,13 @@ class User extends Account {
 
 		const data = this.database.get(this.type).find({
 			name : this.name
-		}).value();
+		}).value() || {};
 
 		this.permissions = [
 			'help',
 			'logout',
 			'password'
-		].concat(data.permissions);
+		].concat(data.permissions).concat(options.permissions || []);
 		this.roles       = data.roles;
 	}
 

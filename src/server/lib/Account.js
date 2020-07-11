@@ -9,13 +9,14 @@ class Account {
 	constructor (options) {
 		this.connections = [];
 		this.#events     = {};
-		this.database    = options.database;
+		this.parent      = options.parent;
+		this.database    = options.parent.parent.database;
 		this.name        = options.name;
 		this.type        = options.type;
 
 		const data = this.database.get(this.type).find({
 			name : this.name
-		}).value();
+		}).value() || {};
 
 		this.#hash = data.hash;
 	}

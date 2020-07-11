@@ -1,6 +1,6 @@
 
 WSConsole
-	server
+	Server
 		.start()
 		.stop()
 		.users
@@ -17,6 +17,8 @@ WSConsole
 			.delete(taskname) Boolean
 
 		User
+			.name
+			.type
 			.permissions
 				.add(permission)
 				.getAll()
@@ -24,6 +26,7 @@ WSConsole
 				.remove(permission)
 			.connections
 				.add(connection)
+				.getAll()
 				.remove(connection)
 			.roles
 				.add(role)
@@ -31,38 +34,44 @@ WSConsole
 				.has(role)
 				.remove(role)
 
-			.addConnection(connection)
-
-			.addRole()
-			.getRoles()
-			.removeRole(role)
-
-			.addPermission(permission)
-			.getPermissions()
-			.hasPermission(permission)
-			.removePermission(permission)
-
-			.authenticate()
+			.connections
+				.add(connection)
+				.disconnect()
+				.getAll()
+				.remove(connection)
 			.delete()
-			.disconnect()
-			.getName()
 			.on(event, callback)
 			.removeEventListener(event, callback)
 			.send(data)
 			.setPassword(password)
 
+			// REMOVE //
+			x.addConnection(connection)
+			x.addRole()
+			x.getRoles()
+			x.removeRole(role)
+
+			x.addPermission(permission)
+			x.getPermissions()
+			x.hasPermission(permission)
+			x.removePermission(permission)
+
 		Process
-			.addConnection(connection)
-			.authenticate()
+			.name
+			.type
+			.connections
+				.add(connection)
+				.disconnect()
+				.getAll()
+				.remove(connection)
+				.send(data)
 			.delete()
-			.disconnect()
-			.getName()
 			.on(event, callback)
 			.removeEventListener(event, callback)
-			.send(command)
 			.setPassword(password)
 
 		Connection
+			.authenticate(credentials)
 			.diconnect()
 			.send(message)
 			.isAuthenticated()
@@ -90,35 +99,34 @@ WSConsole
 			console.[name]
 			console.[name].command
 
-	process
-		connect()
-		disconnect()
-		log(data)
+	Task
+		.connect()
+		.disconnect()
+		.log(data)
 
-	client
+	Client
 		.on(event, callback)
 			connect
 			disconnect
-			processConnect {
-				Process
+			taskConnect {
+				Task
 			}
-			processDisconnect {
-				Process
+			taskDisconnect {
+				Task
 			}
-			processData {
-				Process,
+			taskData {
+				Task,
 				data
 			}
 
 		.connect()
 		.disconnect()
-		.getProcess(name) Process
-		.getProcesses() [Process]
+		.tasks
+			.get(name) Task
+			.getAll() [Task]
 
-		Process
-			.send(data) {
-				data
-			}
+		Task
+			.send(data)
 			.on(event, callback)
 				data {
 					data
