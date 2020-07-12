@@ -17,17 +17,18 @@ WSConsole
 			.delete(taskname) Boolean
 
 		User
-			.name
-			.type
+			.name String
+			.type String
 			.permissions
 				.add(permission)
-				.getAll()
-				.has(permission)
+				.getAll() [String]
+				.has(permission) Boolean
 				.remove(permission)
 			.connections
 				.add(connection)
 				.disconnect()
-				.getAll()
+				.getAll() [Connection]
+				.send()
 			.roles
 				.add(role)
 				.getAll()
@@ -41,14 +42,13 @@ WSConsole
 			.setPassword(password)
 
 
-		Process
+		Task
 			.name
 			.type
 			.connections
 				.add(connection)
 				.disconnect()
 				.getAll()
-				.remove(connection)
 				.send(data)
 			.delete()
 			.on(event, callback)
