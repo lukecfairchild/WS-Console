@@ -6,9 +6,9 @@ const Path     = require('path');
 
 class Database {
 	constructor (options) {
-		this.parent = options.parent;
+		this.Server = options.Server;
 
-		const database = LowDB(new FileSync(Path.resolve(this.parent.settings.dbPath)));
+		const database = LowDB(new FileSync(Path.resolve(this.Server.settings.dbPath)));
 
 		database.defaults({
 			user    : [],

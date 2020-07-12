@@ -1,66 +1,36 @@
 'use strict';
 
-const bcrypt = require('bcryptjs');
+const bcrypt      = require('bcryptjs');
+const Connections = require('./Connections');
 
 class Account {
 	#events;
 	#hash;
 
 	constructor (options) {
-		this.connections = [];
-		this.#events     = {};
-		this.parent      = options.parent;
-		this.database    = options.parent.parent.database;
-		this.name        = options.name;
-		this.type        = options.type;
+		this.#events = {};
+		this.name    = options.name;
+		this.type    = options.type;
+
+		if (options.type === 'user') {
+			this.connections = new Connections({
+				Task : options.Task
+			});
+			this.Tasks       = options.Taasks;
+		}
+
+		if (options.type === 'task') {
+			this.connections = new Connections({
+				User : options.User
+			});
+			this.Users       = options.Users;
+		}
 
 		const data = this.database.get(this.type).find({
 			name : this.name
 		}).value() || {};
 
 		this.#hash = data.hash;
-	}
-
-	addConnection (connection) {
-		this.connections.push(connection);
-
-		connection.webSocket.on('close',() => {
-			if (this.connections.includes(connection)) {
-				this.connections.splice(this.connections.indexOf(connection), 1);
-			}
-		});
-
-		connection.webSocket.on('message',() => {
-			// do stuffs
-		});
-
-		this.trigger('login', {
-			connection,
-			...this
-		});
-	}
-
-	authenticate (password) {
-		if (!password) {
-			return false;
-		}
-
-		const match = bcrypt.compareSync(password, this.#hash);
-		if (!match) {
-			return false;
-		}
-
-		return true;
-	}
-
-	disconnect () {
-		for (const i in this.connections) {
-			this.connections[i].disconnect();
-		}
-	}
-
-	getName () {
-		return this.name;
 	}
 
 	on (event, callback) {
@@ -112,7 +82,7 @@ class Account {
 
 		this.#hash = hash;
 
-		this.database.get(this.type).find({
+		this.Users.Server.database.get(this.type).find({
 			name : this.name
 		}).set('hash', hash).write();
 	}
