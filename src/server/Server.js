@@ -11,12 +11,12 @@ class  Server {
 	constructor (settings) {
 		this.settings = settings;
 
-		this.commands        = new Commands({parent : this});
-		this.database        = new Database({parent : this});
-		this.tasks           = new Tasks({parent : this});
-		this.users           = new Users({parent : this});
-		this.webServer       = new WebServer({parent : this});
-		this.WebSocketServer = new WebSocketServer({parent : this});
+		this.commands        = new Commands({Server : this});
+		this.database        = new Database({Server : this});
+		this.users           = new Users({Server : this});
+		this.tasks           = new Tasks({Server : this});
+		this.webServer       = new WebServer({Server : this});
+		this.WebSocketServer = new WebSocketServer({Server : this});
 
 		this.WebSocketServer.on('connection', (connection) => {
 			connection.on('login', (event) => {

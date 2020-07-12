@@ -26,35 +26,20 @@ WSConsole
 				.remove(permission)
 			.connections
 				.add(connection)
+				.disconnect()
 				.getAll()
-				.remove(connection)
 			.roles
 				.add(role)
 				.getAll()
 				.has(role)
 				.remove(role)
 
-			.connections
-				.add(connection)
-				.disconnect()
-				.getAll()
-				.remove(connection)
 			.delete()
 			.on(event, callback)
 			.removeEventListener(event, callback)
 			.send(data)
 			.setPassword(password)
 
-			// REMOVE //
-			x.addConnection(connection)
-			x.addRole()
-			x.getRoles()
-			x.removeRole(role)
-
-			x.addPermission(permission)
-			x.getPermissions()
-			x.hasPermission(permission)
-			x.removePermission(permission)
 
 		Process
 			.name

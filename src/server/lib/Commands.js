@@ -6,7 +6,7 @@ class Commands {
 	#commands = {};
 
 	constructor (options) {
-		this.parent = options.parent;
+		this.Server = options.Server;
 
 		const files = FileSystem.readdirSync(Path.join(__dirname, 'commands'));
 
@@ -45,7 +45,7 @@ class Commands {
 
 			if (this.#commands[commandName]) {
 				const command = new this.#commands[commandName]({
-					parent : this
+					Commands : this
 				});
 
 				return {
