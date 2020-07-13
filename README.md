@@ -58,9 +58,9 @@ WSConsole
 		Connection
 			.authenticate(credentials)
 			.diconnect()
-			.send(message)
-			.isAuthenticated()
 			.on()
+			.send(message)
+			.trigger(event, data)
 
 		Permissions
 			help (globalize)
