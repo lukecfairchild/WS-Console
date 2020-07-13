@@ -1,11 +1,13 @@
 'use strict';
 
+const Uuid = require('uuid').uuidv4;
+
 class Connection {
-	#events;
+	#events = {};
 
 	constructor (webSocket) {
 		this.authenticated = false;
-		this.#events       = {};
+		this.id            = Uuid();
 		this.webSocket     = webSocket;
 		this.webSocket.on('message', (message) => {
 			let data = {};
@@ -21,21 +23,24 @@ class Connection {
 				this.trigger('login', data);
 			}
 		});
+
+		this.webSocket.on('close', () => {
+			if (this.Connections) {
+				this.Connections.remove(this.id);
+			}
+		});
+
 		this.send({
 			action : 'ready'
 		});
 	}
 
-	isAuthenticated () {
-		return this.authenticated;
-	}
-
-	setAuthenticated (state) {
-		this.authenticated = state;
-	}
-
 	disconnect () {
 		this.webSocket.terminate();
+	}
+
+	on (event, callback) {
+		return this.webSocket.on(event, callback);
 	}
 
 	send (message) {
@@ -47,17 +52,9 @@ class Connection {
 			});
 		}
 	}
-	on (event, callback) {
-		return this.webSocket.on(event, callback);
-	}
 
 	trigger (event, data) {
-		if (!event
-		||  !data) {
-			return;
-		}
-
-		if (this.#events[event]) {
+		if (this.#events[event] && data) {
 			for (const i in this.#events[event]) {
 				this.#events[event][i](data);
 			}
