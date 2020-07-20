@@ -13,7 +13,7 @@ class Tasks {
 			return this.get(name);
 		}
 
-		this.parent.database.get('task').push({
+		this.parent.database.get('accounts').push({
 			name : name,
 			hash : null
 		}).write();
@@ -33,7 +33,7 @@ class Tasks {
 			this.#tasks[name].disconnect();
 
 			delete this.#tasks[name];
-			this.parent.database.get('task').remove({
+			this.parent.database.get('accounts').remove({
 				name : name
 			}).write();
 		}
@@ -67,7 +67,7 @@ class Tasks {
 			return true;
 		}
 
-		const data = this.parent.database.get('task').find({
+		const data = this.parent.database.get('accounts').find({
 			name : name
 		}).value();
 

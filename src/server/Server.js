@@ -3,12 +3,33 @@
 const Commands        = require('./lib/Commands');
 const Database        = require('./lib/Database');
 const Users           = require('./lib/Users');
+const Type            = require('simple-type-assert');
 const Tasks           = require('./lib/Tasks');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/WebSocketServer');
 
 class  Server {
 	constructor (settings) {
+		// Required settings
+		Type.assert(settings, {
+			cacheSize     : Number,
+			dbPath        : String,
+			webServerPort : Number,
+			webSocketPort : Number
+		});
+
+		// Optional settings
+		settings.useStdin = settings.useStdin || false;
+		settings.ssl      = settings.ssl      || false;
+		settings.sslKey   = settings.sslKey   || '';
+		settings.sslCert  = settings.sslCert  || '';
+		Type.assert(settings, {
+			useStdin : Boolean,
+			ssl      : Boolean,
+			sslKey   : String,
+			sslCert  : String
+		});
+
 		this.settings = settings;
 
 		this.commands        = new Commands({Server : this});

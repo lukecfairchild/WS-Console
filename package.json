@@ -21,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "lowdb": "^1.0.0",
     "randomatic": "^3.1.1",
+    "simple-type-assert": "^1.1.1",
     "uuid": "^8.2.0",
     "ws": "^7.2.5"
   },
