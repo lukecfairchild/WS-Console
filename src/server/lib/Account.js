@@ -8,25 +8,16 @@ class Account {
 	#hash;
 
 	constructor (options) {
-		this.#events = {};
-		this.name    = options.name;
-		this.type    = options.type;
+		this.#events     = {};
+		this.Accounts    = options.Accounts;
+		this.connections = new Connections({
+			Account : this
+		});
 
-		if (options.type === 'user') {
-			this.connections = new Connections({
-				Task : options.Task
-			});
-			this.Tasks       = options.Taasks;
-		}
+		this.name = options.name;
+		this.type = options.type;
 
-		if (options.type === 'task') {
-			this.connections = new Connections({
-				User : options.User
-			});
-			this.Users       = options.Users;
-		}
-
-		const data = this.database.get(this.type).find({
+		const data = this.database.get('accounts').find({
 			name : this.name
 		}).value() || {};
 
@@ -82,7 +73,7 @@ class Account {
 
 		this.#hash = hash;
 
-		this.Users.Server.database.get(this.type).find({
+		this.Users.Server.database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
 	}

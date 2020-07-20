@@ -11,9 +11,8 @@ class Database {
 		const database = LowDB(new FileSync(Path.resolve(this.Server.settings.dbPath)));
 
 		database.defaults({
-			user    : [],
-			process : [],
-			role    : {}
+			accounts : [],
+			role     : {}
 		}).write();
 
 		return database;
