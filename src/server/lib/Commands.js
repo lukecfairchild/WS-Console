@@ -30,18 +30,17 @@ class Commands {
 		delete this.#commands[command];
 	}
 
-	getAll () {
+	getAll (account) {
 		const commands = {};
 
 		for (const i in this.#commands) {
-			commands[i] = this.get(i);
+			commands[i] = this.get(account, i);
 		}
 
 		return commands;
 	}
 
 	get (account, commandRaw) {
-		console.log('args', arguments);
 		const commandTrimmed = commandRaw.trim();
 
 		for (const i in commandTrimmed.split(' ')) {

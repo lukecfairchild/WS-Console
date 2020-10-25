@@ -59,7 +59,7 @@ class  Server {
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
 		process.stdin.on('data', async (data) => {
-			this.Accounts.get('Console').run(data);
+			this.Accounts.get('Console').Commands.run(data);
 		});
 	}
 
