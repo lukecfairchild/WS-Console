@@ -9,7 +9,7 @@ class Users {
 
 		this.#users.Console = new User({
 			name        : 'Console',
-			parent      : this,
+			Accounts    : this,
 			permissions : ['*']
 		});
 	}
@@ -19,7 +19,7 @@ class Users {
 			return this.get(name);
 		}
 
-		this.Server.database.get('user').push({
+		this.Server.Database.get('user').push({
 			name        : name,
 			hash        : null,
 			permissions : {},
@@ -27,8 +27,8 @@ class Users {
 		}).write();
 
 		const user = new User({
-			name   : name,
-			parent : this
+			name     : name,
+			Accounts : this
 		});
 
 		this.#users[name] = user;
@@ -41,7 +41,7 @@ class Users {
 			this.#users[name].disconnect();
 
 			delete this.#users[name];
-			this.Server.database.get('user').remove({
+			this.Server.Database.get('user').remove({
 				name : name
 			}).write();
 		}
@@ -57,8 +57,8 @@ class Users {
 		}
 
 		const user = new User({
-			Users : this,
-			name  : name
+			Accounts : this,
+			name     : name
 		});
 
 		this.#users[name] = user;
@@ -75,7 +75,7 @@ class Users {
 			return true;
 		}
 
-		const data = this.Server.database.get('user').find({
+		const data = this.Server.Database.get('user').find({
 			name : name
 		}).value();
 

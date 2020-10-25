@@ -1,7 +1,8 @@
 'use strict';
 
-const bcrypt      = require('bcryptjs');
-const Connections = require('./Connections');
+const bcrypt       = require('bcryptjs');
+const Connections  = require('./Connections');
+const IndentString = require('indent-string');
 
 class Account {
 	#events;
@@ -17,11 +18,19 @@ class Account {
 		this.name = options.name;
 		this.type = options.type;
 
-		const data = this.database.get('accounts').find({
+		const data = this.Accounts.Server.Database.get('accounts').find({
 			name : this.name
 		}).value() || {};
 
 		this.#hash = data.hash;
+	}
+
+	async run (command) {
+		const response = await this.Accounts.Server.Commands.get(this, command).run();
+
+		if (response) {
+		//	console.log(IndentString(response, 4));
+		}
 	}
 
 	on (event, callback) {
@@ -73,7 +82,7 @@ class Account {
 
 		this.#hash = hash;
 
-		this.Users.Server.database.get('accounts').find({
+		this.Users.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
 	}

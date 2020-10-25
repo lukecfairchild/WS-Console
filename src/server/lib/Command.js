@@ -1,16 +1,17 @@
 
 class Command {
-	constructor (options) {
-		this.parent    = options.parent;
-		this.arguments = options.arguments || [];
+	constructor (options = {}) {
+		this.Commands = options.Commands;
+		this.Account  = options.Account;
 
+		this.arguments   = '';
 		this.description = '';
 		this.permissions = [];
 	}
 
-	run () {}
-
-	help () {}
+	run () {
+		return 'Command not found.';
+	}
 }
 
 module.exports = Command;

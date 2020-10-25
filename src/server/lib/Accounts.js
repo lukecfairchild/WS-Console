@@ -44,7 +44,7 @@ class Accounts {
 			return this.get(accountOptions.name);
 		}
 
-		this.Server.database.get('accounts').push({
+		this.Server.Database.get('accounts').push({
 			name        : accountOptions.name,
 			hash        : null,
 			permissions : accountOptions.permissions || {},
@@ -67,7 +67,7 @@ class Accounts {
 
 		if (this.exists(name)) {
 			this.unload(name);
-			this.Server.database.get('accounts').remove({
+			this.Server.Database.get('accounts').remove({
 				name : name
 			}).write();
 		}
@@ -80,7 +80,7 @@ class Accounts {
 			return true;
 		}
 
-		const data = this.Server.database.get('accounts').find({
+		const data = this.Server.Database.get('accounts').find({
 			name : name
 		}).value();
 
@@ -98,7 +98,7 @@ class Accounts {
 			return;
 		}
 
-		const data = this.Server.database.get('accounts').find({
+		const data = this.Server.Database.get('accounts').find({
 			name : name
 		}).value();
 

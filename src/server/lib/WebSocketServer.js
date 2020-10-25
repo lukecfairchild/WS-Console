@@ -12,13 +12,13 @@ class WebSocketServer {
 	#webSocketServer;
 
 	constructor (options) {
-		this.parent  = options.parent;
+		this.Server  = options.Server;
 		this.#events = {};
 
-		if (this.parent.settings.ssl) {
+		if (this.Server.settings.ssl) {
 			this.#webServer = HTTPS.createServer({
-				cert : FileSystem.readFileSync(this.parent.settings.sslCert),
-				key  : FileSystem.readFileSync(this.parent.settings.sslKey)
+				cert : FileSystem.readFileSync(this.Server.settings.sslCert),
+				key  : FileSystem.readFileSync(this.Server.settings.sslKey)
 			});
 
 		} else {
@@ -32,7 +32,7 @@ class WebSocketServer {
 		this.#webSocketServer.on('listening', () => {
 			this.trigger('listening', {});
 
-			console.log('WebSocketServer listening on port: ' + this.parent.settings.webSocketPort);
+			console.log('WebSocketServer listening on port: ' + this.Server.settings.webSocketPort);
 		});
 
 		this.#webSocketServer.on('connection', (webSocket) => {
@@ -42,7 +42,7 @@ class WebSocketServer {
 	}
 
 	start () {
-		this.#webServer.listen(this.parent.settings.webSocketPort);
+		this.#webServer.listen(this.Server.settings.webSocketPort);
 	}
 
 	stop () {

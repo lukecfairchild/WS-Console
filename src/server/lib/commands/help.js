@@ -1,5 +1,6 @@
 
-const Command = require('../Command');
+const Command      = require('../Command');
+const IndentString = require('indent-string');
 
 class Help extends Command {
 	constructor (options) {
@@ -9,14 +10,35 @@ class Help extends Command {
 		this.permissions = [];
 	}
 
-	run (...args) {
-		console.log('args:', args);
-		console.log('this.parent:', this.parent);
-		return args;
-	}
+	async run (...args) {
+		const commands = this.Commands.getAll();
 
-	help (...args) {
+		if (args.length === 0) {
+			const results = [];
 
+			for (let i in commands) {
+				const command = commands[i];
+				let result    = i;
+
+				if (command.arguments) {
+					result += ' ' + command.arguments;
+				}
+
+				if (command.description) {
+					result += '\n' + IndentString(command.description, 4);
+				}
+
+				results.push(result);
+			}
+
+			return results.join('\n');
+		}
+
+		if (commands[args.join()]) {
+			return commands[args.join()].help();
+		}
+
+		return 'unknown command';
 	}
 }
 

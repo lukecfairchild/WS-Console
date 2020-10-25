@@ -5,7 +5,7 @@ class Tasks {
 	#tasks = {};
 
 	constructor (options) {
-		this.parent = options.parent;
+		this.Server = options.Server;
 	}
 
 	create (name) {
@@ -13,14 +13,14 @@ class Tasks {
 			return this.get(name);
 		}
 
-		this.parent.database.get('accounts').push({
+		this.Server.Database.get('accounts').push({
 			name : name,
 			hash : null
 		}).write();
 
 		const task = new Task({
-			database : this.parent.database,
-			name     : name
+			Tasks : this,
+			name  : name
 		});
 
 		this.#tasks[name] = task;
@@ -33,7 +33,7 @@ class Tasks {
 			this.#tasks[name].disconnect();
 
 			delete this.#tasks[name];
-			this.parent.database.get('accounts').remove({
+			this.Server.Database.get('accounts').remove({
 				name : name
 			}).write();
 		}
@@ -49,8 +49,8 @@ class Tasks {
 		}
 
 		const task = new Task({
-			database : this.parent.database,
-			name     : name
+			Tasks : this,
+			name  : name
 		});
 
 		this.#tasks[name] = task;
@@ -67,7 +67,7 @@ class Tasks {
 			return true;
 		}
 
-		const data = this.parent.database.get('accounts').find({
+		const data = this.Server.Database.get('accounts').find({
 			name : name
 		}).value();
 

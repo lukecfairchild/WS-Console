@@ -5,7 +5,7 @@ class Permissions {
 	constructor (options) {
 		this.User = options.User;
 
-		const data = this.Users.Server.database.get(this.User.type).find({
+		const data = this.User.Accounts.Server.Database.get(this.User.type).find({
 			name : this.User.name
 		}).value() || {};
 
@@ -13,14 +13,14 @@ class Permissions {
 			'help',
 			'logout',
 			'password'
-		].concat(data.permissions || []).concat(options.permissions || [])
+		].concat(data.permissions || []).concat(options.permissions || []);
 	}
 
 	add (permission) {
 		if (!this.#permissions.includes(permission)) {
 			this.#permissions.push(permission);
 
-			this.User.Users.Server.database.get(this.User.type).find({
+			this.User.Users.Server.Database.get(this.User.type).find({
 				name : this.User.name
 			}).set('permissions', this.#permissions).write();
 		}
@@ -58,7 +58,7 @@ class Permissions {
 		if (this.#permissions.includes(permission)) {
 			this.#permissions.splice(this.#permissions.indexOf(permission), 1);
 
-			this.User.Users.Server.database.get(this.User.type).find({
+			this.User.Users.Server.Database.get(this.User.type).find({
 				name : this.User.name
 			}).set('permissions', this.#permissions).write();
 		}
