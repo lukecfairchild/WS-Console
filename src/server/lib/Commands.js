@@ -1,6 +1,8 @@
 
+const Command    = require('./Command');
 const FileSystem = require('fs');
 const Path       = require('path');
+const Type       = require('simpler-types');
 
 class Commands {
 	#commands = {};
@@ -16,6 +18,8 @@ class Commands {
 
 			this.add(command, require(filePath));
 		});
+
+		this.unknownCommand = new Command();
 	}
 
 	add (command, commandPackage) {
@@ -27,28 +31,32 @@ class Commands {
 	}
 
 	getAll () {
-		const commands = [];
+		const commands = {};
 
 		for (const i in this.#commands) {
-			commands.push(this.get(this.#commands[i]));
+			commands[i] = this.get(i);
 		}
 
 		return commands;
 	}
 
-	get (commandRaw) {
+	get (account, commandRaw) {
+		console.log('args', arguments);
 		const commandTrimmed = commandRaw.trim();
 
 		for (const i in commandTrimmed.split(' ')) {
 			const commandParts = commandTrimmed.split(' ');
 			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
 
-			if (this.#commands[commandName]) {
+			if (this.#commands[commandName] && Type.get(this.#commands[commandName]) === 'Function') {
 				const command = new this.#commands[commandName]({
+					Account  : account,
 					Commands : this
 				});
 
 				return {
+					...command,
+					account     : account,
 					help        : command.help        || '',
 					permissions : command.permissions || [],
 					run         : async (...rawArgs) => {
@@ -64,13 +72,7 @@ class Commands {
 			}
 		}
 
-		return {
-			help        : '',
-			permissions : [],
-			run         : () => {
-				return 'Command not found.';
-			}
-		};
+		return this.unknownCommand;
 	}
 }
 

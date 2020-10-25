@@ -20,5 +20,6 @@
   "processes": [],
   "user": [],
   "process": [],
-  "role": {}
+  "role": {},
+  "accounts": []
 }
