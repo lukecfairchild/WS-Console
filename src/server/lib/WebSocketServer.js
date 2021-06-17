@@ -66,51 +66,42 @@ class WebSocketServer {
 			} catch (error) {
 				webSocket.terminate();
 			}
-		});
 
-		/*
-		(function (data) {
 			this.trigger('message', data);
 
-			if (data.clientType === 'user') {
-				switch (data.action) {
-					case 'login' : {
-						connection.authenticate({
-							username : data.username,
-							password : data.password
-						});
-						break;
-					}
+			switch (data.action) {
+				case 'login' : {
+					console.log(data, this.Server.Accounts.exists(data.name));
+					break;
+				}
 
-					case 'command' : {
-						try {
-							const server = connection.getServer().getName();
+				case 'command' : {
+					try {
+						const server = connection.getServer().getName();
 
-							if (server === 'Console'
-							||  Data.userHasPermission(connection.getUsername(), 'console.command.' + connection.getServer().getName())) {
+						if (server === 'Console'
+						||  Data.userHasPermission(connection.getUsername(), 'console.command.' + connection.getServer().getName())) {
 
-								connection.getServer().getWebSocket().send(JSON.stringify({
-									action   : 'command',
-									data     : data.data,
-									username : connection.getUsername(),
-									uuid     : connection.getUUID()
-								}));
+							connection.getServer().getWebSocket().send(JSON.stringify({
+								action   : 'command',
+								data     : data.data,
+								username : connection.getUsername(),
+								uuid     : connection.getUUID()
+							}));
 
-							} else {
-								connection.getWebSocket().send(JSON.stringify({
-									action : 'data',
-									data   : ['You do not have permission for that.'],
-									server : server
-								}));
-							}
-						} catch (error) {}
+						} else {
+							connection.getWebSocket().send(JSON.stringify({
+								action : 'data',
+								data   : ['You do not have permission for that.'],
+								server : server
+							}));
+						}
+					} catch (error) {}
 
-						break;
-					}
+					break;
 				}
 			}
 		});
-		*/
 	}
 
 	consoleCommand (data) {

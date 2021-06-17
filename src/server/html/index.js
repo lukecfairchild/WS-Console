@@ -483,7 +483,7 @@ const startListener = function () {
 				webSocket.send(JSON.stringify({
 					clientType : 'user',
 					action     : 'login',
-					username   : username,
+					name       : username,
 					password   : password
 				}));
 

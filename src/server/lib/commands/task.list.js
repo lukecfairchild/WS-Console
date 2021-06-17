@@ -10,7 +10,7 @@ class TaskList extends Command {
 	}
 
 	async run () {
-
+		console.log(this.Commands.Server.Accounts.getAll());
 	}
 }
 

@@ -77,7 +77,7 @@ class Account {
 
 		this.#hash = hash;
 
-		this.Users.Server.Database.get('accounts').find({
+		this.Accounts.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
 	}

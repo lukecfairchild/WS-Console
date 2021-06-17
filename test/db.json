@@ -18,7 +18,26 @@
   ],
   "roles": {},
   "processes": [],
-  "user": [],
+  "user": [
+    {
+      "name": {
+        "type": "task",
+        "name": "testTask"
+      },
+      "hash": null,
+      "permissions": {},
+      "roles": []
+    },
+    {
+      "name": {
+        "type": "task",
+        "name": "test"
+      },
+      "hash": null,
+      "permissions": {},
+      "roles": []
+    }
+  ],
   "process": [],
   "role": {},
   "accounts": []
