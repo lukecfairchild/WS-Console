@@ -9,7 +9,8 @@ class Logout extends Command {
 	}
 
 	async run () {
-
+		//console.log(this.Account);
+		this.Account.connections.disconnect();
 	}
 }
 

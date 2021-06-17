@@ -117,3 +117,21 @@ WSConsole
 					data
 				}
 				disconnect {}
+
+Server Commands
+	help
+	logout
+	password <password>
+	task create <name>
+	task delete <name>
+	task list
+	task logout <name>
+	task password <name> <password>
+	user create <name>
+	user delete <name>
+	user list
+	user logout <name>
+	user password <name> <password>
+	user permission add <name> <permission>
+	user permission list <name>
+	user permission remove <name> <permission>
