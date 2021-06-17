@@ -30,11 +30,11 @@ class Commands {
 		delete this.#commands[command];
 	}
 
-	getAll () {
+	getAll (account) {
 		const commands = {};
 
 		for (const i in this.#commands) {
-			commands[i] = this.get(i);
+			commands[i] = this.get(account, i);
 		}
 
 		return commands;
