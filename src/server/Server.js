@@ -1,9 +1,10 @@
 'use strict';
 
-const Accounts        = require('./lib/Users');
+const Type = require('simple-type-assert');
+
+const Accounts        = require('./lib/Accounts');
 const Commands        = require('./lib/Commands');
 const Database        = require('./lib/Database');
-const Type            = require('simple-type-assert');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/webSocketServer');
 

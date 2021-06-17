@@ -1,12 +1,15 @@
 'use strict';
 
+const bcrypt = require('bcryptjs');
+const Type   = require('simple-type-assert');
+
 const AccountCommands = require('./AccountCommands');
-const bcrypt          = require('bcryptjs');
 const Connections     = require('./Connections');
 
 class Account {
 	#events;
 	#hash;
+	#permissions;
 
 	constructor (options) {
 		this.#events     = {};
@@ -25,7 +28,14 @@ class Account {
 			name : this.name
 		}).value() || {};
 
-		this.#hash = data.hash;
+		this.#hash        = data.hash;
+		this.#permissions = data.permissions;
+	}
+
+	hasPermission (permissions) {
+		Type.assert(permissions, String);
+
+		
 	}
 
 	on (event, callback) {
@@ -68,15 +78,16 @@ class Account {
 	}
 
 	setPassword (password) {
+console.log('account 1', this.name);
 		if (!password) {
 			return;
 		}
-
+console.log('account 2');
 		const salt = bcrypt.genSaltSync(10);
 		const hash = bcrypt.hashSync(password, salt);
 
 		this.#hash = hash;
-
+console.log('account 3', password, hash);
 		this.Accounts.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();

@@ -11,14 +11,16 @@ class TaskCreate extends Command {
 	}
 
 	async run (name, password = null) {
+console.log('task.create 1');
 		const task = this.Commands.Server.Accounts.create({
 			type : 'task',
 			name : name
 		});
-
+console.log('task.create 2');
 		if (password) {
-			task .setPassword(password);
+			task.setPassword(password);
 		}
+console.log('task.create 3');
 	}
 }
 
