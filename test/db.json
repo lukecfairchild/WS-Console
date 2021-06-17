@@ -1,44 +1,23 @@
 {
-  "users": [
+  "accounts": [
     {
-      "username": "test",
-      "hash": "$2a$10$6wM6/EGm5CPt20.FlHvBSuYdDEcygL7dgU9MYR0autj8RMkI8qGPa",
-      "permissions": {
-        "console.view.test": true,
-        "*": true
-      },
-      "roles": []
-    }
-  ],
-  "servers": [
-    {
-      "name": "test",
-      "password": "test"
-    }
-  ],
-  "roles": {},
-  "processes": [],
-  "user": [
-    {
-      "name": {
-        "type": "task",
-        "name": "testTask"
-      },
+      "name": "Console",
       "hash": null,
-      "permissions": {},
-      "roles": []
+      "permissions": [
+        "*",
+        "-logout",
+        "-password"
+      ],
+      "roles": [],
+      "type": "user"
     },
     {
-      "name": {
-        "type": "task",
-        "name": "test"
-      },
-      "hash": null,
-      "permissions": {},
-      "roles": []
+      "name": "testTask",
+      "hash": "$2a$10$jLaZFYG2LT7UjMATN/TV9uHRIHw4eGW71kZaTDzAtO/w1nCCBT5PK",
+      "permissions": [],
+      "roles": [],
+      "type": "task"
     }
   ],
-  "process": [],
-  "role": {},
-  "accounts": []
+  "role": {}
 }

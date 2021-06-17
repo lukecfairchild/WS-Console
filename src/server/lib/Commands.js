@@ -65,7 +65,9 @@ class Commands {
 							args = rawArgs;
 						}
 
-						return await command.run(...args);
+						if (account.hasPermission(command.permissions || [])) {
+							return await command.run(...args);
+						}
 					}
 				};
 			}

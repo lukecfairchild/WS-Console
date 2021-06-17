@@ -1,8 +1,8 @@
 
-const User   = require('./User');
-const Server = require('./Server');
-const Task   = require('./Task');
-const Type   = require('simple-type-assert');
+const User = require('./User');
+//const Server = require('./Server');
+const Task = require('./Task');
+const Type = require('simple-type-assert');
 
 class Accounts {
 	#accounts = {};
@@ -10,7 +10,7 @@ class Accounts {
 	constructor (options) {
 		// Required options
 		Type.assert(options, {
-			Server : Server
+			Server : options.Server
 		});
 
 		this.Server = options.Server;
@@ -21,7 +21,8 @@ class Accounts {
 
 		this.create({
 			name        : 'Console',
-			permissions : ['*']
+			type        : 'user',
+			permissions : ['*', '-logout', '-password']
 		});
 	}
 
@@ -33,10 +34,10 @@ class Accounts {
 		});
 
 		// Optional options
-		accountOptions.permissions = accountOptions.permissions || {};
+		accountOptions.permissions = accountOptions.permissions || [];
 		accountOptions.roles       = accountOptions.roles || [];
 		Type.assert(accountOptions, {
-			permissions : Object,
+			permissions : Array,
 			roles       : Array
 		});
 
@@ -47,14 +48,14 @@ class Accounts {
 		this.Server.Database.get('accounts').push({
 			name        : accountOptions.name,
 			hash        : null,
-			permissions : accountOptions.permissions || {},
+			permissions : accountOptions.permissions || [],
 			roles       : accountOptions.roles || [],
 			type        : accountOptions.type
 		}).write();
 
 		const account = new this.types[accountOptions.type]({
 			Accounts : this,
-			options  : accountOptions
+			...accountOptions
 		});
 
 		this.#accounts[account.name] = account;

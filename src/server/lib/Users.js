@@ -9,6 +9,7 @@ class Users {
 
 		this.#users.Console = new User({
 			name        : 'Console',
+			type        : 'user',
 			Accounts    : this,
 			permissions : ['*']
 		});

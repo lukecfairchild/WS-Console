@@ -6,6 +6,7 @@ class Logout extends Command {
 		super(options);
 
 		this.description = 'Logs you out';
+		this.permissions = ['logout'];
 	}
 
 	async run () {
