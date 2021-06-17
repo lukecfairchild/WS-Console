@@ -42,7 +42,7 @@ class Commands {
 
 	get (account, commandRaw) {
 		console.log('args', arguments);
-		const commandTrimmed = commandRaw.trim();
+		const commandTrimmed = (commandRaw || '').trim();
 
 		for (const i in commandTrimmed.split(' ')) {
 			const commandParts = commandTrimmed.split(' ');
