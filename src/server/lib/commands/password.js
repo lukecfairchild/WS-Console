@@ -7,6 +7,7 @@ class Password extends Command {
 
 		this.arguments   = '<new password>';
 		this.description = 'Allows you to change your current password';
+		this.permissions = ['password'];
 	}
 
 	async run (...password) {

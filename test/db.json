@@ -10,13 +10,6 @@
       ],
       "roles": [],
       "type": "user"
-    },
-    {
-      "name": "testTask",
-      "hash": "$2a$10$jLaZFYG2LT7UjMATN/TV9uHRIHw4eGW71kZaTDzAtO/w1nCCBT5PK",
-      "permissions": [],
-      "roles": [],
-      "type": "task"
     }
   ],
   "role": {}
