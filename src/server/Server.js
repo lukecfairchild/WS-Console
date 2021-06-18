@@ -59,8 +59,8 @@ class  Server {
 	#startCmdlineListener = () => {
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
-		process.stdin.on('data', async (data) => {
-			this.Accounts.get('Console').Commands.run(data);
+		process.stdin.on('data', async (command) => {
+			this.Accounts.get('Console').Commands.run(command);
 		});
 	}
 

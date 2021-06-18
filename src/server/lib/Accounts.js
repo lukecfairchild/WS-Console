@@ -35,7 +35,7 @@ class Accounts {
 
 		// Optional options
 		accountOptions.permissions = accountOptions.permissions || [];
-		accountOptions.roles       = accountOptions.roles || [];
+		accountOptions.roles       = accountOptions.roles       || [];
 		Type.assert(accountOptions, {
 			permissions : Array,
 			roles       : Array
@@ -105,7 +105,7 @@ class Accounts {
 
 		const account = new this.types[data.type]({
 			Accounts : this,
-			options  : data
+			...data
 		});
 
 		this.#accounts[name] = account;

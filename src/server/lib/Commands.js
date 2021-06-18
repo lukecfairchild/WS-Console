@@ -34,7 +34,10 @@ class Commands {
 		const commands = {};
 
 		for (const i in this.#commands) {
-			commands[i] = this.get(account, i);
+			const command = this.get(account, i);
+			if (account.hasPermission(command.permissions || [])) {
+				commands[i] = command;
+			}
 		}
 
 		return commands;
@@ -67,6 +70,8 @@ class Commands {
 
 						if (account.hasPermission(command.permissions || [])) {
 							return await command.run(...args);
+						} else {
+							return 'You do not have permission to do that.';
 						}
 					}
 				};

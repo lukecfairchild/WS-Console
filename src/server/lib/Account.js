@@ -29,13 +29,48 @@ class Account {
 		}).value() || {};
 
 		this.#hash        = data.hash;
-		this.#permissions = data.permissions;
+		this.#permissions = data.permissions || [];
 	}
 
 	hasPermission (permissions) {
-		Type.assert(permissions, String);
+		if (Type.is(permissions, String)) {
+			permissions = [permissions];
+		}
 
-		
+		Type.assert(permissions, Array);
+
+		if (permissions.length === 0) {
+			return true;
+		}
+
+		for (const j in permissions) {
+			const permission = permissions[j].split('.');
+
+			if (this.#permissions.includes(`-${permission}`)) {
+				return false;
+			}
+
+			if (this.#permissions.includes(permission)) {
+				return true;
+			}
+
+			for (let i = 0; i < permission.length; i++) {
+				const parts = permission.slice(0, permission.length - i - 1);
+				parts.push('*');
+
+				const permissionParts = parts.join('.');
+
+				if (this.#permissions.includes(`-${permissionParts}`)) {
+					return false;
+				}
+
+				if (this.#permissions.includes(permissionParts)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	on (event, callback) {
@@ -78,16 +113,13 @@ class Account {
 	}
 
 	setPassword (password) {
-console.log('account 1', this.name);
-		if (!password) {
-			return;
-		}
-console.log('account 2');
+		Type.assert(password, String);
+
 		const salt = bcrypt.genSaltSync(10);
 		const hash = bcrypt.hashSync(password, salt);
 
 		this.#hash = hash;
-console.log('account 3', password, hash);
+
 		this.Accounts.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
