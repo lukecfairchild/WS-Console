@@ -6,13 +6,11 @@ class TaskList extends Command {
 		super(options);
 
 		this.description = 'Lists all task accounts';
-		this.permissions = [];
+		this.permissions = ['task.list'];
 	}
 
 	async run () {
-		const tasks = this.Commands.Server.Accounts.Tasks.getAll().map((account) => {
-			return account.name;
-		});
+		const tasks = this.Commands.Server.Accounts.Tasks.list();
 
 		return tasks.join(', ');
 	}
