@@ -18,12 +18,12 @@ class Tasks {
 		return this.Accounts.get(name, this.#type);
 	}
 
-	getAll () {
-		return this.Accounts.getAll(this.#type);
-	}
-
 	exists (name) {
 		return this.Accounts.exists(name, this.#type);
+	}
+
+	list () {
+		return this.Accounts.list(this.#type);
 	}
 }
 
