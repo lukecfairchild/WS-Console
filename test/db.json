@@ -17,6 +17,13 @@
       "permissions": [],
       "roles": [],
       "type": "user"
+    },
+    {
+      "name": "test",
+      "hash": null,
+      "permissions": [],
+      "roles": [],
+      "type": "task"
     }
   ],
   "role": {}

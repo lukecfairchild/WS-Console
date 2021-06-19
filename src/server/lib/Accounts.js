@@ -132,7 +132,15 @@ class Accounts {
 	getAll (type) {
 		Type.assert(type, String);
 
-		return this.#accounts[type];
+		const results = this.Server.Database.get('accounts').value().filter((result) => {
+			return result.type === type;
+		});
+
+		const accounts = results.map((result) => {
+			return this.get(result.name, result.type);
+		});
+
+		return accounts;
 	}
 
 	unload (name, type) {
