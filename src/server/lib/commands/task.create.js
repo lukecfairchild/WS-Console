@@ -11,6 +11,10 @@ class TaskCreate extends Command {
 	}
 
 	async run (name, password = null) {
+		if (this.Commands.Server.Accounts.exists(name)) {
+			return `An Account already exists with that name: "${name}"`;
+		}
+
 		const task = this.Commands.Server.Accounts.create({
 			type : 'task',
 			name : name

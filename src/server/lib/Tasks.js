@@ -9,11 +9,11 @@ class Tasks {
 	}
 
 	create (name) {
-console.log('create 1');
+
 		if (this.exists(name)) {
 			return this.get(name);
 		}
-console.log('create 2');
+
 		this.Server.Database.get('accounts').push({
 			name : name,
 			type : 'task',
