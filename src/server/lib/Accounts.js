@@ -36,15 +36,13 @@ class Accounts {
 	}
 
 	create (accountOptions, type) {
-		type = accountOptions.type || type;
-
 		// Required options
 		Type.assert(type, String);
 		Type.assert(accountOptions, {
 			name : String
 		});
 
-		if (this.exists(accountOptions.name)) {
+		if (this.exists(accountOptions.name, type)) {
 			throw new Error(`Account name already exists: "${accountOptions.name}"`);
 		}
 
@@ -143,7 +141,6 @@ class Accounts {
 
 		if (this.exists(name, type)) {
 			const task = this.get(name, type);
-			console.log('this is what it is', task);
 			task.disconnect();
 
 			delete this.#accounts[type][name];
