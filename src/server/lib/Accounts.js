@@ -1,8 +1,8 @@
 
-const User = require('./User');
-//const Server = require('./Server');
-const Task = require('./Task');
 const Type = require('simple-type-assert');
+
+const User = require('./User');
+const Task = require('./Task');
 
 class Accounts {
 	#accounts = {};
@@ -19,11 +19,13 @@ class Accounts {
 			task : Task
 		};
 
-		this.create({
-			name        : 'Console',
-			type        : 'user',
-			permissions : ['*', '-logout', '-password']
-		});
+		if (!this.exists('Console')) {
+			this.create({
+				name        : 'Console',
+				type        : 'user',
+				permissions : ['*', '-logout', '-password']
+			});
+		}
 	}
 
 	create (accountOptions) {
@@ -33,6 +35,10 @@ class Accounts {
 			type : String
 		});
 
+		if (this.exists(accountOptions.name)) {
+			throw new Error(`Account name already exists: "${accountOptions.name}"`);
+		}
+
 		// Optional options
 		accountOptions.permissions = accountOptions.permissions || [];
 		accountOptions.roles       = accountOptions.roles       || [];
@@ -40,10 +46,6 @@ class Accounts {
 			permissions : Array,
 			roles       : Array
 		});
-
-		if (this.exists(accountOptions.name)) {
-			return this.get(accountOptions.name);
-		}
 
 		this.Server.Database.get('accounts').push({
 			name        : accountOptions.name,
@@ -88,7 +90,7 @@ class Accounts {
 		return Boolean(data);
 	}
 
-	get (name) {
+	get (name, type) {
 		Type.assert(name, String);
 
 		if (this.#accounts[name]) {
