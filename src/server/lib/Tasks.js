@@ -1,79 +1,29 @@
 
-const Task = require('./Task');
-
 class Tasks {
-	#tasks = {};
+	#type = 'task';
 
 	constructor (options) {
-		this.Server = options.Server;
+		this.Accounts = options.Accounts;
 	}
 
 	create (name) {
-
-		if (this.exists(name)) {
-			return this.get(name);
-		}
-
-		this.Server.Database.get('accounts').push({
-			name : name,
-			type : 'task',
-			hash : null
-		}).write();
-
-		const task = new Task({
-			Tasks : this,
-			name  : name
-		});
-
-		this.#tasks[name] = task;
-
-		return task;
+		return this.Accounts.create(name, this.#type);
 	}
 
 	delete (name) {
-		if (this.exists(name)) {
-			this.#tasks[name].disconnect();
-
-			delete this.#tasks[name];
-			this.Server.Database.get('accounts').remove({
-				name : name
-			}).write();
-		}
+		return this.Accounts.delete(name, this.#type);
 	}
 
 	get (name) {
-		if (this.#tasks[name]) {
-			return this.#tasks[name];
-		}
-
-		if (!this.exists(name)) {
-			return;
-		}
-
-		const task = new Task({
-			Tasks : this,
-			name  : name
-		});
-
-		this.#tasks[name] = task;
-
-		return task;
+		return this.Accounts.get(name, this.#type);
 	}
 
 	getAll () {
-		return this.#tasks;
+		return this.Accounts.getAll(this.#type);
 	}
 
 	exists (name) {
-		if (this.#tasks[name]) {
-			return true;
-		}
-
-		const data = this.Server.Database.get('accounts').find({
-			name : name
-		}).value();
-
-		return Boolean(data);
+		return this.Accounts.exists(name, this.#type);
 	}
 }
 

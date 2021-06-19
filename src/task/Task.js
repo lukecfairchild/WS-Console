@@ -23,10 +23,10 @@ class Task {
 		this.websocket.on('open', () => {
 			// Authenticate with Hub
 			this.websocket.send(JSON.stringify({
-				clientType : 'server',
-				action     : 'login',
-				name       : this.options.name,
-				password   : this.options.password
+				type     : 'task',
+				action   : 'login',
+				name     : this.options.name,
+				password : this.options.password
 			}));
 
 			const cache = this.cache.get();

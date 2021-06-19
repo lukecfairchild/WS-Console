@@ -16,6 +16,8 @@ class Task extends Account {
 			});
 		});
 	}
+
+	disconnect () {}
 }
 
 module.exports = Task;

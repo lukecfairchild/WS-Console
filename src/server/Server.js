@@ -57,10 +57,12 @@ class  Server {
 	}
 
 	#startCmdlineListener = () => {
+		const Console = this.Accounts.get('Console', 'user');
+
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
 		process.stdin.on('data', async (command) => {
-			this.Accounts.get('Console').Commands.run(command);
+			Console.Commands.run(command);
 		});
 	}
 
