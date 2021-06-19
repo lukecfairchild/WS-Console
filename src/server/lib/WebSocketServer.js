@@ -71,7 +71,7 @@ class WebSocketServer {
 
 			switch (data.action) {
 				case 'login' : {
-					console.log(data, this.Server.Accounts.exists(data.name));
+					console.log(data, this.Server.Accounts.exists(data.name, data.type));
 					break;
 				}
 

@@ -12,13 +12,6 @@
       "type": "user"
     },
     {
-      "name": "test",
-      "hash": "$2a$10$/MOf0yZR5Hplk5VQTGZnh.4XU.Btx3oKJ8NapGTMS/XwgdQ/sU/qK",
-      "permissions": [],
-      "roles": [],
-      "type": "task"
-    },
-    {
       "name": "testUser",
       "hash": "$2a$10$0eJEMc68UynEatV7fP4P9OLyy3kVrJos1ATD4UQgK2LrSEW5aNtym",
       "permissions": [],

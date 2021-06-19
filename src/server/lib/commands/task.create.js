@@ -8,15 +8,16 @@ class TaskCreate extends Command {
 		this.arguments   = '<task name> [password]';
 		this.description = 'Creates a new task account';
 		this.permissions = [];
+
+		this.Tasks = this.Commands.Server.Accounts.Tasks;
 	}
 
 	async run (name, password = null) {
-		if (this.Commands.Server.Accounts.exists(name)) {
+		if (this.Tasks.exists(name)) {
 			return `An Account already exists with that name: "${name}"`;
 		}
 
-		const task = this.Commands.Server.Accounts.create({
-			type : 'task',
+		const task = this.Tasks.create({
 			name : name
 		});
 

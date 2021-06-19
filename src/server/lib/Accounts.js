@@ -1,11 +1,16 @@
 
 const Type = require('simple-type-assert');
 
-const User = require('./User');
-const Task = require('./Task');
+const Task  = require('./Task');
+const Tasks = require('./Tasks');
+const User  = require('./User');
+const Users = require('./Users');
 
 class Accounts {
-	#accounts = {};
+	#accounts = {
+		user : {},
+		task : {}
+	};
 
 	constructor (options) {
 		// Required options
@@ -14,12 +19,14 @@ class Accounts {
 		});
 
 		this.Server = options.Server;
+		this.Tasks  = new Tasks({Accounts : this});
+		this.Users  = new Users({Accounts : this});
 		this.types  = {
 			user : User,
 			task : Task
 		};
 
-		if (!this.exists('Console')) {
+		if (!this.exists('Console', 'user')) {
 			this.create({
 				name        : 'Console',
 				type        : 'user',
@@ -28,11 +35,13 @@ class Accounts {
 		}
 	}
 
-	create (accountOptions) {
+	create (accountOptions, type) {
+		type = accountOptions.type || type;
+
 		// Required options
+		Type.assert(type, String);
 		Type.assert(accountOptions, {
-			name : String,
-			type : String
+			name : String
 		});
 
 		if (this.exists(accountOptions.name)) {
@@ -52,39 +61,44 @@ class Accounts {
 			hash        : null,
 			permissions : accountOptions.permissions || [],
 			roles       : accountOptions.roles || [],
-			type        : accountOptions.type
+			type        : type
 		}).write();
 
-		const account = new this.types[accountOptions.type]({
+		const account = new this.types[type]({
 			Accounts : this,
+			type     : type,
 			...accountOptions
 		});
 
-		this.#accounts[account.name] = account;
+		this.#accounts[type][account.name] = account;
 
 		return account;
 	}
 
-	delete (name) {
+	delete (name, type) {
 		Type.assert(name, String);
+		Type.assert(type, String);
 
-		if (this.exists(name)) {
-			this.unload(name);
+		if (this.exists(name, type)) {
+			this.unload(name, type);
 			this.Server.Database.get('accounts').remove({
-				name : name
+				name : name,
+				type : type
 			}).write();
 		}
 	}
 
-	exists (name) {
+	exists (name, type) {
 		Type.assert(name, String);
+		Type.assert(type, String);
 
-		if (this.#accounts[name]) {
+		if (this.#accounts[type][name]) {
 			return true;
 		}
 
 		const data = this.Server.Database.get('accounts').find({
-			name : name
+			name : name,
+			type : type
 		}).value();
 
 		return Boolean(data);
@@ -92,17 +106,19 @@ class Accounts {
 
 	get (name, type) {
 		Type.assert(name, String);
+		Type.assert(type, String);
 
-		if (this.#accounts[name]) {
-			return this.#accounts[name];
+		if (this.#accounts[type][name]) {
+			return this.#accounts[type][name];
 		}
 
-		if (!this.exists(name)) {
-			return;
+		if (!this.exists(name, type)) {
+			throw new Error(`Account does not exist: [${type}] ${name}`);
 		}
 
 		const data = this.Server.Database.get('accounts').find({
-			name : name
+			name : name,
+			type : type
 		}).value();
 
 		const account = new this.types[data.type]({
@@ -110,22 +126,27 @@ class Accounts {
 			...data
 		});
 
-		this.#accounts[name] = account;
+		this.#accounts[type][name] = account;
 
 		return account;
 	}
 
-	getAll () {
-		return this.#accounts;
+	getAll (type) {
+		Type.assert(type, String);
+
+		return this.#accounts[type];
 	}
 
-	unload (name) {
+	unload (name, type) {
 		Type.assert(name, String);
+		Type.assert(type, String);
 
-		if (this.exists(name)) {
-			this.#accounts[name].disconnect();
+		if (this.exists(name, type)) {
+			const task = this.get(name, type);
+			console.log('this is what it is', task);
+			task.disconnect();
 
-			delete this.#accounts[name];
+			delete this.#accounts[type][name];
 		}
 	}
 
