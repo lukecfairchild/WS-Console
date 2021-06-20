@@ -19,15 +19,15 @@
       "type": "user"
     },
     {
-      "name": "test",
+      "name": "test2",
       "hash": null,
       "permissions": [],
       "roles": [],
       "type": "task"
     },
     {
-      "name": "test2",
-      "hash": null,
+      "name": "test",
+      "hash": "$2a$10$NRVmB4ixDT1.FViHGHXa8eiHZNCwAuL/p7On8Gj4dP3Ew3HwjHyYO",
       "permissions": [],
       "roles": [],
       "type": "task"

@@ -1,5 +1,6 @@
 'use strict';
 
+const Connection = require('./Database');
 const Data       = require('./Database');
 const FileSystem = require('http');
 const HTTP       = require('http');
@@ -50,7 +51,7 @@ class WebSocketServer {
 	}
 
 	webSocketListener (webSocket) {
-		let connection;
+		const connection = new Connection(webSocket);
 
 		webSocket.send(JSON.stringify({
 			action : 'ready'
@@ -67,7 +68,10 @@ class WebSocketServer {
 				webSocket.terminate();
 			}
 
-			this.trigger('message', data);
+			this.trigger('message', {
+				data      : data,
+				webSocket : webSocket
+			});
 
 			switch (data.action) {
 				case 'login' : {
