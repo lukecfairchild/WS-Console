@@ -1,7 +1,7 @@
 'use strict';
 
-const Connection = require('./Database');
-const Data       = require('./Database');
+const Connection = require('./Connection');
+//const Data       = require('./Database');
 const FileSystem = require('http');
 const HTTP       = require('http');
 const HTTPS      = require('https');
@@ -53,10 +53,10 @@ class WebSocketServer {
 	webSocketListener (webSocket) {
 		const connection = new Connection(webSocket);
 
-		webSocket.send(JSON.stringify({
-			action : 'ready'
-		}));
-
+		connection.on('login', (data) => {
+			console.log('incoming login', data);
+		});
+		/*
 		webSocket.on('message', (rawData) => {
 			let data = {};
 
@@ -106,6 +106,7 @@ class WebSocketServer {
 				}
 			}
 		});
+		*/
 	}
 
 	consoleCommand (data) {
