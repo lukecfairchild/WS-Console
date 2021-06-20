@@ -35,6 +35,7 @@ class Commands {
 
 		for (const i in this.#commands) {
 			const command = this.get(account, i);
+
 			if (account.hasPermission(command.permissions || [])) {
 				commands[i] = command;
 			}
@@ -50,7 +51,8 @@ class Commands {
 			const commandParts = commandTrimmed.split(' ');
 			const commandName  = commandParts.splice(0, commandParts.length - i).join(' ');
 
-			if (this.#commands[commandName] && Type.get(this.#commands[commandName]) === 'Function') {
+			if (this.#commands[commandName]
+			&&  Type.get(this.#commands[commandName]) === 'Function') {
 				const command = new this.#commands[commandName]({
 					Account  : account,
 					Commands : this

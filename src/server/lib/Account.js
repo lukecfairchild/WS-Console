@@ -14,7 +14,7 @@ class Account {
 	constructor (options) {
 		this.#events     = {};
 		this.Accounts    = options.Accounts;
-		this.connections = new Connections({
+		this.Connections = new Connections({
 			Account : this
 		});
 		this.Commands    = new AccountCommands({
