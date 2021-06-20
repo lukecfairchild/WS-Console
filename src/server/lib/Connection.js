@@ -1,6 +1,6 @@
 'use strict';
 
-const Uuid = require('uuid').uuidv4;
+const Uuid = require('uuid').v4;
 
 class Connection {
 	#events = {};
@@ -40,7 +40,15 @@ class Connection {
 	}
 
 	on (event, callback) {
-		return this.webSocket.on(event, callback);
+		const id = Uuid();
+
+		if (!this.#events[event]) {
+			this.#events[event] = {};
+		}
+
+		this.#events[event][id] = callback;
+
+		return id;
 	}
 
 	send (message) {
