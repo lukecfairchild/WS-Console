@@ -18,11 +18,6 @@ class Connections {
 		connection.webSocket.on('message',() => {
 			// do stuffs
 		});
-
-		this.User.trigger('login', {
-			connection,
-			...this.User
-		});
 	}
 
 	disconnect () {

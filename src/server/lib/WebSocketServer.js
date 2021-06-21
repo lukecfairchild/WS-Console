@@ -51,7 +51,10 @@ class WebSocketServer {
 	}
 
 	webSocketListener (webSocket) {
-		const connection = new Connection(webSocket);
+		const connection = new Connection({
+			Server    : this.Server,
+			webSocket : webSocket
+		});
 
 		connection.on('login', (data) => {
 			console.log('incoming login', data);

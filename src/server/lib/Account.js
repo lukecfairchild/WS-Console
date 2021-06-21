@@ -32,6 +32,12 @@ class Account {
 		this.#permissions = data.permissions || [];
 	}
 
+	authenticate (password) {
+		Type.assert(password, String);
+
+		return bcrypt.compareSync(password, this.#hash);
+	}
+
 	hasPermission (permissions) {
 		if (Type.is(permissions, String)) {
 			permissions = [permissions];

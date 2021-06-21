@@ -1,7 +1,7 @@
 
 const Command = require('../Command');
 
-class TaskDelete extends Command {
+class TaskLogout extends Command {
 	constructor (options) {
 		super(options);
 
@@ -17,8 +17,8 @@ class TaskDelete extends Command {
 			return `An Account does not exist with that name: "${name}"`;
 		}
 
-		this.Tasks.delete(name);
+		this.Tasks.logout(name);
 	}
 }
 
-module.exports = TaskDelete;
+module.exports = TaskLogout;

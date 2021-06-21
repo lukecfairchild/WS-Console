@@ -5,10 +5,11 @@ const Uuid = require('uuid').v4;
 class Connection {
 	#events = {};
 
-	constructor (webSocket) {
+	constructor (options) {
 		this.authenticated = false;
 		this.id            = Uuid();
-		this.webSocket     = webSocket;
+		this.Server        = options.Server;
+		this.webSocket     = options.webSocket;
 		this.webSocket.on('message', (message) => {
 			let data = {};
 
@@ -19,8 +20,22 @@ class Connection {
 				this.webSocket.terminate();
 			}
 
-			if (data.action === 'login') {
+			if (!this.authenticated) {
+				if (data.action !== 'login') {
+					return this.disconnect();
+				}
+
 				this.trigger('login', data);
+				const account = this.Server.Accounts.get(data.name, data.type);
+
+				this.authenticated = account.authenticate(data.password);
+
+				if (!this.authenticated) {
+					return this.disconnect();
+				}
+
+				account.Connections.add(this);
+				console.log('authenticated', this.authenticated);
 			}
 		});
 
