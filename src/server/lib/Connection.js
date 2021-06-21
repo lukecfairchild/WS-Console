@@ -40,9 +40,7 @@ class Connection {
 		});
 
 		this.webSocket.on('close', () => {
-			if (this.Connections) {
-				this.Connections.remove(this.id);
-			}
+			this.trigger('close', {});
 		});
 
 		this.send({

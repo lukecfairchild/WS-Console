@@ -9,7 +9,8 @@ class Connections {
 	add (connection) {
 		this.#connections[connection.id] = connection;
 
-		connection.webSocket.on('close',() => {
+		connection.on('close',() => {
+			console.log('closed');
 			if (this.#connections[connection.id]) {
 				delete this.#connections[connection.id];
 			}
