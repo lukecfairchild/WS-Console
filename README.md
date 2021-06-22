@@ -122,11 +122,15 @@ Server Commands
 	help
 	logout
 	password <password>
+	task connections <name>
+	task connections logout <name>
 	task create <name>
 	task delete <name>
 	task list
 	task logout <name>
 	task password <name> <password>
+	user connections <name>
+	user connections logout <name>
 	user create <name>
 	user delete <name>
 	user list
@@ -135,3 +139,5 @@ Server Commands
 	user permission add <name> <permission>
 	user permission list <name>
 	user permission remove <name> <permission>
+	connections list [name]
+	connections logout <connection>
