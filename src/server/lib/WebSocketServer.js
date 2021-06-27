@@ -38,7 +38,10 @@ class WebSocketServer {
 
 		this.#webSocketServer.on('connection', (webSocket) => {
 			this.trigger('connection', webSocket);
-			this.webSocketListener(webSocket);
+			new Connection({
+				Server    : this.Server,
+				webSocket : webSocket
+			});
 		});
 	}
 
@@ -48,68 +51,6 @@ class WebSocketServer {
 
 	stop () {
 		this.#webServer.close();
-	}
-
-	webSocketListener (webSocket) {
-		const connection = new Connection({
-			Server    : this.Server,
-			webSocket : webSocket
-		});
-
-		connection.on('login', (data) => {
-			console.log('incoming login', data);
-		});
-		/*
-		webSocket.on('message', (rawData) => {
-			let data = {};
-
-			try {
-				data = JSON.parse(rawData);
-				this.trigger(data.action, data);
-
-			} catch (error) {
-				webSocket.terminate();
-			}
-
-			this.trigger('message', {
-				data      : data,
-				webSocket : webSocket
-			});
-
-			switch (data.action) {
-				case 'login' : {
-					console.log(data, this.Server.Accounts.exists(data.name, data.type));
-					break;
-				}
-
-				case 'command' : {
-					try {
-						const server = connection.getServer().getName();
-
-						if (server === 'Console'
-						||  Data.userHasPermission(connection.getUsername(), 'console.command.' + connection.getServer().getName())) {
-
-							connection.getServer().getWebSocket().send(JSON.stringify({
-								action   : 'command',
-								data     : data.data,
-								username : connection.getUsername(),
-								uuid     : connection.getUUID()
-							}));
-
-						} else {
-							connection.getWebSocket().send(JSON.stringify({
-								action : 'data',
-								data   : ['You do not have permission for that.'],
-								server : server
-							}));
-						}
-					} catch (error) {}
-
-					break;
-				}
-			}
-		});
-		*/
 	}
 
 	consoleCommand (data) {
