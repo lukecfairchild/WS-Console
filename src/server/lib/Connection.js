@@ -25,6 +25,10 @@ class Connection {
 					return this.disconnect();
 				}
 
+				if (!this.Server.Accounts.exists(data.name, data.type)) {
+					return this.disconnect();
+				}
+
 				this.trigger('login', data);
 				const account = this.Server.Accounts.get(data.name, data.type);
 
