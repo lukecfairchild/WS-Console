@@ -106,7 +106,7 @@ WSConsole
 
 		.connect()
 		.disconnect()
-		.tasks
+		.Tasks
 			.get(name) Task
 			.getAll() [Task]
 
