@@ -8,13 +8,36 @@ const server = new WSConsole.server({
 	webServerPort : 8081,
 	cacheSize     : 300,
 	dbPath        : Path.join(__dirname, 'db.json'),
-	useStdin      : true
+	useStdin      : false
 	//ssl           : false,
 	//sslKey        : '/path/to/key',
 	//sslCert       : '/path/to/cert'
 });
+const Console = server.Accounts.get('Console', 'user');
+
+const client = new WSConsole.client({
+	path     : 'ws:localhost:9000',
+	name     : 'testUser',
+	password : 'pass',
+	useStdin : false
+});
+
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', async (command) => {
+	const split = command.replace(/\n/, '').split(' ');
+	const targetCommand = split.slice(1, split.length).join(' ');
+
+	switch (split[0]) {
+		case 'server' :
+			Console.Commands.run(targetCommand);
+		case 'client' :
+			console.log('not implemented');
+	}
+});
 
 server.start();
+client.start();
 
 new WSConsole.task({
 	path             : 'ws:localhost:9000',
