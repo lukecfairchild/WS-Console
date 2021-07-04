@@ -10,6 +10,13 @@ class Connection {
 		this.id            = Uuid();
 		this.Server        = options.Server;
 		this.webSocket     = options.webSocket;
+
+		const authTimeout = setTimeout(() => {
+			if (!this.authenticated) {
+				this.disconnect();
+			}
+		}, 5000);
+
 		this.webSocket.on('message', (message) => {
 			let data = {};
 
@@ -38,7 +45,18 @@ class Connection {
 					return this.disconnect();
 				}
 
+				this.Account = account;
+
+				clearTimeout(authTimeout);
 				account.Connections.add(this);
+console.log('authenticated', this.Account.name, this.Account.type);
+			}
+
+			if (this.authenticated) {
+				if (this.Account.hasPermission(data.action)) {
+
+				}
+			console.log('message', data);
 			}
 		});
 

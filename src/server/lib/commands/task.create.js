@@ -7,7 +7,7 @@ class TaskCreate extends Command {
 
 		this.arguments   = '<task name> [password]';
 		this.description = 'Creates a new task account';
-		this.permissions = [];
+		this.permissions = ['task.create'];
 
 		this.Tasks = this.Commands.Server.Accounts.Tasks;
 	}
