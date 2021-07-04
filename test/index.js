@@ -26,13 +26,17 @@ process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', async (command) => {
 	const split = command.replace(/\n/, '').split(' ');
-	const targetCommand = split.slice(1, split.length).join(' ');
+	const targetCommand = split.slice(1, split.length);
 
 	switch (split[0]) {
 		case 'server' :
-			Console.Commands.run(targetCommand);
+			Console.Commands.run(targetCommand.join(' '));
 		case 'client' :
-			console.log('not implemented');
+			client.send({
+				action : 'command',
+				task   : split[1],
+				data   : split.slice(2, split.length)
+			});
 	}
 });
 
