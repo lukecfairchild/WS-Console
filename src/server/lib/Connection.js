@@ -39,7 +39,6 @@ class Connection {
 				}
 
 				account.Connections.add(this);
-				console.log('authenticated', this.authenticated);
 			}
 		});
 

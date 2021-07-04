@@ -10,14 +10,9 @@ class Connections {
 		this.#connections[connection.id] = connection;
 
 		connection.on('close',() => {
-			console.log('closed');
 			if (this.#connections[connection.id]) {
 				delete this.#connections[connection.id];
 			}
-		});
-
-		connection.webSocket.on('message',() => {
-			// do stuffs
 		});
 	}
 
@@ -27,8 +22,14 @@ class Connections {
 		}
 	}
 
-	getAll () {
-		return this.#connections;
+	exists (id) {
+		return this.#connections[id] !== undefined;
+	}
+
+	get (id) {
+		if (this.exists(id)) {
+			return this.#connections[id];
+		}
 	}
 
 	remove (connection) {
