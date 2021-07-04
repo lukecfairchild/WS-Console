@@ -1,8 +1,6 @@
 'use strict';
 
 const Connection = require('./Connection');
-//const Data       = require('./Database');
-const FileSystem = require('http');
 const HTTP       = require('http');
 const HTTPS      = require('https');
 const WebSocket  = require('ws');
@@ -38,7 +36,10 @@ class WebSocketServer {
 
 		this.#webSocketServer.on('connection', (webSocket) => {
 			this.trigger('connection', webSocket);
-			this.webSocketListener(webSocket);
+			new Connection({
+				Server    : this.Server,
+				webSocket : webSocket
+			});
 		});
 	}
 
