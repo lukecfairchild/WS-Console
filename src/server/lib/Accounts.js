@@ -90,6 +90,10 @@ class Accounts {
 		Type.assert(name, String);
 		Type.assert(type, String);
 
+		if (!this.#accounts[type]) {
+			return false;
+		}
+
 		if (this.#accounts[type][name]) {
 			return true;
 		}
