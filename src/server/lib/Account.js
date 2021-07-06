@@ -5,6 +5,7 @@ const Type   = require('simple-type-assert');
 
 const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
+const EventSystem     = require('../../lib/EventSystem');
 
 class Account {
 	#events;
@@ -12,7 +13,8 @@ class Account {
 	#permissions;
 
 	constructor (options) {
-		this.#events     = {};
+		new EventSystem(this);
+
 		this.Accounts    = options.Accounts;
 		this.Connections = new Connections({
 			Account : this
@@ -79,35 +81,6 @@ class Account {
 		return false;
 	}
 
-	on (event, callback) {
-		if (!event
-		||  !callback) {
-			return;
-		}
-
-		if (!this.#events[event]) {
-			this.#events[event] = [];
-		}
-
-		if (this.#events[event].includes(callback)) {
-			return;
-		}
-
-		this.#events[event].push(callback);
-	}
-
-	removeEventListener (event, callback) {
-		if (!event
-		||  !callback
-		||  !this.#events[event]) {
-			return;
-		}
-
-		if (this.#events[event].includes(callback)) {
-			this.#events[event].splice(this.#events[event].indexOf(callback), 1);
-		}
-	}
-
 	send (message) {
 		if (!message) {
 			return;
@@ -129,19 +102,6 @@ class Account {
 		this.Accounts.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
-	}
-
-	trigger (event, data) {
-		if (!event
-		||  !data) {
-			return;
-		}
-
-		if (this.#events[event]) {
-			for (const i in this.#events[event]) {
-				this.#events[event][i](data);
-			}
-		}
 	}
 }
 

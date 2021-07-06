@@ -6,8 +6,12 @@ const HTTPS      = require('https');
 const Path       = require('path');
 const Url        = require('url');
 
+const EventSystem = require('../../lib/EventSystem');
+
 class WebServer {
 	constructor (options) {
+		new EventSystem(this);
+
 		this.Server = options.Server;
 
 		if (this.Server.settings.ssl) {
@@ -21,6 +25,7 @@ class WebServer {
 		}
 
 		this.webServer.on('request', (request, response) => {
+			this.trigger('request', request, response);
 			const filename = Path.basename(Url.parse(request.url).pathname);
 			const files    = {
 				'' : {
@@ -48,7 +53,8 @@ class WebServer {
 			let file = files[filename];
 
 			if (!file) {
-				file = files[''];
+				response.end();
+				return;
 			}
 
 			const responseBody = FileSystem.readFileSync(file.path, {
@@ -75,11 +81,15 @@ class WebServer {
 			}
 
 			console.log('WebServer listening on port: ' + this.Server.settings.webServerPort);
+			this.trigger('start', {
+				port : this.Server.settings.webServerPort
+			});
 		});
 	}
 
 	stop () {
 		this.webServer.close();
+		this.trigger('stop');
 	}
 }
 

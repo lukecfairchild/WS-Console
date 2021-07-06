@@ -13,6 +13,7 @@ const server = new WSConsole.server({
 	//sslKey        : '/path/to/key',
 	//sslCert       : '/path/to/cert'
 });
+
 const Console = server.Accounts.get('Console', 'user');
 
 const client = new WSConsole.client({
@@ -25,7 +26,7 @@ const client = new WSConsole.client({
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', async (command) => {
-	const split = command.replace(/\n/, '').split(' ');
+	const split         = command.replace(/\n/, '').split(' ');
 	const targetCommand = split.slice(1, split.length);
 
 	switch (split[0]) {
