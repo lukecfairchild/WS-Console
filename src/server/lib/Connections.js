@@ -32,8 +32,11 @@ class Connections {
 		}
 	}
 
-	remove (connection) {
-		delete this.#connections[connection.id];
+	remove (id) {
+		if (this.exists(id)) {
+			delete this.#connections[id];
+		}
+
 	}
 }
 

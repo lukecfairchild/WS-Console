@@ -2,10 +2,14 @@
 
 const Uuid = require('uuid').v4;
 
+const EventSystem = require('../../lib/EventSystem');
+
 class Connection {
 	#events = {};
 
 	constructor (options) {
+		new EventSystem(this);
+
 		this.authenticated = false;
 		this.id            = Uuid();
 		this.Server        = options.Server;
@@ -53,10 +57,10 @@ console.log('authenticated', this.Account.name, this.Account.type);
 			}
 
 			if (this.authenticated) {
-				if (this.Account.hasPermission(data.action)) {
+				if (this.Account.hasPermission(`${data.action}.${data.target}`)) {
 
 				}
-			console.log('message', data);
+console.log('message', data);
 			}
 		});
 
@@ -73,18 +77,6 @@ console.log('authenticated', this.Account.name, this.Account.type);
 		this.webSocket.terminate();
 	}
 
-	on (event, callback) {
-		const id = Uuid();
-
-		if (!this.#events[event]) {
-			this.#events[event] = {};
-		}
-
-		this.#events[event][id] = callback;
-
-		return id;
-	}
-
 	send (message) {
 		if (this.webSocket.readyState === 1) {
 			return this.webSocket.send(JSON.stringify(message), (error) => {
@@ -92,14 +84,6 @@ console.log('authenticated', this.Account.name, this.Account.type);
 					console.error(error);
 				}
 			});
-		}
-	}
-
-	trigger (event, data) {
-		if (this.#events[event] && data) {
-			for (const i in this.#events[event]) {
-				this.#events[event][i](data);
-			}
 		}
 	}
 }
