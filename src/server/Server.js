@@ -4,12 +4,15 @@ const Type = require('simple-type-assert');
 
 const Accounts        = require('./lib/Accounts');
 const Commands        = require('./lib/Commands');
+const EventSystem     = require('../lib/EventSystem');
 const Database        = require('./lib/Database');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/webSocketServer');
 
 class  Server {
 	constructor (settings) {
+		new EventSystem(this);
+
 		// Required settings
 		Type.assert(settings, {
 			cacheSize     : Number,
@@ -38,42 +41,27 @@ class  Server {
 		this.WebServer       = new WebServer({Server : this});
 		this.WebSocketServer = new WebSocketServer({Server : this});
 
-		this.WebSocketServer.on('connection', (connection) => {
-			connection.on('login', (event) => {
-				const account = this.Accounts.get(event.name);
-
-				if (!account
-				||  !account.authenticate(event.password)) {
-					return connection.disconnect();
-				}
-
-				account.addConnection(connection);
-			});
-		});
-
 		if (this.settings.useStdin) {
-			this.#startCmdlineListener();
+			const Console = this.Accounts.get('Console', 'user');
+
+			process.stdin.resume();
+			process.stdin.setEncoding('utf8');
+			process.stdin.on('data', async (command) => {
+				Console.Commands.run(command);
+			});
 		}
-	}
-
-	#startCmdlineListener = () => {
-		const Console = this.Accounts.get('Console', 'user');
-
-		process.stdin.resume();
-		process.stdin.setEncoding('utf8');
-		process.stdin.on('data', async (command) => {
-			Console.Commands.run(command);
-		});
 	}
 
 	start () {
 		this.WebServer.start();
 		this.WebSocketServer.start();
+		this.trigger('start');
 	}
 
 	stop () {
 		this.WebServer.stop();
 		this.WebSocketServer.stop();
+		this.trigger('stop');
 	}
 }
 
