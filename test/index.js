@@ -35,7 +35,7 @@ process.stdin.on('data', async (command) => {
 			client.send({
 				action : 'command',
 				task   : split[1],
-				data   : split.slice(2, split.length)
+				data   : split.slice(2, split.length).join(' ')
 			});
 	}
 });
