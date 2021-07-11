@@ -5,7 +5,7 @@ class TaskDelete extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<task name>';
+		this.arguments   = '<taskname>';
 		this.description = 'Deletes a task account';
 		this.permissions = [];
 
