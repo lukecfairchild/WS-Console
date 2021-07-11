@@ -8,9 +8,9 @@ const Url        = require('url');
 
 const EventSystem = require('../../lib/EventSystem');
 
-class WebServer {
+class WebServer extends EventSystem {
 	constructor (options) {
-		new EventSystem(this);
+		super();
 
 		this.Server = options.Server;
 

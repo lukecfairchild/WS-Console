@@ -7,14 +7,14 @@ const HTTP        = require('http');
 const HTTPS       = require('https');
 const WebSocket   = require('ws');
 
-class WebSocketServer {
+class WebSocketServer extends EventSystem {
 	#webServer;
 	#webSocketServer;
 
 	constructor (options) {
-		this.Server = options.Server;
+		super();
 
-		new EventSystem(this);
+		this.Server = options.Server;
 
 		if (this.Server.settings.ssl) {
 			this.#webServer = HTTPS.createServer({

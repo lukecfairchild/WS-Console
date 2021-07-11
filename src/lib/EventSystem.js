@@ -2,20 +2,6 @@
 class EventSystem {
 	#events = {};
 
-	constructor (object) {
-		object.on = (...args) => {
-			return this.on(...args);
-		};
-
-		object.removeEventListener = (...args) => {
-			return this.removeEventListener(...args);
-		};
-
-		object.trigger = (...args) => {
-			return this.trigger(...args);
-		};
-	}
-
 	on (event, callback) {
 		if (!event
 		||  !callback) {

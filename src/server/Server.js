@@ -9,9 +9,9 @@ const Database        = require('./lib/Database');
 const WebServer       = require('./lib/WebServer');
 const WebSocketServer = require('./lib/webSocketServer');
 
-class  Server {
+class Server extends EventSystem {
 	constructor (settings) {
-		new EventSystem(this);
+		super();
 
 		// Required settings
 		Type.assert(settings, {

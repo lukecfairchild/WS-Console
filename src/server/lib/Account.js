@@ -7,12 +7,12 @@ const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
 const EventSystem     = require('../../lib/EventSystem');
 
-class Account {
+class Account extends EventSystem {
 	#hash;
 	#permissions;
 
 	constructor (options) {
-		new EventSystem(this);
+		super();
 
 		this.Accounts    = options.Accounts;
 		this.Connections = new Connections({
