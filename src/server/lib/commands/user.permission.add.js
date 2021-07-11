@@ -11,7 +11,7 @@ class UserPermissionAdd extends Command {
 	}
 
 	async run (username, permission) {
-		const Users = this.Commands.Server.Accounts.Users;
+		const Users = this.Server.Accounts.Users;
 
 		console.log(this.Account);
 		if (!this.Account.hasPermissions(permission)) {

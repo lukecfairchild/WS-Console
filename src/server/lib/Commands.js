@@ -55,7 +55,8 @@ class Commands {
 			&&  Type.get(this.#commands[commandName]) === 'Function') {
 				const command = new this.#commands[commandName]({
 					Account  : account,
-					Commands : this
+					Commands : this,
+					Server   : this.Server
 				});
 
 				return {

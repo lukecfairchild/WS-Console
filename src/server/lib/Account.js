@@ -12,7 +12,6 @@ class Account {
 	#permissions;
 
 	constructor (options) {
-		this.testOfDoom = 'hmm';
 		new EventSystem(this);
 
 		this.Accounts    = options.Accounts;
@@ -20,7 +19,8 @@ class Account {
 			Account : this
 		});
 		this.Commands    = new AccountCommands({
-			Account : this
+			Account : this,
+			Server  : options.Server
 		});
 
 		this.name = options.name;

@@ -4,6 +4,7 @@ class Command {
 		this.Account    = options.Account;
 		this.Commands   = options.Commands;
 		this.Connection = options.Connection;
+		this.Server     = options.Server;
 
 		this.arguments   = '';
 		this.description = '';
