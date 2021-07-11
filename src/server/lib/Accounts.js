@@ -13,11 +13,6 @@ class Accounts {
 	};
 
 	constructor (options) {
-		// Required options
-		Type.assert(options, {
-			Server : options.Server
-		});
-
 		this.Server = options.Server;
 		this.Tasks  = new Tasks({Accounts : this});
 		this.Users  = new Users({Accounts : this});
@@ -65,6 +60,7 @@ class Accounts {
 		const account = new this.types[type]({
 			Accounts : this,
 			type     : type,
+			Server   : this.Server,
 			...accountOptions
 		});
 
@@ -123,14 +119,13 @@ class Accounts {
 			type : type
 		}).value();
 
-		const account = new this.types[data.type]({
+		this.#accounts[type][name] = new this.types[data.type]({
 			Accounts : this,
+			Server   : this.Server,
 			...data
 		});
 
-		this.#accounts[type][name] = account;
-
-		return account;
+		return this.#accounts[type][name];
 	}
 
 	list (type) {

@@ -6,14 +6,12 @@ const Roles   = require('./Roles');
 class User extends Account {
 	constructor (options) {
 		options.type = 'user';
-		const x = super(options);
+		super(options);
 
 		this.roles = new Roles({
 			roles : options.roles,
 			User  : this
 		});
-
-		console.log('TEST OF DOOM', x);
 	}
 }
 
