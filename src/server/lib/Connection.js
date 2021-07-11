@@ -4,11 +4,9 @@ const Uuid = require('uuid').v4;
 
 const EventSystem = require('../../lib/EventSystem');
 
-class Connection {
-	#events = {};
-
+class Connection extends EventSystem {
 	constructor (options) {
-		new EventSystem(this);
+		super();
 
 		this.authenticated = false;
 		this.id            = Uuid();
