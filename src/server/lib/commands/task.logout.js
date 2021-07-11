@@ -5,7 +5,7 @@ class TaskLogout extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<task name>';
+		this.arguments   = '<taskname>';
 		this.description = 'Logs out a task account';
 		this.permissions = [];
 

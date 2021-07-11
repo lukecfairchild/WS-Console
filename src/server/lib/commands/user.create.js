@@ -5,7 +5,7 @@ class UserCreate extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<user name> [password]';
+		this.arguments   = '<username> [password]';
 		this.description = 'Creates a new user account';
 		this.permissions = [];
 	}

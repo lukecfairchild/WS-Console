@@ -5,7 +5,7 @@ class Password extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<new password>';
+		this.arguments   = '<password>';
 		this.description = 'Allows you to change your current password';
 		this.permissions = ['password'];
 	}

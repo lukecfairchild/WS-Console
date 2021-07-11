@@ -1,29 +1,27 @@
 
 class Tasks {
-	#type = 'task';
-
 	constructor (options) {
 		this.Accounts = options.Accounts;
 	}
 
 	create (name) {
-		return this.Accounts.create(name, this.#type);
+		return this.Accounts.create(name, 'task');
 	}
 
 	delete (name) {
-		return this.Accounts.delete(name, this.#type);
+		return this.Accounts.delete(name, 'task');
 	}
 
 	get (name) {
-		return this.Accounts.get(name, this.#type);
+		return this.Accounts.get(name, 'task');
 	}
 
 	exists (name) {
-		return this.Accounts.exists(name, this.#type);
+		return this.Accounts.exists(name, 'task');
 	}
 
 	list () {
-		return this.Accounts.list(this.#type);
+		return this.Accounts.list('task');
 	}
 }
 

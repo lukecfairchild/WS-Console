@@ -5,7 +5,7 @@ class TaskCreate extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<task name> [password]';
+		this.arguments   = '<taskname> [password]';
 		this.description = 'Creates a new task account';
 		this.permissions = ['task.create'];
 

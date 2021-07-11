@@ -8,11 +8,11 @@ const Connections     = require('./Connections');
 const EventSystem     = require('../../lib/EventSystem');
 
 class Account {
-	#events;
 	#hash;
 	#permissions;
 
 	constructor (options) {
+		this.testOfDoom = 'hmm';
 		new EventSystem(this);
 
 		this.Accounts    = options.Accounts;
@@ -34,10 +34,24 @@ class Account {
 		this.#permissions = data.permissions || [];
 	}
 
+	addPermission (permission) {
+		if (!this.#permissions.includes(permission)) {
+			this.#permissions.push(permission);
+
+			this.Accounts.Server.Database.get('accounts').find({
+				name : this.name
+			}).set('permissions', this.#permissions).write();
+		}
+	}
+
 	authenticate (password) {
 		Type.assert(password, String);
 
 		return bcrypt.compareSync(password, this.#hash);
+	}
+
+	getPermissions () {
+		return this.#permissions;
 	}
 
 	hasPermission (permissions) {
@@ -79,6 +93,16 @@ class Account {
 		}
 
 		return false;
+	}
+
+	removePermission (permission) {
+		if (this.#permissions.includes(permission)) {
+			this.#permissions.splice(this.#permissions.indexOf(permission), 1);
+
+			this.Accounts.Server.Database.get('accounts').find({
+				name : this.name
+			}).set('permissions', this.#permissions).write();
+		}
 	}
 
 	send (message) {
