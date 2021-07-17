@@ -13,8 +13,7 @@ class UserPermissionAdd extends Command {
 	async run (username, permission) {
 		const Users = this.Server.Accounts.Users;
 
-		console.log(this.Account);
-		if (!this.Account.hasPermissions(permission)) {
+		if (!this.Account.hasPermission(permission)) {
 			return 'You cannot give that permission';
 		}
 
@@ -22,7 +21,7 @@ class UserPermissionAdd extends Command {
 			return 'User does not exist';
 		}
 
-		Users.get(username).addPermissions(permission);
+		Users.get(username).addPermission(permission);
 	}
 }
 
