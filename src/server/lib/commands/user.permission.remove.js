@@ -13,7 +13,7 @@ class UserPermissionRemove extends Command {
 	async run (username, permission) {
 		const Users = this.Server.Accounts.Users;
 
-		if (!this.Account.hasPermission(permission)) {
+		if (!this.Account.hasPermission(permission.replace(/^-/, '') + '.grant')) {
 			return 'You cannot remove that permission';
 		}
 
