@@ -1,12 +1,20 @@
-'use strict';
 
-const Uuid = require('uuid').v4;
+const Type      = require('simpler-types');
+const Uuid      = require('uuid').v4;
+const WebSocket = require('ws');
 
 const EventSystem = require('../../lib/EventSystem');
+const Server      = require('../Server');
 
 class Connection extends EventSystem {
+	#authenticated;
+
 	constructor (options) {
 		super();
+
+		Type.assert(options, Object);
+		Type.assert(options.Server, Server);
+		Type.assert(options.webSocket, WebSocket);
 
 		this.authenticated = false;
 		this.id            = Uuid();
@@ -14,7 +22,7 @@ class Connection extends EventSystem {
 		this.webSocket     = options.webSocket;
 
 		const authTimeout = setTimeout(() => {
-			if (!this.authenticated) {
+			if (!this.#authenticated) {
 				this.disconnect();
 			}
 		}, 5000);
@@ -29,7 +37,7 @@ class Connection extends EventSystem {
 				this.webSocket.terminate();
 			}
 
-			if (!this.authenticated) {
+			if (!this.#authenticated) {
 				if (data.action !== 'login') {
 					return this.disconnect();
 				}
@@ -41,9 +49,9 @@ class Connection extends EventSystem {
 				this.trigger('login', data);
 				const account = this.Server.Accounts.get(data.name, data.type);
 
-				this.authenticated = account.authenticate(data.password);
+				this.#authenticated = account.authenticate(data.password);
 
-				if (!this.authenticated) {
+				if (!this.#authenticated) {
 					return this.disconnect();
 				}
 
@@ -54,7 +62,7 @@ class Connection extends EventSystem {
 console.log('authenticated', this.Account.name, this.Account.type);
 			}
 
-			if (this.authenticated) {
+			if (this.#authenticated) {
 				if (this.Account.hasPermission(`${data.action}.${data.target}`)) {
 
 				}
@@ -76,6 +84,8 @@ console.log('message', data);
 	}
 
 	send (message) {
+		Type.assert(message, Object);
+
 		if (this.webSocket.readyState === 1) {
 			return this.webSocket.send(JSON.stringify(message), (error) => {
 				if (error) {
