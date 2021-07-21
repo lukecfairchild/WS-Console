@@ -1,8 +1,15 @@
 
+const Type = require('simpler-types');
+
+const User = require('./User');
+
 class Roles {
 	#roles;
 
 	constructor (options) {
+		Type.assert(options, Object);
+		Type.assert(options.User, User);
+
 		this.User = options.User;
 
 		const data = this.User.Accounts.Server.Database.get(this.User.type).find({
@@ -13,6 +20,8 @@ class Roles {
 	}
 
 	add (role) {
+		Type.assert(role, String);
+
 		if (!this.#roles.includes(role)) {
 			this.#roles.push(role);
 
@@ -27,6 +36,8 @@ class Roles {
 	}
 
 	remove (role) {
+		Type.assert(role, String);
+
 		if (this.#roles.includes(role)) {
 			this.#roles.splice(this.#roles.indexOf(role), 1);
 

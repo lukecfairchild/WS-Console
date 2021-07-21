@@ -1,9 +1,16 @@
 
+const Type = require('simpler-types');
+
+const Account = require('./Account');
+
 class Connections {
 	#connections = {};
 
 	constructor (options) {
-		this.User = options.User;
+		Type.assert(options, Object);
+		Type.assert(options.Account, Account);
+
+		this.Account = options.Account;
 	}
 
 	add (connection) {

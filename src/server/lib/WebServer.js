@@ -4,13 +4,17 @@ const FileSystem = require('fs');
 const HTTP       = require('http');
 const HTTPS      = require('https');
 const Path       = require('path');
+const Type       = require('simpler-types');
 const Url        = require('url');
 
 const EventSystem = require('../../lib/EventSystem');
+const Server      = require('../Server');
 
 class WebServer extends EventSystem {
 	constructor (options) {
 		super();
+		Type.assert(options, Object);
+		Type.assert(options.Server, Server);
 
 		this.Server = options.Server;
 

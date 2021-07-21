@@ -1,8 +1,8 @@
-'use strict';
 
 const bcrypt = require('bcryptjs');
 const Type   = require('simple-type-assert');
 
+const Accounts        = require('./Accounts');
 const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
 const EventSystem     = require('../../lib/EventSystem');
@@ -13,6 +13,8 @@ class Account extends EventSystem {
 
 	constructor (options) {
 		super();
+		Type.assert(options, Object);
+		Type.assert(options.Accounts, Accounts);
 
 		this.Accounts    = options.Accounts;
 		this.Connections = new Connections({

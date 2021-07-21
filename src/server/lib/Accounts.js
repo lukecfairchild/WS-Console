@@ -1,10 +1,11 @@
 
 const Type = require('simple-type-assert');
 
-const Task  = require('./Task');
-const Tasks = require('./Tasks');
-const User  = require('./User');
-const Users = require('./Users');
+const Server = require('../Server');
+const Task   = require('./Task');
+const Tasks  = require('./Tasks');
+const User   = require('./User');
+const Users  = require('./Users');
 
 class Accounts {
 	#accounts = {
@@ -13,6 +14,9 @@ class Accounts {
 	};
 
 	constructor (options) {
+		Type.assert(options, Object);
+		Type.assert(options.Server, Server);
+
 		this.Server = options.Server;
 		this.Tasks  = new Tasks({Accounts : this});
 		this.Users  = new Users({Accounts : this});
@@ -31,7 +35,6 @@ class Accounts {
 	}
 
 	create (accountOptions, type) {
-		// Required options
 		Type.assert(type, String);
 		Type.assert(accountOptions, {
 			name : String

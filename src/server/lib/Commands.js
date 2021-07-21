@@ -1,13 +1,19 @@
 
-const Command    = require('./Command');
 const FileSystem = require('fs');
 const Path       = require('path');
 const Type       = require('simpler-types');
+
+const Account = require('./Account');
+const Command = require('./Command');
+const Server  = require('../Server');
 
 class Commands {
 	#commands = {};
 
 	constructor (options) {
+		Type.assert(options, Object);
+		Type.assert(options.Server, Server);
+
 		this.Server = options.Server;
 
 		const files = FileSystem.readdirSync(Path.join(__dirname, 'commands'));
@@ -23,14 +29,21 @@ class Commands {
 	}
 
 	add (command, commandPackage) {
+		Type.assert(command, String);
+		Type.assert([commandPackage], [Function, Object]);
+
 		this.#commands[command] = commandPackage;
 	}
 
 	remove (command) {
+		Type.assert(command, String);
+
 		delete this.#commands[command];
 	}
 
 	getAll (account) {
+		Type.assert(account, Account);
+
 		const commands = {};
 
 		for (const i in this.#commands) {
@@ -45,6 +58,9 @@ class Commands {
 	}
 
 	get (account, commandRaw) {
+		Type.assert(account, Account);
+		Type.assert(commandRaw, String);
+
 		const commandTrimmed = (commandRaw || '').trim();
 
 		for (const i in commandTrimmed.split(' ')) {

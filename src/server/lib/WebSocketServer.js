@@ -5,7 +5,10 @@ const EventSystem = require('../../lib/EventSystem');
 const FileSystem  = require('fs');
 const HTTP        = require('http');
 const HTTPS       = require('https');
+const Type        = require('simpler-types');
 const WebSocket   = require('ws');
+
+const Server = require('../Server');
 
 class WebSocketServer extends EventSystem {
 	#webServer;
@@ -13,6 +16,8 @@ class WebSocketServer extends EventSystem {
 
 	constructor (options) {
 		super();
+		Type.assert(options, Object);
+		Type.assert(options.Server, Server);
 
 		this.Server = options.Server;
 
