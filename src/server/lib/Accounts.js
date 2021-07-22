@@ -1,5 +1,5 @@
 
-const Type = require('simple-type-assert');
+const Type = require('simpler-types');
 
 const Server = require('../Server');
 const Task   = require('./Task');
