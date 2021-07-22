@@ -6,7 +6,7 @@ class Help extends Command {
 	constructor (options) {
 		super(options);
 
-		this.description = '';
+		this.description = 'Lists all available commands and their descriptions.';
 		this.permissions = [];
 	}
 

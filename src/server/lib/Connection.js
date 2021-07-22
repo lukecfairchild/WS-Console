@@ -18,6 +18,7 @@ class Connection extends EventSystem {
 
 		this.authenticated = false;
 		this.id            = Uuid();
+		this.request       = options.request;
 		this.Server        = options.Server;
 		this.webSocket     = options.webSocket;
 

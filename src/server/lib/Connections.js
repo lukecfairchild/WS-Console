@@ -39,6 +39,10 @@ class Connections {
 		}
 	}
 
+	getAll () {
+		return this.#connections;
+	}
+
 	remove (id) {
 		if (this.exists(id)) {
 			delete this.#connections[id];

@@ -41,8 +41,9 @@ class WebSocketServer extends EventSystem {
 			console.log('WebSocketServer listening on port: ' + this.Server.settings.webSocketPort);
 		});
 
-		this.#webSocketServer.on('connection', (webSocket) => {
+		this.#webSocketServer.on('connection', (webSocket, request) => {
 			const connection = new Connection({
+				request   : request,
 				Server    : this.Server,
 				webSocket : webSocket
 			});
