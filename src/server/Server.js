@@ -1,6 +1,6 @@
 'use strict';
 
-const Type = require('simple-type-assert');
+const Type = require('simpler-types');
 
 const Accounts        = require('./lib/Accounts');
 const Commands        = require('./lib/Commands');

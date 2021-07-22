@@ -1,6 +1,6 @@
 
 const IndentString = require('indent-string');
-const Type         = require('simple-type-assert');
+const Type         = require('simpler-types');
 
 const Account = require('./Account');
 const Server  = require('../Server');

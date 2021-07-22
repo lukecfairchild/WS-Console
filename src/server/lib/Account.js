@@ -1,6 +1,6 @@
 
 const bcrypt = require('bcryptjs');
-const Type   = require('simple-type-assert');
+const Type   = require('simpler-types');
 
 const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
@@ -16,7 +16,7 @@ class Account extends EventSystem {
 		Type.assert(options, Object);
 		Type.assert(options.Server, Server);
 
-		this.Server    = options.Server;
+		this.Server      = options.Server;
 		this.Connections = new Connections({
 			Account : this
 		});
