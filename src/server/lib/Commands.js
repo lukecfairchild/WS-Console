@@ -6,6 +6,8 @@ const Type       = require('simpler-types');
 const Account = require('./Account');
 const Command = require('./Command');
 const Server  = require('../Server');
+const Task    = require('./Task');
+const User    = require('./User');
 
 class Commands {
 	#commands = {};
@@ -42,7 +44,7 @@ class Commands {
 	}
 
 	getAll (account) {
-		Type.assert(account, Account);
+		Type.assert([account], [Account, Task, User]);
 
 		const commands = {};
 
@@ -58,7 +60,7 @@ class Commands {
 	}
 
 	get (account, commandRaw) {
-		Type.assert(account, Account);
+		Type.assert([account], [Account, Task, User]);
 		Type.assert(commandRaw, String);
 
 		const commandTrimmed = (commandRaw || '').trim();
@@ -89,6 +91,7 @@ class Commands {
 
 						if (account.hasPermission(command.permissions || [])) {
 							return await command.run(...args);
+
 						} else {
 							return 'You do not have permission to do that.';
 						}

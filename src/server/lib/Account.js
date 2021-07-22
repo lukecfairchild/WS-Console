@@ -57,8 +57,6 @@ class Account extends EventSystem {
 	}
 
 	hasPermission (permissions) {
-		console.log('permissions', permissions);
-
 		if (Type.is(permissions, String)) {
 			permissions = [permissions];
 		}

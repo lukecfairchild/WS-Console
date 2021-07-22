@@ -29,7 +29,7 @@ class Accounts {
 			this.create({
 				name        : 'Console',
 				type        : 'user',
-				permissions : ['*', '-logout', '-password']
+				permissions : ['*', '-connections', '-logout', '-password']
 			});
 		}
 	}

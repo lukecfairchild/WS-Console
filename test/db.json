@@ -6,7 +6,8 @@
       "permissions": [
         "*",
         "-logout",
-        "-password"
+        "-password",
+        "-connections"
       ],
       "roles": [],
       "type": "user"
