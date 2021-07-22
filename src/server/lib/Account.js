@@ -2,10 +2,10 @@
 const bcrypt = require('bcryptjs');
 const Type   = require('simple-type-assert');
 
-const Accounts        = require('./Accounts');
 const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
 const EventSystem     = require('../../lib/EventSystem');
+const Server          = require('../Server');
 
 class Account extends EventSystem {
 	#hash;
@@ -14,9 +14,9 @@ class Account extends EventSystem {
 	constructor (options) {
 		super();
 		Type.assert(options, Object);
-		Type.assert(options.Accounts, Accounts);
+		Type.assert(options.Server, Server);
 
-		this.Accounts    = options.Accounts;
+		this.Server    = options.Server;
 		this.Connections = new Connections({
 			Account : this
 		});
@@ -28,7 +28,7 @@ class Account extends EventSystem {
 		this.name = options.name;
 		this.type = options.type;
 
-		const data = this.Accounts.Server.Database.get('accounts').find({
+		const data = this.Server.Database.get('accounts').find({
 			name : this.name
 		}).value() || {};
 
@@ -40,7 +40,7 @@ class Account extends EventSystem {
 		if (!this.#permissions.includes(permission)) {
 			this.#permissions.push(permission);
 
-			this.Accounts.Server.Database.get('accounts').find({
+			this.Server.Database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
 		}
@@ -103,7 +103,7 @@ class Account extends EventSystem {
 		if (this.#permissions.includes(permission)) {
 			this.#permissions.splice(this.#permissions.indexOf(permission), 1);
 
-			this.Accounts.Server.Database.get('accounts').find({
+			this.Server.Database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
 		}
@@ -127,7 +127,7 @@ class Account extends EventSystem {
 
 		this.#hash = hash;
 
-		this.Accounts.Server.Database.get('accounts').find({
+		this.Server.Database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
 	}

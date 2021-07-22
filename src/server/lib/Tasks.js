@@ -1,14 +1,14 @@
 
 const Type = require('simpler-types');
 
-const Accounts = require('./Accounts');
+const Server = require('../Server');
 
 class Tasks {
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Accounts, Accounts);
+		Type.assert(options.Server, Server);
 
-		this.Accounts = options.Accounts;
+		this.Accounts = options.Server.Accounts;
 	}
 
 	create (name) {
