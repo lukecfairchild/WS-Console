@@ -18,8 +18,8 @@ class Accounts {
 		Type.assert(options.Server, Server);
 
 		this.Server = options.Server;
-		this.Tasks  = new Tasks({Accounts : this});
-		this.Users  = new Users({Accounts : this});
+		this.Tasks  = new Tasks({Server : this.Server});
+		this.Users  = new Users({Server : this.Server});
 		this.types  = {
 			user : User,
 			task : Task
@@ -61,9 +61,8 @@ class Accounts {
 		}).write();
 
 		const account = new this.types[type]({
-			Accounts : this,
-			type     : type,
-			Server   : this.Server,
+			type   : type,
+			Server : this.Server,
 			...accountOptions
 		});
 
@@ -123,8 +122,7 @@ class Accounts {
 		}).value();
 
 		this.#accounts[type][name] = new this.types[data.type]({
-			Accounts : this,
-			Server   : this.Server,
+			Server : this.Server,
 			...data
 		});
 
