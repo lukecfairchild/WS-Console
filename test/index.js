@@ -31,12 +31,14 @@ process.stdin.on('data', async (command) => {
 
 	switch (split[0]) {
 		case 'server' :
-			Console.Commands.run(targetCommand.join(' '));
+			console.log(await Console.Commands.run(targetCommand.join(' ')));
+			break;
+
 		case 'client' :
 			client.send({
 				action : 'command',
-				task   : split[1],
-				data   : split.slice(2, split.length).join(' ')
+				target : 'console',
+				data   : targetCommand.join(' ')
 			});
 	}
 });

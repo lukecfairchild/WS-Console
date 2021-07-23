@@ -47,7 +47,7 @@ class Server extends EventSystem {
 			process.stdin.resume();
 			process.stdin.setEncoding('utf8');
 			process.stdin.on('data', async (command) => {
-				Console.Commands.run(command);
+				console.log(await Console.Commands.run(command));
 			});
 		}
 	}
