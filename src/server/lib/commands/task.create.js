@@ -6,19 +6,19 @@ class TaskCreate extends Command {
 		super(options);
 
 		this.arguments   = '<taskname> [password]';
-		this.description = 'Creates a new task account';
+		this.description = 'Creates a new task account with an optional password';
 		this.permissions = ['task.create'];
-
-		this.Tasks = this.Commands.Server.Accounts.Tasks;
 	}
 
-	async run (name, password = null) {
-		if (this.Tasks.exists(name)) {
-			return `An Account already exists with that name: "${name}"`;
+	async run (taskname, password = null) {
+		const Tasks = this.Commands.Server.Accounts.Tasks;
+
+		if (Tasks.exists(taskname)) {
+			return `A Task already exists with that name: "${taskname}"`;
 		}
 
-		const task = this.Tasks.create({
-			name : name
+		const task = Tasks.create({
+			name : taskname
 		});
 
 		if (password) {

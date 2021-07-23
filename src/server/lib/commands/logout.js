@@ -5,13 +5,22 @@ class Logout extends Command {
 	constructor (options) {
 		super(options);
 
-		this.description = 'Logs you out';
+		this.arguments   = '[connectionId]';
+		this.description = 'Logs out your current connection or the provided connection.';
 		this.permissions = ['logout'];
 	}
 
-	async run () {
-		this.Connection.logout();
-		//this.Account.Connections.disconnect();
+	async run (connectionId) {
+		if (connectionId) {
+			if (this.Account.Connections.exists(connectionId)) {
+				return 'Invalid connectionId';
+			}
+
+			this.Account.Connections.get(connectionId).disconnect();
+
+		} else {
+			this.Connection.logout();
+		}
 	}
 }
 

@@ -10,7 +10,7 @@ class TaskList extends Command {
 	}
 
 	async run () {
-		const tasks = this.Commands.Server.Accounts.Tasks.list();
+		const tasks = this.Server.Accounts.Tasks.list();
 
 		return tasks.join(', ');
 	}
