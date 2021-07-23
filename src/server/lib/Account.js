@@ -68,7 +68,7 @@ class Account extends EventSystem {
 		}
 
 		for (const j in permissions) {
-			const permission = permissions[j].split('.');
+			const permission = permissions[j];
 
 			if (this.#permissions.includes(`-${permission}`)) {
 				return false;
@@ -78,8 +78,10 @@ class Account extends EventSystem {
 				return true;
 			}
 
-			for (let i = 0; i < permission.length; i++) {
-				const parts = permission.slice(0, permission.length - i - 1);
+			const permissionSplit = permission.split('.');
+
+			for (let i = 0; i < permissionSplit.length; i++) {
+				const parts = permissionSplit.slice(0, permissionSplit.length - i - 1);
 				parts.push('*');
 
 				const permissionParts = parts.join('.');

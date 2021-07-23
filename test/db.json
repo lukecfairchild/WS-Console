@@ -16,9 +16,7 @@
       "name": "testUser",
       "hash": "$2a$10$0eJEMc68UynEatV7fP4P9OLyy3kVrJos1ATD4UQgK2LrSEW5aNtym",
       "permissions": [
-        "test",
-        "test2",
-        "test3"
+        "user.list"
       ],
       "roles": [],
       "type": "user"
