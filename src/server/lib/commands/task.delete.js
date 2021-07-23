@@ -7,17 +7,17 @@ class TaskDelete extends Command {
 
 		this.arguments   = '<taskname>';
 		this.description = 'Deletes a task account';
-		this.permissions = [];
-
-		this.Tasks = this.Commands.Server.Accounts.Tasks;
+		this.permissions = ['task.delete'];
 	}
 
-	async run (name) {
-		if (!this.Tasks.exists(name)) {
-			return `An Account does not exist with that name: "${name}"`;
+	async run (taskname) {
+		const Tasks = this.Commands.Server.Accounts.Tasks;
+
+		if (!Tasks.exists(taskname)) {
+			return 'Task does not exist';
 		}
 
-		this.Tasks.delete(name);
+		Tasks.delete(taskname);
 	}
 }
 

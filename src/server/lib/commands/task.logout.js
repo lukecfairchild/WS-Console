@@ -5,19 +5,28 @@ class TaskLogout extends Command {
 	constructor (options) {
 		super(options);
 
-		this.arguments   = '<taskname>';
-		this.description = 'Logs out a task account';
-		this.permissions = [];
-
-		this.Tasks = this.Commands.Server.Accounts.Tasks;
+		this.arguments   = '<taskname> [connectionId]';
+		this.description = 'Logs out the specified task entirely or given connection.';
+		this.permissions = ['task.logout'];
 	}
 
-	async run (name) {
-		if (!this.Tasks.exists(name)) {
-			return `An Account does not exist with that name: "${name}"`;
+	async run (taskname, connectionId) {
+		const Tasks = this.Server.Accounts.Tasks;
+
+		if (!Tasks.exists(taskname)) {
+			return 'Task does not exist';
 		}
 
-		this.Tasks.logout(name);
+		if (connectionId) {
+			if (!Tasks.get(username).Connections.exists(connectionId)) {
+				return 'Invalid connectionId';
+			}
+
+			Tasks.get(taskname).Connections.get(connectionId).disconnect();
+
+		} else {
+			Users.get(taskname).Connections.disconnect();
+		}
 	}
 }
 

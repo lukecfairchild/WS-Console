@@ -11,8 +11,9 @@ class Password extends Command {
 	}
 
 	async run (...password) {
-		password = password.join(' ');
-		console.log(password);
+		this.Account.setPassword(password.join(' '));
+
+		return 'Password set'
 	}
 }
 

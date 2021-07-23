@@ -6,7 +6,7 @@ class UserLogout extends Command {
 		super(options);
 
 		this.arguments   = '<username> [connectionId]';
-		this.description = 'Logs out the specified user entirely or optional connection by ID';
+		this.description = 'Logs out the specified user entirely or given connection.';
 		this.permissions = ['user.logout'];
 	}
 
