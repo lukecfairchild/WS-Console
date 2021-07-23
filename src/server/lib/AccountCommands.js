@@ -31,7 +31,7 @@ class AccountCommands {
 		const response = await this.Server.Commands.get(this.Account, command).run();
 
 		if (response) {
-			console.log(IndentString(response, 4));
+			return IndentString(response, 4);
 		}
 	}
 }

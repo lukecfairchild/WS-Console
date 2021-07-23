@@ -28,29 +28,29 @@ class Connection extends EventSystem {
 			}
 		}, 5000);
 
-		this.webSocket.on('message', (message) => {
-			let data = {};
+		this.webSocket.on('message', async (message) => {
+			let json = {};
 
 			try {
-				data = JSON.parse(message);
+				json = JSON.parse(message);
 
 			} catch (error) {
 				this.webSocket.terminate();
 			}
 
 			if (!this.#authenticated) {
-				if (data.action !== 'login') {
+				if (json.action !== 'login') {
 					return this.disconnect();
 				}
 
-				if (!this.Server.Accounts.exists(data.name, data.type)) {
+				if (!this.Server.Accounts.exists(json.name, json.type)) {
 					return this.disconnect();
 				}
 
-				this.trigger('login', data);
-				const account = this.Server.Accounts.get(data.name, data.type);
+				this.trigger('login', json);
+				const account = this.Server.Accounts.get(json.name, json.type);
 
-				this.#authenticated = account.authenticate(data.password);
+				this.#authenticated = account.authenticate(json.password);
 
 				if (!this.#authenticated) {
 					return this.disconnect();
@@ -60,14 +60,25 @@ class Connection extends EventSystem {
 
 				clearTimeout(authTimeout);
 				account.Connections.add(this);
-console.log('authenticated', this.Account.name, this.Account.type);
 			}
 
 			if (this.#authenticated) {
-				if (this.Account.hasPermission(`${data.action}.${data.target}`)) {
+				if (this.Account.hasPermission(`${json.action}.${json.target}`)) {
 
 				}
-console.log('message', data);
+
+				switch (json.action) {
+					case 'command' : {
+						if (json.target === 'console') {
+							this.send({
+								target : 'console',
+								data   : await this.Account.Commands.run(json.data)
+							});
+						}
+
+						break;
+					}
+				}
 			}
 		});
 

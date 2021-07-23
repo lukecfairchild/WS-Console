@@ -27,17 +27,21 @@ class Client {
 		});
 
 		// Remote commands
-		if (this.options.allowRemoteInput) {
-			this.websocket.on('message', (rawData) => {
-				let data = {};
+		//if (this.options.allowRemoteInput) {
+		this.websocket.on('message', (rawData) => {
+			let data = {};
 
-				try {
-					data = JSON.parse(rawData);
-				} catch (error) {}
+			try {
+				data = JSON.parse(rawData);
+			} catch (error) {}
 
+			if (data.target === 'console') {
+				console.log(data.data);
+			} else {
 				console.log(data);
-			});
-		}
+			}
+		});
+		//}
 	}
 
 	send (message) {
