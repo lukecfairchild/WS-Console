@@ -23,6 +23,22 @@ const client = new WSConsole.client({
 	useStdin : false
 });
 
+server.start();
+client.start();
+
+const task = new WSConsole.task({
+	path             : 'ws:localhost:9000',
+	name             : 'test',
+	password         : 'pass',
+	useStdin         : true,
+	allowRemoteInput : true,
+	command          : [
+		'node',
+		Path.join(__dirname, 'test_process.js')
+	]
+});
+
+
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', async (command) => {
@@ -40,20 +56,8 @@ process.stdin.on('data', async (command) => {
 				target : 'console',
 				data   : targetCommand.join(' ')
 			});
+			break;
+		case 'task' :
+			task.process.stdin.write(targetCommand.join(' ') + '\n');
 	}
-});
-
-server.start();
-client.start();
-
-new WSConsole.task({
-	path             : 'ws:localhost:9000',
-	name             : 'test',
-	password         : 'pass',
-	useStdin         : false,
-	allowRemoteInput : true,
-	command          : [
-		'node',
-		Path.join(__dirname, 'test_process.js')
-	]
 });
