@@ -65,7 +65,7 @@ class Task {
 							data       : message
 						}));
 
-						this.task.stdin.write(data.data + '\n');
+						this.process.stdin.write(data.data + '\n');
 						break;
 					}
 
@@ -79,7 +79,7 @@ class Task {
 
 	#startTask = () => {
 		// Start Task
-		this.task = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
+		this.process = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
 			shell : true,
 			stdio : [
 				'pipe',
@@ -89,12 +89,12 @@ class Task {
 		});
 
 		// Exit if Task closes
-		this.task.on('close', () => {
+		this.process.on('close', () => {
 			process.exit();
 		});
 
 		// Relay Task data to Hub
-		this.task.stdout.on('data', (rawData) => {
+		this.process.stdout.on('data', (rawData) => {
 			const data = rawData.toString();
 
 			this.cache.push(data);

@@ -7,7 +7,7 @@ new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'test',
 	password         : 'pass',
-	useStdin         : false,
+	useStdin         : true,
 	allowRemoteInput : true,
 	command          : [
 		'node',
