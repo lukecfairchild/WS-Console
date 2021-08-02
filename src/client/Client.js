@@ -21,8 +21,10 @@ class Client {
 			this.websocket.send(JSON.stringify({
 				type     : 'user',
 				action   : 'login',
-				name     : this.options.name,
-				password : this.options.password
+				data     : {
+					name     : this.options.name,
+					password : this.options.password
+				}
 			}));
 		});
 

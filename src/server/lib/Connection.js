@@ -43,14 +43,14 @@ class Connection extends EventSystem {
 					return this.disconnect();
 				}
 
-				if (!this.Server.Accounts.exists(json.name, json.type)) {
+				if (!this.Server.Accounts.exists(json.data.name, json.type)) {
 					return this.disconnect();
 				}
 
 				this.trigger('login', json);
-				const account = this.Server.Accounts.get(json.name, json.type);
+				const account = this.Server.Accounts.get(json.data.name, json.type);
 
-				this.#authenticated = account.authenticate(json.password);
+				this.#authenticated = account.authenticate(json.data.password);
 
 				if (!this.#authenticated) {
 					return this.disconnect();
@@ -63,6 +63,7 @@ class Connection extends EventSystem {
 			}
 
 			if (this.#authenticated) {
+				console.log('connection event', json);
 				if (this.Account.hasPermission(`${json.action}.${json.target}`)) {
 
 				}

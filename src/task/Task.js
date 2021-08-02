@@ -23,10 +23,12 @@ class Task {
 		this.websocket.on('open', () => {
 			// Authenticate with Hub
 			this.websocket.send(JSON.stringify({
-				type     : 'task',
-				action   : 'login',
-				name     : this.options.name,
-				password : this.options.password
+				type   : 'task',
+				action : 'login',
+				data   : {
+					name     : this.options.name,
+					password : this.options.password
+				}
 			}));
 
 			const cache = this.cache.get();
@@ -35,9 +37,9 @@ class Task {
 			if (cache.length) {
 				for (const i in cache) {
 					this.websocket.send(JSON.stringify({
-						clientType : 'server',
-						action     : 'data',
-						data       : cache[i]
+						type   : 'task',
+						action : 'data',
+						data   : cache[i]
 					}));
 				}
 			}
@@ -60,9 +62,9 @@ class Task {
 
 						console.log(message);
 						this.websocket.send(JSON.stringify({
-							clientType : 'server',
-							action     : 'data',
-							data       : message
+							type   : 'task',
+							action : 'data',
+							data   : message
 						}));
 
 						this.process.stdin.write(data.data + '\n');
@@ -101,9 +103,9 @@ class Task {
 
 			process.stdout.write(data);
 			this.websocket.send(JSON.stringify({
-				clientType : 'server',
-				action     : 'data',
-				data       : data
+				type   : 'task',
+				action : 'data',
+				data   : data
 			}));
 		});
 	}
@@ -118,9 +120,9 @@ class Task {
 			this.cache.push(data);
 
 			this.websocket.send(JSON.stringify({
-				clientType : 'server',
-				action     : 'data',
-				data       : data
+				type   : 'task',
+				action : 'data',
+				data   : data
 			}));
 
 			process.stdin.write(data);
