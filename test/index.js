@@ -30,7 +30,7 @@ const task = new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'test',
 	password         : 'pass',
-	useStdin         : true,
+	useStdin         : false,
 	allowRemoteInput : true,
 	command          : [
 		'node',
@@ -46,18 +46,23 @@ process.stdin.on('data', async (command) => {
 	const targetCommand = split.slice(1, split.length);
 
 	switch (split[0]) {
-		case 'server' :
+		case 'server' : {
 			console.log(await Console.Commands.run(targetCommand.join(' ')));
-			break;
+			return;
+		}
 
-		case 'client' :
+		case 'client' : {
 			client.send({
 				action : 'command',
 				target : 'console',
 				data   : targetCommand.join(' ')
 			});
-			break;
-		case 'task' :
-			task.process.stdin.write(targetCommand.join(' ') + '\n');
+			return;
+		}
+
+		case 'task' : {
+			task.process.stdin.write(targetCommand.join(' '));
+			return;
+		}
 	}
 });

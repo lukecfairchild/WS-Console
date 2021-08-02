@@ -261,9 +261,9 @@ document.addEventListener('keypress', (event) => {
 				commands[name].history.push(command);
 				commands[name].current = commands[name].history.length;
 				webSocket.send(JSON.stringify({
-					clientType : 'user',
-					action     : 'command',
-					data       : command
+					type   : 'user',
+					action : 'command',
+					data   : command
 				}));
 			}
 
@@ -481,10 +481,12 @@ const startListener = function () {
 		switch (data.action) {
 			case 'ready' : {
 				webSocket.send(JSON.stringify({
-					clientType : 'user',
-					action     : 'login',
-					name       : username,
-					password   : password
+					type     : 'user',
+					action   : 'login',
+					data     : {
+						name     : username,
+						password : password
+					}
 				}));
 
 				break;
