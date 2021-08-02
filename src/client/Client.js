@@ -1,11 +1,13 @@
 'use strict';
 
-const Tasks = require('./Tasks');
+const EventSystem = require('../lib/EventSystem');
+const Tasks       = require('./Tasks');
+const WebSocket   = require('../task/lib/WebSocket');
 
-const WebSocket = require('../task/lib/WebSocket');
-
-class Client {
+class Client extends EventSystem {
 	constructor (options) {
+		super();
+
 		this.options = options;
 
 		this.Tasks = new Tasks({
@@ -19,17 +21,15 @@ class Client {
 		this.websocket.on('open', () => {
 			// Authenticate with Hub
 			this.websocket.send(JSON.stringify({
-				type     : 'user',
-				action   : 'login',
-				data     : {
+				type   : 'user',
+				action : 'login',
+				data   : {
 					name     : this.options.name,
 					password : this.options.password
 				}
 			}));
 		});
 
-		// Remote commands
-		//if (this.options.allowRemoteInput) {
 		this.websocket.on('message', (rawData) => {
 			let data = {};
 
@@ -37,13 +37,8 @@ class Client {
 				data = JSON.parse(rawData);
 			} catch (error) {}
 
-			if (data.target === 'console') {
-				console.log(data.data);
-			} else {
-				console.log(data);
-			}
+			this.trigger('message', data);
 		});
-		//}
 	}
 
 	send (message) {

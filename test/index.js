@@ -23,6 +23,9 @@ const client = new WSConsole.client({
 	useStdin : false
 });
 
+client.on('message', (event) => {
+	console.log('client recieved:', event);
+});
 server.start();
 client.start();
 
