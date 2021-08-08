@@ -79,6 +79,15 @@ class Connection extends EventSystem {
 
 						break;
 					}
+
+					case 'data' : {
+						this.Account.trigger('data', {
+							connection : this,
+							data       : json.data
+						});
+
+						break;
+					}
 				}
 			}
 		});

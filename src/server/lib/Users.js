@@ -29,6 +29,10 @@ class Users {
 		return this.Server.Accounts.get(name, 'user');
 	}
 
+	getAll () {
+		return this.Server.Accounts.getAll('user');
+	}
+
 	exists (name) {
 		Type.assert(name, String);
 

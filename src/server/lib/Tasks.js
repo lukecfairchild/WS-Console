@@ -29,6 +29,10 @@ class Tasks {
 		return this.Accounts.get(name, 'task');
 	}
 
+	getAll () {
+		return this.Accounts.getAll('task');
+	}
+
 	exists (name) {
 		Type.assert(name, String);
 
