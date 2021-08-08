@@ -22,12 +22,14 @@ class Task extends Account {
 			const accounts = this.Server.Accounts.Users.getAll();
 			for (let i in accounts) {
 				const account = accounts[i];
-// Need to add a permission check here.
-				account.Connections.send({
-					action : 'data',
-					target : this.name,
-					data   : event.data
-				});
+
+				if (account.hasPermission(`task.console.${this.name}.view`)) {
+					account.Connections.send({
+						action : 'data',
+						target : this.name,
+						data   : event.data
+					});
+				}
 			}
 		});
 
