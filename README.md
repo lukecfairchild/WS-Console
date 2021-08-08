@@ -141,3 +141,9 @@ Server Commands
 	user permission remove <name> <permission>
 	connections list [name]
 	connections logout <connection>
+
+
+TO DO:
+	account names character restrictions
+	account names character limits
+	account password character limits
