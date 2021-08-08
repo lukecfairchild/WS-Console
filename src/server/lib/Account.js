@@ -109,16 +109,6 @@ class Account extends EventSystem {
 		}
 	}
 
-	send (message) {
-		if (!message) {
-			return;
-		}
-
-		for (const i in this.connections) {
-			this.connections[i].send(message);
-		}
-	}
-
 	setPassword (password) {
 		Type.assert(password, String);
 

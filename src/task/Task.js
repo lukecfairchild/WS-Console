@@ -1,6 +1,6 @@
 'use strict';
 
-const Cache     = require('./lib/Cache');
+const Cache     = require('../lib/Cache');
 const Spawn     = require('child_process').spawn;
 const WebSocket = require('./lib/WebSocket');
 

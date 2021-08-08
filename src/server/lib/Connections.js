@@ -49,6 +49,16 @@ class Connections {
 		}
 
 	}
+
+	send (message) {
+		if (!message) {
+			return;
+		}
+
+		for (const i in this.#connections) {
+			this.#connections[i].send(message);
+		}
+	}
 }
 
 module.exports = Connections;

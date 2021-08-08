@@ -129,6 +129,10 @@ class Accounts {
 		return this.#accounts[type][name];
 	}
 
+	getAll (type) {
+		return this.#accounts[type];
+	}
+
 	list (type) {
 		Type.assert(type, String);
 
