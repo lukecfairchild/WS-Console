@@ -17,6 +17,10 @@ class TaskCreate extends Command {
 			return `A Task already exists with that name: "${taskname}"`;
 		}
 
+		if (taskname.match(/\./)) {
+			return 'Account names may not contain periods.';
+		}
+
 		const task = Tasks.create({
 			name : taskname
 		});

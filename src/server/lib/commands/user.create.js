@@ -17,6 +17,11 @@ class UserCreate extends Command {
 			return `A User already exists with that name: "${username}"`;
 		}
 
+		
+		if (username.match(/\./)) {
+			return 'Account names may not contain periods.';
+		}
+
 		const user = Users.create({
 			name : username
 		});

@@ -25,6 +25,10 @@ class Account extends EventSystem {
 			Server  : options.Server
 		});
 
+		if (options.name.match(/\./)) {
+			throw new Error('Account names may not contain periods');
+		}
+
 		this.name = options.name;
 		this.type = options.type;
 
