@@ -8,39 +8,39 @@ class Tasks {
 		Type.assert(options, Object);
 		Type.assert(options.Server, Server);
 
-		this.Accounts = options.Server.Accounts;
+		this.Server = options.Server;
 	}
 
 	create (name) {
 		Type.assert(name, String);
 
-		return this.Accounts.create(name, 'task');
+		return this.Server.Accounts.create(name, 'task');
 	}
 
 	delete (name) {
 		Type.assert(name, String);
 
-		return this.Accounts.delete(name, 'task');
+		return this.Server.Accounts.delete(name, 'task');
 	}
 
 	get (name) {
 		Type.assert(name, String);
 
-		return this.Accounts.get(name, 'task');
+		return this.Server.Accounts.get(name, 'task');
 	}
 
 	getAll () {
-		return this.Accounts.getAll('task');
+		return this.Server.Accounts.getAll('task');
 	}
 
 	exists (name) {
 		Type.assert(name, String);
 
-		return this.Accounts.exists(name, 'task');
+		return this.Server.Accounts.exists(name, 'task');
 	}
 
 	list () {
-		return this.Accounts.list('task');
+		return this.Server.Accounts.list('task');
 	}
 }
 

@@ -58,8 +58,8 @@ process.stdin.on('data', async (command) => {
 		case 'client' : {
 			client.send({
 				action : 'command',
-				target : 'console',
-				data   : targetCommand.join(' ')
+				target : split[1],
+				data   : split.slice(2, split.length).join(' ')
 			});
 			return;
 		}
