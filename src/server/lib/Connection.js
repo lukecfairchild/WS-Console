@@ -64,7 +64,7 @@ class Connection extends EventSystem {
 
 			if (this.#authenticated) {
 				this.trigger('message', json);
-
+console.log('json', json);
 				switch (json.action) {
 					case 'command' : {
 						if (json.target === 'console') {
@@ -76,10 +76,12 @@ class Connection extends EventSystem {
 						} else {
 							if (this.Account.hasPermission(`task.console.${json.target}.command`)
 							&&  this.Server.Accounts.Tasks.exists(json.target)) {
-								const task = this.Server.Accounts.get(json.target, 'task');
+								const task = this.Server.Accounts.Tasks.get(json.target);
 
 								task.Connections.send({
-									data : json.data
+									action   : 'command',
+									data     : json.data,
+									username : this.Account.name
 								});
 							}
 						}
