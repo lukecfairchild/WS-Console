@@ -18,7 +18,7 @@ const Console = server.Accounts.get('Console', 'user');
 
 const client = new WSConsole.client({
 	path     : 'ws:localhost:9000',
-	name     : 'testUser',
+	name     : 'user',
 	password : 'pass',
 	useStdin : false
 });
@@ -32,7 +32,7 @@ client.start();
 
 const task = new WSConsole.task({
 	path             : 'ws:localhost:9000',
-	name             : 'test',
+	name             : 'task',
 	password         : 'pass',
 	useStdin         : false,
 	allowRemoteInput : true,
