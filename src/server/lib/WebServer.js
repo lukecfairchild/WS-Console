@@ -51,6 +51,18 @@ class WebServer extends EventSystem {
 				'ansi_up.js' : {
 					type : 'application/javascript',
 					path : Path.join(__dirname, '../html/ansi_up.js')
+				},
+				'jquery-ui.css' : {
+					type : 'text/css',
+					path : Path.join(__dirname, '../html/jquery-ui.css')
+				},
+				'jquery-ui.js' : {
+					type : 'application/javascript',
+					path : Path.join(__dirname, '../html/jquery-ui.js')
+				},
+				'jquery.js' : {
+					type : 'application/javascript',
+					path : Path.join(__dirname, '../html/jquery.js')
 				}
 			};
 

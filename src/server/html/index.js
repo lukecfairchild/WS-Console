@@ -442,8 +442,8 @@ class UI {
 const ui = new UI();
 
 const startListener = function () {
-	let username = document.getElementById('username').value;
-	let password = document.getElementById('password').value;
+	const username = document.getElementById('username').value;
+	const password = document.getElementById('password').value;
 
 	document.getElementById('password').value = '';
 
@@ -451,12 +451,11 @@ const startListener = function () {
 	document.getElementById('username').style.visibility = 'hidden';
 	document.getElementById('password').style.visibility = 'hidden';
 
-	let tabs = $('#tabs').tabs();
+	const tabs = $('#tabs').tabs();
 
 	tabs.find('.ui-tabs-nav').sortable({
 		axis : 'x',
 		stop : function () {
-
 			tabs.tabs('refresh');
 		}
 	});
@@ -513,9 +512,7 @@ const startListener = function () {
 			}
 
 			case 'data' : {
-
-				let getDocHeight = function () {
-
+				const getDocHeight = function () {
 					return Math.max(
 						document.body.scrollHeight, document.documentElement.scrollHeight,
 						document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -523,7 +520,7 @@ const startListener = function () {
 					);
 				};
 
-				let getPosition = function () {
+				const getPosition = function () {
 					return window.pageYOffset + (window.innerHeight
 						||  html.clientHeight
 						||  body.clientHeight
@@ -538,8 +535,8 @@ const startListener = function () {
 				}
 
 				const targetConsole = document.getElementById('console-' + data.server);
-				let children        = targetConsole.children;
-				let consoleY        = Math.round(targetConsole.getBoundingClientRect().y);
+				const children        = targetConsole.children;
+				const consoleY        = Math.round(targetConsole.getBoundingClientRect().y);
 
 				if (children.length > 0) {
 					let lastChildY = Math.round(children[children.length - 1].getBoundingClientRect().y);
@@ -549,21 +546,21 @@ const startListener = function () {
 					}
 				}
 
-				let buffer = document.getElementById('buffer-' + data.server);
+				const buffer = document.getElementById('buffer-' + data.server);
 
 				if (buffer) {
 					buffer.remove();
 				}
 
 				for (const i in data.data) {
-					let whole = data.data[i];
-					let div   = document.createElement('div');
+					const whole = data.data[i];
+					const div   = document.createElement('div');
 
-					let htmlLines = [];
-					let lines     = whole.split(/(?:\r\n|\n)/);
+					const htmlLines = [];
+					const lines     = whole.split(/(?:\r\n|\n)/);
 
 					for (const j in lines) {
-						let line = lines[j];
+						const line = lines[j];
 
 						let htmlLine = line
 						.replace(/>/g, '&gt;')
@@ -573,9 +570,9 @@ const startListener = function () {
 						let spans = 0;
 
 						for (let j in codes) {
-							let code       = codes[j];
-							let splitLine  = htmlLine.split(code.code);
-							let lineString = '';
+							const code      = codes[j];
+							const splitLine = htmlLine.split(code.code);
+							let lineString  = '';
 
 							if (splitLine.length) {
 								lineString += '<span style="' + code.css + '">';
