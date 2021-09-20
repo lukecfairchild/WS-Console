@@ -476,7 +476,8 @@ const startListener = function () {
 		} catch (error) {
 			console.error('Invalid JSON recieved: ' + rawData.data);
 		}
-
+console.log(data);
+console.log('action:', data.action);
 		switch (data.action) {
 			case 'ready' : {
 				webSocket.send(JSON.stringify({
@@ -487,7 +488,7 @@ const startListener = function () {
 						password : password
 					}
 				}));
-
+console.log('sending login');
 				break;
 			}
 

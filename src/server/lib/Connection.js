@@ -37,7 +37,7 @@ class Connection extends EventSystem {
 			} catch (error) {
 				this.webSocket.terminate();
 			}
-
+console.log(json);
 			if (!this.#authenticated) {
 				if (json.action !== 'login') {
 					return this.disconnect();
@@ -64,7 +64,7 @@ class Connection extends EventSystem {
 
 			if (this.#authenticated) {
 				this.trigger('message', json);
-console.log('json', json);
+
 				switch (json.action) {
 					case 'command' : {
 						if (json.target === 'console') {
