@@ -1,12 +1,14 @@
 
 const Type = require('simpler-types');
 
-const Account = require('./Account');
+const Account     = require('./Account');
+const EventSystem = require('../../lib/EventSystem');
 
-class Connections {
+class Connections extends EventSystem {
 	#connections = {};
 
 	constructor (options) {
+		super();
 		Type.assert(options, Object);
 		Type.assert(options.Account, Account);
 
@@ -20,6 +22,10 @@ class Connections {
 			if (this.#connections[connection.id]) {
 				delete this.#connections[connection.id];
 			}
+		});
+		this.trigger('login', () => {
+			console.log('Login Connections!!!');
+			this.trigger('login', {connection});
 		});
 	}
 

@@ -16,6 +16,10 @@ class User extends Account {
 			roles : options.roles,
 			User  : this
 		});
+
+		this.Connections.on('login', () => {
+			console.log('login!!!');
+		});
 	}
 }
 
