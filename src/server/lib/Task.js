@@ -33,13 +33,34 @@ class Task extends Account {
 			}
 		});
 
-		this.on('login', (event) => {
-			event.connection.send({
+		this.Connections.on('data', (event) => {
+			console.log('task send data', event);
+		});
+
+		this.Connections.on('login', () => {
+			this.Connections.send({
 				action : 'settingsSync',
 				data   : {
 					cacheSize : options.cacheSize
 				}
 			});
+
+			console.log('(task) login!!!');
+
+			const users = this.Server.Accounts.getAll('user');
+
+			for (const i in users) {
+				const user = users[i];
+
+				console.log(`(task) checking if "${user.name}" has permission "task.console.${this.name}.view"`);
+				if (user.hasPermission(`task.console.${this.name}.view`)) {
+					user.Connections.send({
+						action : 'taskConnect',
+						name   : this.name,
+						data   : this.Cache.get()
+					});
+				}
+			}
 		});
 	}
 

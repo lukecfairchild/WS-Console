@@ -42,6 +42,9 @@ const task = new WSConsole.task({
 	]
 });
 
+task.on('ready', () => {
+	task.send('Hello World');
+});
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');

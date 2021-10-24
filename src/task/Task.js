@@ -1,11 +1,14 @@
 'use strict';
 
-const Cache     = require('../lib/Cache');
-const Spawn     = require('child_process').spawn;
-const WebSocket = require('./lib/WebSocket');
+const Cache       = require('../lib/Cache');
+const EventSystem = require('../lib/EventSystem');
+const Spawn       = require('child_process').spawn;
+const WebSocket   = require('./lib/WebSocket');
 
-class Task {
+class Task extends EventSystem {
 	constructor (options) {
+		super();
+
 		this.cache   = new Cache(options.cacheSize);
 		this.options = options;
 
@@ -55,6 +58,10 @@ class Task {
 				} catch (error) {}
 
 				switch (data.action) {
+					case 'ready' : {
+						this.trigger('ready');
+					}
+
 					case 'command' : {
 						const message = '[WebCommand:' + data.username +'] ' + data.data;
 
@@ -91,12 +98,14 @@ class Task {
 		});
 
 		// Exit if Task closes
-		this.process.on('close', () => {
+		this.process.on('close', async () => {
+			await this.trigger('close');
+
 			process.exit();
 		});
 
 		// Relay Task data to Hub
-		this.process.stdout.on('data', (rawData) => {
+		this.process.stdout.on('data', async (rawData) => {
 			const data = rawData.toString();
 
 			this.cache.push(data);
@@ -127,6 +136,14 @@ class Task {
 
 			process.stdin.write(data);
 		});
+	}
+
+	send (data) {
+		this.websocket.send(JSON.stringify({
+			type   : 'task',
+			action : 'data',
+			data   : data
+		}));
 	}
 }
 

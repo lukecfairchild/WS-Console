@@ -1,3 +1,19 @@
+const getDocHeight = function () {
+	return Math.max(
+		document.body.scrollHeight, document.documentElement.scrollHeight,
+		document.body.offsetHeight, document.documentElement.offsetHeight,
+		document.body.clientHeight, document.documentElement.clientHeight
+	);
+};
+
+const getPosition = function () {
+	return window.pageYOffset + (window.innerHeight
+		||  html.clientHeight
+		||  body.clientHeight
+		||  screen.availHeight
+	);
+};
+
 const getCookie = (cname) => {
 	let name          = cname + '=';
 	let decodedCookie = decodeURIComponent(document.cookie);
@@ -481,9 +497,9 @@ console.log('action:', data.action);
 		switch (data.action) {
 			case 'ready' : {
 				webSocket.send(JSON.stringify({
-					type     : 'user',
-					action   : 'login',
-					data     : {
+					type   : 'user',
+					action : 'login',
+					data   : {
 						name     : username,
 						password : password
 					}
@@ -492,52 +508,34 @@ console.log('sending login');
 				break;
 			}
 
-			case 'serverConnect' : {
-				ui.addTab(data.serverName);
+			case 'taskConnect' : {
+				ui.addTab(data.name);
 
 				break;
 			}
 
-			case 'serverDisconnect' : {
-				ui.removeTab(data.serverName);
+			case 'taskDisconnect' : {
+				const targetConsole = document.getElementById('console-' + data.name);
 
-				break;
-			}
-
-			case 'resetData' : {
-				const targetConsole = document.getElementById('console-' + data.server);
+				ui.removeTab(data.name);
 
 				while (targetConsole.firstChild) {
 					targetConsole.removeChild(targetConsole.firstChild);
 				}
+
+				break;
 			}
 
-			case 'data' : {
-				const getDocHeight = function () {
-					return Math.max(
-						document.body.scrollHeight, document.documentElement.scrollHeight,
-						document.body.offsetHeight, document.documentElement.offsetHeight,
-						document.body.clientHeight, document.documentElement.clientHeight
-					);
-				};
-
-				const getPosition = function () {
-					return window.pageYOffset + (window.innerHeight
-						||  html.clientHeight
-						||  body.clientHeight
-						||  screen.availHeight
-					);
-				};
-
+			case 'taskData' : {
 				let scroll = false;
 
 				if (getDocHeight() - getPosition() < 1) {
 					scroll = true;
 				}
 
-				const targetConsole = document.getElementById('console-' + data.server);
-				const children        = targetConsole.children;
-				const consoleY        = Math.round(targetConsole.getBoundingClientRect().y);
+				const targetConsole = document.getElementById('console-' + data.name);
+				const children      = targetConsole.children;
+				const consoleY      = Math.round(targetConsole.getBoundingClientRect().y);
 
 				if (children.length > 0) {
 					let lastChildY = Math.round(children[children.length - 1].getBoundingClientRect().y);
@@ -547,7 +545,7 @@ console.log('sending login');
 					}
 				}
 
-				const buffer = document.getElementById('buffer-' + data.server);
+				const buffer = document.getElementById('buffer-' + data.name);
 
 				if (buffer) {
 					buffer.remove();
@@ -595,18 +593,18 @@ console.log('sending login');
 					div.innerHTML = ansi_up.ansi_to_html(htmlLines.join('\n'));
 
 					targetConsole.appendChild(div);
-					ui.tabs[data.server].lines.push(div);
+					ui.tabs[data.name].lines.push(div);
 				}
 
-				while (ui.tabs[data.server].lines.length > 1000) {
-					ui.tabs[data.server].lines[0].remove();
-					ui.tabs[data.server].lines.shift();
+				while (ui.tabs[data.name].lines.length > 1000) {
+					ui.tabs[data.name].lines[0].remove();
+					ui.tabs[data.name].lines.shift();
 				}
 
 				let selectedTab = $('.ui-state-active')[0].getAttribute('wrapperName');
 
 				if (scroll
-				&&  data.server === selectedTab) {
+				&&  data.name === selectedTab) {
 					window.scrollTo(window.pageXOffset, document.body.scrollHeight);
 				}
 			}
