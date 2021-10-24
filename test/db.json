@@ -14,10 +14,11 @@
     },
     {
       "name": "user",
-      "hash": "$2a$10$0eJEMc68UynEatV7fP4P9OLyy3kVrJos1ATD4UQgK2LrSEW5aNtym",
+      "hash": "$2a$10$fhQCZBHokW32wMQdPHSyJea856TZ1KBCu0VRpPfaK4hJ5xWbnRB1O",
       "permissions": [
         "user.list",
-        "task.console.task.*"
+        "task.console.task.*",
+        "*"
       ],
       "roles": [],
       "type": "user"

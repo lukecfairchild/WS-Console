@@ -18,7 +18,21 @@ class User extends Account {
 		});
 
 		this.Connections.on('login', () => {
-			console.log('login!!!');
+			console.log('(user) login!!!');
+
+			const tasks = this.Server.Accounts.getAll('task');
+			for (const i in tasks) {
+				const task = tasks[i];
+
+				console.log(`(task) checking if "${this.name}" has permission "task.console.${task.name}.view"`);
+				if (this.hasPermission(`task.console.${task.name}.view`)) {
+					this.Connections.send({
+						action : 'taskConnect',
+						name   : task.name,
+						data   : task.Cache.get()
+					});
+				}
+			}
 		});
 	}
 }
