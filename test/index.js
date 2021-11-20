@@ -24,7 +24,7 @@ const client = new WSConsole.client({
 });
 
 client.on('message', (event) => {
-	console.log('Client Recieved:', event);
+	console.log('[Client] Recieved:', event);
 });
 
 server.start();
@@ -43,7 +43,7 @@ const task = new WSConsole.task({
 });
 
 task.on('ready', () => {
-	task.send('Hello World');
+	task.send('[Task] Ready');
 });
 
 process.stdin.resume();
