@@ -280,7 +280,7 @@ document.addEventListener('keypress', (event) => {
 					type   : 'user',
 					action : 'command',
 					target : name,
-					data   : command
+					data   : [command]
 				}));
 			}
 
@@ -516,7 +516,7 @@ console.log('sending login');
 			}
 
 			case 'taskDisconnect' : {
-				const targetConsole = document.getElementById('console-' + data.name);
+				const targetConsole = document.getElementById('console-' + data.target);
 
 				ui.removeTab(data.name);
 
@@ -527,6 +527,7 @@ console.log('sending login');
 				break;
 			}
 
+			case 'data' :
 			case 'taskData' : {
 				let scroll = false;
 
@@ -534,7 +535,7 @@ console.log('sending login');
 					scroll = true;
 				}
 
-				const targetConsole = document.getElementById('console-' + data.name);
+				const targetConsole = document.getElementById('console-' + data.target);
 				const children      = targetConsole.children;
 				const consoleY      = Math.round(targetConsole.getBoundingClientRect().y);
 
@@ -546,7 +547,7 @@ console.log('sending login');
 					}
 				}
 
-				const buffer = document.getElementById('buffer-' + data.name);
+				const buffer = document.getElementById('buffer-' + data.target);
 
 				if (buffer) {
 					buffer.remove();
@@ -594,18 +595,18 @@ console.log('sending login');
 					div.innerHTML = ansi_up.ansi_to_html(htmlLines.join('\n'));
 
 					targetConsole.appendChild(div);
-					ui.tabs[data.name].lines.push(div);
+					ui.tabs[data.target].lines.push(div);
 				}
 
-				while (ui.tabs[data.name].lines.length > 1000) {
-					ui.tabs[data.name].lines[0].remove();
-					ui.tabs[data.name].lines.shift();
+				while (ui.tabs[data.target].lines.length > 1000) {
+					ui.tabs[data.target].lines[0].remove();
+					ui.tabs[data.target].lines.shift();
 				}
 
 				let selectedTab = $('.ui-state-active')[0].getAttribute('wrapperName');
 
 				if (scroll
-				&&  data.name === selectedTab) {
+				&&  data.target === selectedTab) {
 					window.scrollTo(window.pageXOffset, document.body.scrollHeight);
 				}
 			}
