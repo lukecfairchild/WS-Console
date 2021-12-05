@@ -279,6 +279,7 @@ document.addEventListener('keypress', (event) => {
 				webSocket.send(JSON.stringify({
 					type   : 'user',
 					action : 'command',
+					name   : name,
 					data   : command
 				}));
 			}

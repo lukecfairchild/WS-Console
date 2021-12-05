@@ -45,6 +45,21 @@ const task = new WSConsole.task({
 task.on('ready', () => {
 	task.send('[Task] Ready');
 });
+const task2 = new WSConsole.task({
+	path             : 'ws:localhost:9000',
+	name             : 'task2',
+	password         : 'pass',
+	useStdin         : false,
+	allowRemoteInput : true,
+	command          : [
+		'node',
+		Path.join(__dirname, 'test_process.js')
+	]
+});
+
+task2.on('ready', () => {
+	task.send('[Task 2] Ready');
+});
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
