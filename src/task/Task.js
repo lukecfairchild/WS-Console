@@ -71,7 +71,7 @@ class Task extends EventSystem {
 						this.websocket.send(JSON.stringify({
 							type   : 'task',
 							action : 'data',
-							data   : message
+							data   : [message]
 						}));
 
 						this.process.stdin.write(data.data + '\n');
@@ -114,7 +114,7 @@ class Task extends EventSystem {
 			this.websocket.send(JSON.stringify({
 				type   : 'task',
 				action : 'data',
-				data   : data
+				data   : [data]
 			}));
 		});
 	}
