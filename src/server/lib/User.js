@@ -17,8 +17,21 @@ class User extends Account {
 			User  : this
 		});
 
-		this.Connections.on('login', () => {
+		this.Connections.on('login', async () => {
+			/*
 			console.log('(user) login!!!');
+			const commands = Object.keys(this.Commands.getAll());
+			console.log('commands', commands);
+			*/
+			this.send({
+				action : 'taskConnect',
+				name   : 'Console',
+				data   : []
+			});
+			this.send({
+				target : 'console',
+				data   : await this.Account.Commands.run('help')
+			});
 
 			const tasks = this.Server.Accounts.getAll('task');
 			for (const i in tasks) {

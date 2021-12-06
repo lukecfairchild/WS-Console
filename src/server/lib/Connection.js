@@ -73,17 +73,15 @@ console.log(json);
 								data   : await this.Account.Commands.run(json.data)
 							});
 
-						} else {
-							if (this.Account.hasPermission(`task.console.${json.target}.command`)
-							&&  this.Server.Accounts.Tasks.exists(json.target)) {
-								const task = this.Server.Accounts.Tasks.get(json.target);
+						} else if (this.Account.hasPermission(`task.console.${json.target}.command`)
+						&&  this.Server.Accounts.Tasks.exists(json.target)) {
+							const task = this.Server.Accounts.Tasks.get(json.target);
 
-								task.Connections.send({
-									action   : 'command',
-									data     : json.data,
-									username : this.Account.name
-								});
-							}
+							task.Connections.send({
+								action   : 'command',
+								data     : json.data,
+								username : this.Account.name
+							});
 						}
 
 						break;
