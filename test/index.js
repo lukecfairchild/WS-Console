@@ -57,7 +57,7 @@ const task2 = new WSConsole.task({
 });
 
 task2.on('ready', () => {
-	task.send('[Task 2] Ready');
+	task2.send('[Task 2] Ready');
 });
 
 process.stdin.resume();

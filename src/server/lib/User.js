@@ -36,7 +36,6 @@ class User extends Account {
 					this.Connections.send({
 						action : 'taskConnect',
 						name   : task.name,
-						target : task.name,
 						data   : task.Cache.get()
 					});
 				}

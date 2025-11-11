@@ -522,6 +522,8 @@ const startListener = function () {
 
 			case 'taskConnect' : {
 				ui.addTab(data.name);
+
+				data.target = data.name; // We do this so the tab will get populated with the cached data below.
 			}
 			case 'data' :
 			case 'taskData' : {
@@ -532,8 +534,9 @@ const startListener = function () {
 				}
 
 				const targetConsole = document.getElementById('console-' + data.target);
-				const children      = targetConsole.children;
-				const consoleY      = Math.round(targetConsole.getBoundingClientRect().y);
+
+				const children = targetConsole.children;
+				const consoleY = Math.round(targetConsole.getBoundingClientRect().y);
 
 				if (children.length > 0) {
 					let lastChildY = Math.round(children[children.length - 1].getBoundingClientRect().y);
