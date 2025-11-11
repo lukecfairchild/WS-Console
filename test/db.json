@@ -14,7 +14,7 @@
     },
     {
       "name": "user",
-      "hash": "$2a$10$fhQCZBHokW32wMQdPHSyJea856TZ1KBCu0VRpPfaK4hJ5xWbnRB1O",
+      "hash": "$2a$10$wfNi6b603WnM92UlwKGTNeitXDYXVhZEDNQOGWRYKs5Spr2h9Xh8e",
       "permissions": [
         "user.list",
         "task.console.task.*",

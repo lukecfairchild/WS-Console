@@ -24,7 +24,6 @@ class Connections extends EventSystem {
 			}
 		});
 		this.trigger('login', () => {
-			console.log('Login Connections!!!');
 			this.trigger('login', {connection});
 		});
 	}

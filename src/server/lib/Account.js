@@ -67,6 +67,8 @@ class Account extends EventSystem {
 
 		Type.assert(permissions, Array);
 
+		console.log('checking permissions', permissions);
+
 		if (permissions.length === 0) {
 			return true;
 		}

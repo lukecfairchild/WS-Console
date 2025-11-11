@@ -18,7 +18,6 @@ class Task extends Account {
 		this.on('data', (event) => {
 			this.Cache.push(event.data);
 
-			console.log('cache',this.Cache.get());
 			const accounts = this.Server.Accounts.Users.getAll();
 			for (let i in accounts) {
 				const account = accounts[i];
@@ -34,7 +33,7 @@ class Task extends Account {
 		});
 
 		this.Connections.on('data', (event) => {
-			console.log('task send data', event);
+			//console.log('task send data', event);
 		});
 
 		this.Connections.on('login', () => {
@@ -45,18 +44,16 @@ class Task extends Account {
 				}
 			});
 
-			console.log('(task) login!!!');
-
 			const users = this.Server.Accounts.getAll('user');
 
 			for (const i in users) {
 				const user = users[i];
 
-				console.log(`(task) checking if "${user.name}" has permission "task.console.${this.name}.view"`);
 				if (user.hasPermission(`task.console.${this.name}.view`)) {
 					user.Connections.send({
 						action : 'taskConnect',
 						name   : this.name,
+						target : this.name,
 						data   : this.Cache.get()
 					});
 				}

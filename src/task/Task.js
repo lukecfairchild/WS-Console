@@ -90,7 +90,7 @@ class Task extends EventSystem {
 	#startTask = () => {
 		// Start Task
 		this.process = Spawn(this.options.command[0], this.options.command.slice(1, this.options.command.length), {
-			shell : true,
+			//shell : true,
 			stdio : [
 				'pipe',
 				'pipe',
@@ -111,7 +111,7 @@ class Task extends EventSystem {
 
 			this.cache.push(data);
 
-			process.stdout.write(data);
+			process.stdout.write(data + '\n');
 			this.websocket.send(JSON.stringify({
 				type   : 'task',
 				action : 'data',
@@ -135,7 +135,7 @@ class Task extends EventSystem {
 				data   : data
 			}));
 
-			process.stdin.write(data);
+			process.stdin.write(data + '\n');
 		});
 	}
 

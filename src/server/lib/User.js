@@ -18,11 +18,6 @@ class User extends Account {
 		});
 
 		this.Connections.on('login', async () => {
-			/*
-			console.log('(user) login!!!');
-			const commands = Object.keys(this.Commands.getAll());
-			console.log('commands', commands);
-			*/
 			this.Connections.send({
 				action : 'taskConnect',
 				name   : 'Console',
@@ -37,11 +32,11 @@ class User extends Account {
 			for (const i in tasks) {
 				const task = tasks[i];
 
-				console.log(`(task) checking if "${this.name}" has permission "task.console.${task.name}.view"`);
-				if (this.hasPermission(`task.console.${task.name}.view`)) {
+				if (this.hasPermission(`task.console.${this.name}.view`)) {
 					this.Connections.send({
 						action : 'taskConnect',
 						name   : task.name,
+						target : task.name,
 						data   : task.Cache.get()
 					});
 				}

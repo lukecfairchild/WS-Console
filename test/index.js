@@ -24,7 +24,7 @@ const client = new WSConsole.client({
 });
 
 client.on('message', (event) => {
-	console.log('[Client] Recieved:', event);
+	//console.log('[Client] Recieved:', event);
 });
 
 server.start();
@@ -52,8 +52,7 @@ const task2 = new WSConsole.task({
 	useStdin         : false,
 	allowRemoteInput : true,
 	command          : [
-		'node',
-		Path.join(__dirname, 'test_process.js')
+		'cmd.exe'
 	]
 });
 
@@ -69,7 +68,7 @@ process.stdin.on('data', async (command) => {
 
 	switch (split[0]) {
 		case 'server' : {
-			console.log(await Console.Commands.run(targetCommand.join(' ')));
+			console.log(await Console.Commands.run(targetCommand.join(' ') + '\r\n'));
 			return;
 		}
 
@@ -83,7 +82,12 @@ process.stdin.on('data', async (command) => {
 		}
 
 		case 'task' : {
-			task.process.stdin.write(targetCommand.join(' '));
+			task.process.stdin.write(targetCommand.join(' ') + '\n');
+			return;
+		}
+
+		case 'task2' : {
+			task2.process.stdin.write(targetCommand.join(' ') + '\n');
 			return;
 		}
 	}

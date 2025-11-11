@@ -493,8 +493,7 @@ const startListener = function () {
 		} catch (error) {
 			console.error('Invalid JSON recieved: ' + rawData.data);
 		}
-console.log(data);
-console.log('action:', data.action);
+
 		switch (data.action) {
 			case 'ready' : {
 				webSocket.send(JSON.stringify({
@@ -505,12 +504,6 @@ console.log('action:', data.action);
 						password : password
 					}
 				}));
-console.log('sending login');
-				break;
-			}
-
-			case 'taskConnect' : {
-				ui.addTab(data.name);
 
 				break;
 			}
@@ -527,6 +520,9 @@ console.log('sending login');
 				break;
 			}
 
+			case 'taskConnect' : {
+				ui.addTab(data.name);
+			}
 			case 'data' :
 			case 'taskData' : {
 				let scroll = false;
