@@ -23,14 +23,14 @@ class User extends Account {
 			const commands = Object.keys(this.Commands.getAll());
 			console.log('commands', commands);
 			*/
-			this.send({
+			this.Connections.send({
 				action : 'taskConnect',
 				name   : 'Console',
 				data   : []
 			});
-			this.send({
+			this.Connections.send({
 				target : 'console',
-				data   : await this.Account.Commands.run('help')
+				data   : await this.Commands.run('help')
 			});
 
 			const tasks = this.Server.Accounts.getAll('task');

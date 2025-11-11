@@ -60,6 +60,7 @@ class Task extends EventSystem {
 				switch (data.action) {
 					case 'ready' : {
 						this.trigger('ready');
+						break;
 					}
 
 					case 'command' : {
