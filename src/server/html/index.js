@@ -553,45 +553,68 @@ const startListener = function () {
 				}
 
 				for (const i in data.data) {
-					const whole = data.data[i];
-					const div   = document.createElement('div');
-
+					const div       = document.createElement('div');
 					const htmlLines = [];
-					const lines     = whole.split(/(?:\r\n|\n)/);
 
-					for (const j in lines) {
-						const line = lines[j];
+					const lines = data.data[i].split(/(?:\r\n|\n)/);
 
-						let htmlLine = line
-						.replace(/>/g, '&gt;')
-						.replace(/</g, '&lt;')
-						.replace(/ /g, '&#160;');
+					for (const line of lines) {
+						// Base line container
+						const lineDiv = document.createElement('div');
+						lineDiv.className = 'line';
+						lineDiv.style.color = '#ADADAD';
 
-						let spans = 0;
+						let remainingText = line;
+						let parent = lineDiv;
 
-						for (let j in codes) {
-							const code      = codes[j];
-							const splitLine = htmlLine.split(code.code);
-							let lineString  = '';
+						// We’ll build spans dynamically instead of injecting HTML.
+						let applied = false;
+						for (const code of codes) {
+							const splitParts = remainingText.split(code.code);
 
-							if (splitLine.length) {
-								lineString += '<span style="' + code.css + '">';
+							if (splitParts.length > 1) {
+								applied = true;
+								const frag = document.createDocumentFragment();
 
-								spans   += splitLine.length;
-								htmlLine = splitLine.join(lineString);
+								for (let k = 0; k < splitParts.length; k++) {
+									if (k > 0) {
+										// Apply the style when the code appears
+										const span = document.createElement('span');
+										span.setAttribute('style', code.css);
+										span.textContent = ''; // Empty span where style starts
+										frag.appendChild(span);
+									}
+									const textNode = document.createTextNode(splitParts[k]);
+									frag.appendChild(textNode);
+								}
+
+								parent.appendChild(frag);
+								break;
 							}
 						}
 
-						htmlLine += '</span>'.repeat(spans);
+						// If no code highlighting applied, just append raw text safely
+						if (!applied) {
+							const safeText = line.replace(/ /g, '\u00A0'); // replace space with non-breaking space
+							lineDiv.textContent = safeText;
+						}
 
-						htmlLine = `<div class="line" style="color:#ADADAD">${htmlLine}</div>`;
-
-						htmlLines.push(htmlLine + '\n');
-
-						lines[i] = htmlLine;
+						htmlLines.push(lineDiv);
 					}
 
-					div.innerHTML = ansi_up.ansi_to_html(htmlLines.join('\n'));
+					// If ansi_up processing is still required, you can run it here safely:
+					// But note: ansi_up.ansi_to_html returns HTML, so you'd need to parse that
+					// instead of assigning it directly to innerHTML.
+					// For example:
+					//
+					// const tempDiv = document.createElement('div');
+					// tempDiv.innerHTML = ansi_up.ansi_to_html(htmlLines.map(l => l.textContent).join('\n'));
+					// div.append(...tempDiv.childNodes);
+
+					// Otherwise, just append built lines directly:
+					for (const lineDiv of htmlLines) {
+						div.appendChild(lineDiv);
+					}
 
 					targetConsole.appendChild(div);
 					ui.tabs[data.target].lines.push(div);

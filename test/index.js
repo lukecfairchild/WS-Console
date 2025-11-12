@@ -8,7 +8,6 @@ const WSConsole = require('../src');
  * TO DO
  * add multiple database types, or callback like style
  * documentation
- * 
  */
 const server = new WSConsole.server({
 	webSocketPort : 9000,
@@ -36,7 +35,7 @@ client.on('message', (event) => {
 
 server.start();
 client.start();
-
+/*
 const task = new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'task',
@@ -51,7 +50,7 @@ const task = new WSConsole.task({
 
 task.on('ready', () => {
 	task.send('[Task] Ready');
-});
+});*/
 const task2 = new WSConsole.task({
 	path             : 'ws:localhost:9000',
 	name             : 'task2',
@@ -62,11 +61,11 @@ const task2 = new WSConsole.task({
 		'cmd.exe'
 	]
 });
-
+/*
 task2.on('ready', () => {
 	task2.send('[Task 2] Ready');
 });
-
+*/
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', async (command) => {
@@ -87,12 +86,12 @@ process.stdin.on('data', async (command) => {
 			});
 			return;
 		}
-
+/*
 		case 'task' : {
 			task.process.stdin.write(targetCommand.join(' ') + '\n');
 			return;
 		}
-
+*/
 		case 'task2' : {
 			task2.process.stdin.write(targetCommand.join(' ') + '\n');
 			return;

@@ -11,12 +11,14 @@ class Task extends Account {
 
 		Type.assert(options, Object);
 		//Type.assert(options.cacheSize, Number);
+
 		this.cache = new Cache({
 			cacheSize : options.cacheSize
 		});
 
 		this.on('data', (event) => {
-			this.cache.push(event.data);
+console.log('pushing to cache', event.data.join(''));
+			this.cache.push(event.data.join(''));
 
 			const accounts = this.server.accounts.users.getAll();
 			for (let i in accounts) {
