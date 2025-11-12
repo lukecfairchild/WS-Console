@@ -12,14 +12,14 @@ class Logout extends Command {
 
 	async run (connectionId) {
 		if (connectionId) {
-			if (this.Account.Connections.exists(connectionId)) {
+			if (this.account.connections.exists(connectionId)) {
 				return 'Invalid connectionId';
 			}
 
-			this.Account.Connections.get(connectionId).disconnect();
+			this.account.connections.get(connectionId).disconnect();
 
 		} else {
-			this.Connection.logout();
+			this.connection.logout();
 		}
 	}
 }

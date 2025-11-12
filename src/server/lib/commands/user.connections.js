@@ -11,13 +11,13 @@ class UserConnections extends Command {
 	}
 
 	async run (username) {
-		const Users = this.Server.Accounts.Users;
+		const users = this.server.accounts.users;
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
-		const connections = Users.get(username).Connections.getAll();
+		const connections = users.get(username).connections.getAll();
 
 		let results = 'ID:                                     IP:\n';
 

@@ -11,7 +11,7 @@ class UserPermission extends Command {
 	}
 
 	async run () {
-		const commands = this.Account.Commands.getAll();
+		const commands = this.account.commands.getAll();
 
 		const results = [];
 

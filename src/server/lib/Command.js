@@ -1,10 +1,10 @@
 
 class Command {
 	constructor (options = {}) {
-		this.Account    = options.Account;
-		this.Commands   = options.Commands;
-		this.Connection = options.Connection;
-		this.Server     = options.Server;
+		this.account    = options.account;
+		this.commands   = options.commands;
+		this.connection = options.connection;
+		this.server     = options.server;
 
 		this.arguments   = '';
 		this.description = '';

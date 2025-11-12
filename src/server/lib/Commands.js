@@ -14,9 +14,9 @@ class Commands {
 
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server = options.Server;
+		this.server = options.server;
 
 		const files = FileSystem.readdirSync(Path.join(__dirname, 'commands'));
 
@@ -72,9 +72,9 @@ class Commands {
 			if (this.#commands[commandName]
 			&&  Type.get(this.#commands[commandName]) === 'Function') {
 				const command = new this.#commands[commandName]({
-					Account  : account,
-					Commands : this,
-					Server   : this.Server
+					account  : account,
+					commands : this,
+					server   : this.server
 				});
 
 				return {

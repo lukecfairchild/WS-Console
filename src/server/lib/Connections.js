@@ -10,9 +10,9 @@ class Connections extends EventSystem {
 	constructor (options) {
 		super();
 		Type.assert(options, Object);
-		Type.assert(options.Account, Account);
+		Type.assert(options.account, Account);
 
-		this.Account = options.Account;
+		this.account = options.account;
 	}
 
 	add (connection) {

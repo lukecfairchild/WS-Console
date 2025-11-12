@@ -11,21 +11,21 @@ class UserLogout extends Command {
 	}
 
 	async run (username, connectionId) {
-		const Users = this.Server.Accounts.Users;
+		const users = this.server.accounts.users;
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
 		if (connectionId) {
-			if (!Users.get(username).Connections.exists(connectionId)) {
+			if (!Users.get(username).connections.exists(connectionId)) {
 				return 'Invalid connectionId';
 			}
 
-			Users.get(username).Connections.get(connectionId).disconnect();
+			users.get(username).connections.get(connectionId).disconnect();
 
 		} else {
-			Users.get(username).Connections.disconnect();
+			users.get(username).connections.disconnect();
 		}
 	}
 }

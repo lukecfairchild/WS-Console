@@ -11,19 +11,19 @@ class Task extends Account {
 
 		Type.assert(options, Object);
 		//Type.assert(options.cacheSize, Number);
-		this.Cache = new Cache({
+		this.cache = new Cache({
 			cacheSize : options.cacheSize
 		});
 
 		this.on('data', (event) => {
-			this.Cache.push(event.data);
+			this.cache.push(event.data);
 
-			const accounts = this.Server.Accounts.Users.getAll();
+			const accounts = this.server.accounts.users.getAll();
 			for (let i in accounts) {
 				const account = accounts[i];
 
 				if (account.hasPermission(`task.console.${this.name}.view`)) {
-					account.Connections.send({
+					account.connections.send({
 						action : 'data',
 						target : this.name,
 						data   : event.data
@@ -32,28 +32,28 @@ class Task extends Account {
 			}
 		});
 
-		this.Connections.on('data', (event) => {
+		this.connections.on('data', (event) => {
 			//console.log('task send data', event);
 		});
 
-		this.Connections.on('login', () => {
-			this.Connections.send({
+		this.connections.on('login', () => {
+			this.connections.send({
 				action : 'settingsSync',
 				data   : {
 					cacheSize : options.cacheSize
 				}
 			});
 
-			const users = this.Server.Accounts.getAll('user');
+			const users = this.server.accounts.getAll('user');
 
 			for (const i in users) {
 				const user = users[i];
 
 				if (user.hasPermission(`task.console.${this.name}.view`)) {
-					user.Connections.send({
+					user.connections.send({
 						action : 'taskConnect',
 						name   : this.name,
-						data   : this.Cache.get()
+						data   : this.cache.get()
 					});
 				}
 			}

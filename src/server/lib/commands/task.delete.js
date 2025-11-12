@@ -11,13 +11,13 @@ class TaskDelete extends Command {
 	}
 
 	async run (taskname) {
-		const Tasks = this.Commands.Server.Accounts.Tasks;
+		const tasks = this.commands.server.accounts.tasks;
 
-		if (!Tasks.exists(taskname)) {
+		if (!tasks.exists(taskname)) {
 			return 'Task does not exist';
 		}
 
-		Tasks.delete(taskname);
+		tasks.delete(taskname);
 	}
 }
 

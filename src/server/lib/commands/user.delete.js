@@ -11,13 +11,13 @@ class UserDelete extends Command {
 	}
 
 	async run (username) {
-		const Users = this.Commands.Server.Accounts.Users;
+		const users = this.commands.server.accounts.users;
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
-		Users.delete(username);
+		users.delete(username);
 	}
 }
 

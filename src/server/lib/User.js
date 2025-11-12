@@ -14,29 +14,29 @@ class User extends Account {
 
 		this.roles = new Roles({
 			roles : options.roles,
-			User  : this
+			user  : this
 		});
 
-		this.Connections.on('login', async () => {
-			this.Connections.send({
+		this.connections.on('login', async () => {
+			this.connections.send({
 				action : 'taskConnect',
 				name   : 'Console',
 				data   : []
 			});
-			this.Connections.send({
+			this.connections.send({
 				target : 'console',
-				data   : await this.Commands.run('help')
+				data   : await this.commands.run('help')
 			});
 
-			const tasks = this.Server.Accounts.getAll('task');
+			const tasks = this.server.accounts.getAll('task');
 			for (const i in tasks) {
 				const task = tasks[i];
 
 				if (this.hasPermission(`task.console.${this.name}.view`)) {
-					this.Connections.send({
+					this.connections.send({
 						action : 'taskConnect',
 						name   : task.name,
-						data   : task.Cache.get()
+						data   : task.cache.get()
 					});
 				}
 			}

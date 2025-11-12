@@ -15,11 +15,11 @@ class Accounts {
 
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server = options.Server;
-		this.Tasks  = new Tasks({Server : this.Server});
-		this.Users  = new Users({Server : this.Server});
+		this.server = options.server;
+		this.tasks  = new Tasks({ server : this.server });
+		this.users  = new Users({ server : this.server });
 		this.types  = {
 			user : User,
 			task : Task
@@ -52,7 +52,7 @@ class Accounts {
 			roles       : Array
 		});
 
-		this.Server.Database.get('accounts').push({
+		this.server.database.get('accounts').push({
 			name        : accountOptions.name,
 			hash        : null,
 			permissions : accountOptions.permissions || [],
@@ -62,7 +62,7 @@ class Accounts {
 
 		const account = new this.types[type]({
 			type   : type,
-			Server : this.Server,
+			server : this.server,
 			...accountOptions
 		});
 
@@ -77,7 +77,7 @@ class Accounts {
 
 		if (this.exists(name, type)) {
 			this.unload(name, type);
-			this.Server.Database.get('accounts').remove({
+			this.server.database.get('accounts').remove({
 				name : name,
 				type : type
 			}).write();
@@ -96,7 +96,7 @@ class Accounts {
 			return true;
 		}
 
-		const data = this.Server.Database.get('accounts').find({
+		const data = this.server.database.get('accounts').find({
 			name : name,
 			type : type
 		}).value();
@@ -116,13 +116,13 @@ class Accounts {
 			throw new Error(`Account does not exist: [${type}] ${name}`);
 		}
 
-		const data = this.Server.Database.get('accounts').find({
+		const data = this.server.database.get('accounts').find({
 			name : name,
 			type : type
 		}).value();
 
 		this.#accounts[type][name] = new this.types[data.type]({
-			Server : this.Server,
+			server : this.server,
 			...data
 		});
 
@@ -136,7 +136,7 @@ class Accounts {
 	list (type) {
 		Type.assert(type, String);
 
-		const results = this.Server.Database.get('accounts').value().filter((result) => {
+		const results = this.server.database.get('accounts').value().filter((result) => {
 			return result.type === type;
 		}).map((result) => {
 			return result.name;

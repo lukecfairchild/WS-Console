@@ -11,7 +11,7 @@ class UserConnections extends Command {
 	}
 
 	async run () {
-		const connections = this.Account.Connections.getAll();
+		const connections = this.account.connections.getAll();
 
 		let results = 'ID:                                     IP:\n';
 

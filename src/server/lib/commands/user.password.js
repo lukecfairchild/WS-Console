@@ -11,13 +11,13 @@ class UserPassword extends Command {
 	}
 
 	async run (username, password) {
-		const Users = this.Server.Accounts.Users;
+		const users = this.server.accounts.users;
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
-		Users.get(username).setPassword(password);
+		users.get(username).setPassword(password);
 	}
 }
 

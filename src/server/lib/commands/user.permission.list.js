@@ -11,13 +11,13 @@ class UserPermissionList extends Command {
 	}
 
 	async run (username) {
-		const Users = this.Server.Accounts.Users;
+		const users = this.server.accounts.users;
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
-		return Users.get(username).getPermissions().join(', ');
+		return users.get(username).getPermissions().join(', ');
 	}
 }
 

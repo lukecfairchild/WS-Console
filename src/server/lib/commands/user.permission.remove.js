@@ -11,17 +11,17 @@ class UserPermissionRemove extends Command {
 	}
 
 	async run (username, permission) {
-		const Users = this.Server.Accounts.Users;
+		const users = this.server.accounts.users;
 
-		if (!this.Account.hasPermission(permission.replace(/^-/, '') + '.grant')) {
+		if (!this.account.hasPermission(permission.replace(/^-/, '') + '.grant')) {
 			return 'You cannot remove that permission';
 		}
 
-		if (!Users.exists(username)) {
+		if (!users.exists(username)) {
 			return 'User does not exist';
 		}
 
-		Users.get(username).removePermission(permission);
+		users.get(username).removePermission(permission);
 	}
 }
 

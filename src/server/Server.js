@@ -35,32 +35,32 @@ class Server extends EventSystem {
 
 		this.settings = settings;
 
-		this.Commands        = new Commands({Server : this});
-		this.Database        = new Database({Server : this});
-		this.Accounts        = new Accounts({Server : this});
-		this.WebServer       = new WebServer({Server : this});
-		this.WebSocketServer = new WebSocketServer({Server : this});
+		this.commands        = new Commands({ server : this });
+		this.database        = new Database({ server : this });
+		this.accounts        = new Accounts({ server : this });
+		this.webServer       = new WebServer({ server : this });
+		this.webSocketServer = new WebSocketServer({ server : this });
 
 		if (this.settings.useStdin) {
-			const Console = this.Accounts.get('Console', 'user');
+			const Console = this.accounts.get('Console', 'user');
 
 			process.stdin.resume();
 			process.stdin.setEncoding('utf8');
 			process.stdin.on('data', async (command) => {
-				console.log(await Console.Commands.run(command));
+				console.log(await Console.commands.run(command));
 			});
 		}
 	}
 
 	start () {
-		this.WebServer.start();
-		this.WebSocketServer.start();
+		this.webServer.start();
+		this.webSocketServer.start();
 		this.trigger('start');
 	}
 
 	stop () {
-		this.WebServer.stop();
-		this.WebSocketServer.stop();
+		this.webServer.stop();
+		this.webSocketServer.stop();
 		this.trigger('stop');
 	}
 }

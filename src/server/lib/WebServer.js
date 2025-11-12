@@ -14,14 +14,14 @@ class WebServer extends EventSystem {
 	constructor (options) {
 		super();
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server = options.Server;
+		this.server = options.server;
 
-		if (this.Server.settings.ssl) {
+		if (this.server.settings.ssl) {
 			this.webServer = HTTPS.createServer({
-				cert : FileSystem.readFileSync(this.Server.settings.sslCert),
-				key  : FileSystem.readFileSync(this.Server.settings.sslKey)
+				cert : FileSystem.readFileSync(this.server.settings.sslCert),
+				key  : FileSystem.readFileSync(this.server.settings.sslKey)
 			});
 
 		} else {
@@ -79,7 +79,7 @@ class WebServer extends EventSystem {
 
 			response.writeHead(200, {
 				'Content-Type' : file.type,
-				'Set-Cookie'   : `port=${this.Server.settings.webSocketPort}`
+				'Set-Cookie'   : `port=${this.server.settings.webSocketPort}`
 			});
 
 			response.end(responseBody);
@@ -91,14 +91,14 @@ class WebServer extends EventSystem {
 	}
 
 	start () {
-		this.webServer.listen(this.Server.settings.webServerPort, (error) => {
+		this.webServer.listen(this.server.settings.webServerPort, (error) => {
 			if (error) {
 				return console.error(error);
 			}
 
-			console.log('WebServer listening on port: ' + this.Server.settings.webServerPort);
+			console.log('WebServer listening on port: ' + this.server.settings.webServerPort);
 			this.trigger('start', {
-				port : this.Server.settings.webServerPort
+				port : this.server.settings.webServerPort
 			});
 		});
 	}

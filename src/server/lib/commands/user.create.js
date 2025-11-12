@@ -11,9 +11,9 @@ class UserCreate extends Command {
 	}
 
 	async run (username, password = null) {
-		const Users = this.Commands.Server.Accounts.Users;
+		const users = this.commands.server.accounts.Users;
 
-		if (Users.exists(username)) {
+		if (users.exists(username)) {
 			return `A User already exists with that name: "${username}"`;
 		}
 
@@ -21,7 +21,7 @@ class UserCreate extends Command {
 			return 'Account names may not contain periods.';
 		}
 
-		const user = Users.create({
+		const user = users.create({
 			name : username
 		});
 

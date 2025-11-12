@@ -11,9 +11,9 @@ class TaskCreate extends Command {
 	}
 
 	async run (taskname, password = null) {
-		const Tasks = this.Commands.Server.Accounts.Tasks;
+		const tasks = this.commands.server.accounts.Tasks;
 
-		if (Tasks.exists(taskname)) {
+		if (tasks.exists(taskname)) {
 			return `A Task already exists with that name: "${taskname}"`;
 		}
 
@@ -21,7 +21,7 @@ class TaskCreate extends Command {
 			return 'Account names may not contain periods.';
 		}
 
-		const task = Tasks.create({
+		const task = tasks.create({
 			name : taskname
 		});
 

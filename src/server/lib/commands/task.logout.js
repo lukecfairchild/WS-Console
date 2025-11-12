@@ -11,21 +11,21 @@ class TaskLogout extends Command {
 	}
 
 	async run (taskname, connectionId) {
-		const Tasks = this.Server.Accounts.Tasks;
+		const tasks = this.server.accounts.tasks;
 
-		if (!Tasks.exists(taskname)) {
+		if (!tasks.exists(taskname)) {
 			return 'Task does not exist';
 		}
 
 		if (connectionId) {
-			if (!Tasks.get(username).Connections.exists(connectionId)) {
+			if (!tasks.get(username).connections.exists(connectionId)) {
 				return 'Invalid connectionId';
 			}
 
-			Tasks.get(taskname).Connections.get(connectionId).disconnect();
+			tasks.get(taskname).connections.get(connectionId).disconnect();
 
 		} else {
-			Users.get(taskname).Connections.disconnect();
+			Users.get(taskname).connections.disconnect();
 		}
 	}
 }

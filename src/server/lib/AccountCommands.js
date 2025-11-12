@@ -8,27 +8,27 @@ const Server  = require('../Server');
 class AccountCommands {
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Account, Account);
-		Type.assert(options.Server, Server);
+		Type.assert(options.account, Account);
+		Type.assert(options.server, Server);
 
-		this.Account = options.Account;
-		this.Server  = options.Server;
+		this.account = options.account;
+		this.server  = options.server;
 	}
 
 	get (command) {
 		Type.assert(command, String);
 
-		return this.Server.Commands.get(this.Account, command);
+		return this.server.Commands.get(this.account, command);
 	}
 
 	getAll () {
-		return this.Server.Commands.getAll(this.Account);
+		return this.server.commands.getAll(this.account);
 	}
 
 	async run (command) {
 		Type.assert(command, String);
 
-		const response = await this.Server.Commands.get(this.Account, command).run();
+		const response = await this.server.commands.get(this.account, command).run();
 
 		if (response) {
 			return IndentString(response, 4);

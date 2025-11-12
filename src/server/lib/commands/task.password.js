@@ -11,13 +11,13 @@ class TaskPassword extends Command {
 	}
 
 	async run (taskname, password) {
-		const Tasks = this.Server.Accounts.Tasks;
+		const tasks = this.server.accounts.tasks;
 
-		if (!Tasks.exists(taskname)) {
+		if (!tasks.exists(taskname)) {
 			return 'Task does not exist';
 		}
 
-		Tasks.get(taskname).setPassword(password);
+		tasks.get(taskname).setPassword(password);
 	}
 }
 

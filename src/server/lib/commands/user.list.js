@@ -10,7 +10,7 @@ class UserList extends Command {
 	}
 
 	async run () {
-		const users = this.Server.Accounts.Users.list();
+		const users = this.server.accounts.users.list();
 
 		return users.join(', ');
 	}

@@ -14,15 +14,15 @@ class Account extends EventSystem {
 	constructor (options) {
 		super();
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server      = options.Server;
-		this.Connections = new Connections({
-			Account : this
+		this.server      = options.server;
+		this.connections = new Connections({
+			account : this
 		});
-		this.Commands    = new AccountCommands({
-			Account : this,
-			Server  : options.Server
+		this.commands    = new AccountCommands({
+			account : this,
+			server  : options.server
 		});
 
 		if (options.name.match(/\./)) {
@@ -32,7 +32,7 @@ class Account extends EventSystem {
 		this.name = options.name;
 		this.type = options.type;
 
-		const data = this.Server.Database.get('accounts').find({
+		const data = this.server.database.get('accounts').find({
 			name : this.name
 		}).value() || {};
 
@@ -44,7 +44,7 @@ class Account extends EventSystem {
 		if (!this.#permissions.includes(permission)) {
 			this.#permissions.push(permission);
 
-			this.Server.Database.get('accounts').find({
+			this.server.database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
 		}
@@ -107,7 +107,7 @@ class Account extends EventSystem {
 		if (this.#permissions.includes(permission)) {
 			this.#permissions.splice(this.#permissions.indexOf(permission), 1);
 
-			this.Server.Database.get('accounts').find({
+			this.server.database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
 		}
@@ -121,7 +121,7 @@ class Account extends EventSystem {
 
 		this.#hash = hash;
 
-		this.Server.Database.get('accounts').find({
+		this.server.database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
 	}

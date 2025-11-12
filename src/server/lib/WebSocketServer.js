@@ -17,14 +17,14 @@ class WebSocketServer extends EventSystem {
 	constructor (options) {
 		super();
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server = options.Server;
+		this.server = options.server;
 
-		if (this.Server.settings.ssl) {
+		if (this.server.settings.ssl) {
 			this.#webServer = HTTPS.createServer({
-				cert : FileSystem.readFileSync(this.Server.settings.sslCert),
-				key  : FileSystem.readFileSync(this.Server.settings.sslKey)
+				cert : FileSystem.readFileSync(this.server.settings.sslCert),
+				key  : FileSystem.readFileSync(this.server.settings.sslKey)
 			});
 
 		} else {
@@ -38,13 +38,13 @@ class WebSocketServer extends EventSystem {
 		this.#webSocketServer.on('listening', () => {
 			this.trigger('listening');
 
-			console.log('WebSocketServer listening on port: ' + this.Server.settings.webSocketPort);
+			console.log('WebSocketServer listening on port: ' + this.server.settings.webSocketPort);
 		});
 
 		this.#webSocketServer.on('connection', (webSocket, request) => {
 			const connection = new Connection({
 				request   : request,
-				Server    : this.Server,
+				server    : this.server,
 				webSocket : webSocket
 			});
 			this.trigger('connection', connection);
@@ -56,9 +56,9 @@ class WebSocketServer extends EventSystem {
 	}
 
 	start () {
-		this.#webServer.listen(this.Server.settings.webSocketPort);
+		this.#webServer.listen(this.server.settings.webSocketPort);
 		this.trigger('start', {
-			port : this.Server.settings.webSocketPort
+			port : this.server.settings.webSocketPort
 		});
 	}
 

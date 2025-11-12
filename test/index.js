@@ -3,6 +3,13 @@
 const Path      = require('path');
 const WSConsole = require('../src');
 
+
+/**
+ * TO DO
+ * add multiple database types, or callback like style
+ * documentation
+ * 
+ */
 const server = new WSConsole.server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
@@ -14,7 +21,7 @@ const server = new WSConsole.server({
 	//sslCert       : '/path/to/cert'
 });
 
-const Console = server.Accounts.get('Console', 'user');
+const Console = server.accounts.get('Console', 'user');
 
 const client = new WSConsole.client({
 	path     : 'ws:localhost:9000',
@@ -68,7 +75,7 @@ process.stdin.on('data', async (command) => {
 
 	switch (split[0]) {
 		case 'server' : {
-			console.log(await Console.Commands.run(targetCommand.join(' ') + '\r\n'));
+			console.log(await Console.commands.run(targetCommand.join(' ') + '\r\n'));
 			return;
 		}
 

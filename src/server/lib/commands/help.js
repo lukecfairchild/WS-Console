@@ -11,7 +11,7 @@ class Help extends Command {
 	}
 
 	async run (...args) {
-		const commands = this.Account.Commands.getAll();
+		const commands = this.account.commands.getAll();
 
 		if (args.length === 0) {
 			const results = [];

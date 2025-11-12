@@ -9,10 +9,10 @@ const Server = require('../Server');
 class Database {
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
-		this.Server = options.Server;
+		Type.assert(options.server, Server);
+		this.server = options.server;
 
-		const database = LowDB(new FileSync(Path.resolve(this.Server.settings.dbPath)));
+		const database = LowDB(new FileSync(Path.resolve(this.server.settings.dbPath)));
 
 		database.defaults({
 			accounts : [],

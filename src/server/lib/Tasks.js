@@ -6,41 +6,41 @@ const Server = require('../Server');
 class Tasks {
 	constructor (options) {
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 
-		this.Server = options.Server;
+		this.server = options.server;
 	}
 
 	create (name) {
 		Type.assert(name, String);
 
-		return this.Server.Accounts.create(name, 'task');
+		return this.server.Accounts.create(name, 'task');
 	}
 
 	delete (name) {
 		Type.assert(name, String);
 
-		return this.Server.Accounts.delete(name, 'task');
+		return this.server.accounts.delete(name, 'task');
 	}
 
 	get (name) {
 		Type.assert(name, String);
 
-		return this.Server.Accounts.get(name, 'task');
+		return this.server.accounts.get(name, 'task');
 	}
 
 	getAll () {
-		return this.Server.Accounts.getAll('task');
+		return this.server.accounts.getAll('task');
 	}
 
 	exists (name) {
 		Type.assert(name, String);
 
-		return this.Server.Accounts.exists(name, 'task');
+		return this.server.accounts.exists(name, 'task');
 	}
 
 	list () {
-		return this.Server.Accounts.list('task');
+		return this.server.accounts.list('task');
 	}
 }
 

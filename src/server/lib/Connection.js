@@ -13,13 +13,13 @@ class Connection extends EventSystem {
 		super();
 
 		Type.assert(options, Object);
-		Type.assert(options.Server, Server);
+		Type.assert(options.server, Server);
 		Type.assert(options.webSocket, WebSocket);
 
 		this.authenticated = false;
 		this.id            = Uuid();
 		this.request       = options.request;
-		this.Server        = options.Server;
+		this.server        = options.server;
 		this.webSocket     = options.webSocket;
 
 		const authTimeout = setTimeout(() => {
@@ -43,12 +43,12 @@ class Connection extends EventSystem {
 					return this.disconnect();
 				}
 
-				if (!this.Server.Accounts.exists(json.data.name, json.type)) {
+				if (!this.server.accounts.exists(json.data.name, json.type)) {
 					return this.disconnect();
 				}
 
 				this.trigger('login', json);
-				const account = this.Server.Accounts.get(json.data.name, json.type);
+				const account = this.server.accounts.get(json.data.name, json.type);
 
 				this.#authenticated = account.authenticate(json.data.password);
 
@@ -56,10 +56,10 @@ class Connection extends EventSystem {
 					return this.disconnect();
 				}
 
-				this.Account = account;
+				this.account = account;
 
 				clearTimeout(authTimeout);
-				account.Connections.add(this);
+				account.connections.add(this);
 			}
 
 			if (this.#authenticated) {
@@ -70,17 +70,17 @@ class Connection extends EventSystem {
 						if (json.target === 'console') {
 							this.send({
 								target : 'console',
-								data   : await this.Account.Commands.run(json.data)
+								data   : await this.account.commands.run(json.data)
 							});
 
-						} else if (this.Account.hasPermission(`task.console.${json.target}.command`)
-						&&  this.Server.Accounts.Tasks.exists(json.target)) {
-							const task = this.Server.Accounts.Tasks.get(json.target);
+						} else if (this.account.hasPermission(`task.console.${json.target}.command`)
+						&&  this.server.accounts.tasks.exists(json.target)) {
+							const task = this.server.accounts.tasks.get(json.target);
 
-							task.Connections.send({
+							task.connections.send({
 								action   : 'command',
 								data     : json.data,
-								username : this.Account.name
+								username : this.account.name
 							});
 						}
 
@@ -88,7 +88,7 @@ class Connection extends EventSystem {
 					}
 
 					case 'data' : {
-						this.Account.trigger('data', {
+						this.account.trigger('data', {
 							connection : this,
 							data       : json.data
 						});
