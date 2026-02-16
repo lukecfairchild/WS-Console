@@ -4,7 +4,7 @@ const LowDB    = require('lowdb');
 const Path     = require('path');
 const Type     = require('simpler-types');
 
-const Server = require('../Server');
+const Server = require('..');
 
 class Database {
 	constructor (options) {

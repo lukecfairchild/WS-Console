@@ -3,7 +3,7 @@ const IndentString = require('indent-string');
 const Type         = require('simpler-types');
 
 const Account = require('./Account');
-const Server  = require('../Server');
+const Server  = require('..');
 
 class AccountCommands {
 	constructor (options) {

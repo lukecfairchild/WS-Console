@@ -1,6 +1,6 @@
 
 module.exports = {
-	Client : require('./client/Client'),
-	Task   : require('./task/Task'),
-	Server : require('./server/Server')
+	Client : require('./Client'),
+	Task   : require('./Task'),
+	Server : require('./Server')
 };

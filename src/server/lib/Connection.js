@@ -4,7 +4,7 @@ const Uuid      = require('uuid').v4;
 const WebSocket = require('ws');
 
 const EventSystem = require('../../lib/EventSystem');
-const Server      = require('../Server');
+const Server      = require('..');
 
 class Connection extends EventSystem {
 	#authenticated;

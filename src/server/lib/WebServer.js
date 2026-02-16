@@ -8,7 +8,7 @@ const Type       = require('simpler-types');
 const Url        = require('url');
 
 const EventSystem = require('../../lib/EventSystem');
-const Server      = require('../Server');
+const Server      = require('..');
 
 class WebServer extends EventSystem {
 	constructor (options) {

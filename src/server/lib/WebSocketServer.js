@@ -8,7 +8,7 @@ const HTTPS       = require('https');
 const Type        = require('simpler-types');
 const WebSocket   = require('ws');
 
-const Server = require('../Server');
+const Server = require('..');
 
 class WebSocketServer extends EventSystem {
 	#webServer;

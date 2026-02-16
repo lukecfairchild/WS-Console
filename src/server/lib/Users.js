@@ -1,7 +1,7 @@
 
 const Type = require('simpler-types');
 
-const Server = require('../Server');
+const Server = require('..');
 
 class Users {
 	constructor (options) {

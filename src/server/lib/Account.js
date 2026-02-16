@@ -5,7 +5,7 @@ const Type   = require('simpler-types');
 const AccountCommands = require('./AccountCommands');
 const Connections     = require('./Connections');
 const EventSystem     = require('../../lib/EventSystem');
-const Server          = require('../Server');
+const Server          = require('..');
 
 class Account extends EventSystem {
 	#hash;

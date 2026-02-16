@@ -1,7 +1,7 @@
 
 const Type = require('simpler-types');
 
-const Server = require('../Server');
+const Server = require('..');
 const Task   = require('./Task');
 const Tasks  = require('./Tasks');
 const User   = require('./User');
