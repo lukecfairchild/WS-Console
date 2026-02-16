@@ -1,6 +1,6 @@
 {
   "name": "ws-console",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/letsbuildnet/ws-console.git"
+    "url": "git+https://github.com/lukecfairchild/ws-console.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/letsbuildnet/ws-console/issues"
+    "url": "https://github.com/lukecfairchild/ws-console/issues"
   },
-  "homepage": "https://github.com/letsbuildnet/ws-console#readme",
+  "homepage": "https://github.com/lukecfairchild/ws-console#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "indent-string": "^4.0.0",
