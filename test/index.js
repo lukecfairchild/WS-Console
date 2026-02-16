@@ -3,7 +3,7 @@
 const Path      = require('path');
 const WSConsole = require('../src');
 
-const server = new WSConsole.server({
+const server = new WSConsole.Server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
 	cacheSize     : 300,
@@ -16,7 +16,7 @@ const server = new WSConsole.server({
 
 const Console = server.accounts.get('Console', 'user');
 
-const client = new WSConsole.client({
+const client = new WSConsole.Client({
 	path     : 'ws:localhost:9000',
 	name     : 'user',
 	password : 'pass',
@@ -30,7 +30,7 @@ client.on('message', (event) => {
 server.start();
 client.start();
 
-const wsl = new WSConsole.task({
+const wsl = new WSConsole.Task({
 	path             : 'ws:localhost:9000',
 	name             : 'wsl',
 	password         : 'pass',
@@ -40,7 +40,7 @@ const wsl = new WSConsole.task({
 	command          : 'cmd.exe /c wsl',
 });
 
-const cmd = new WSConsole.task({
+const cmd = new WSConsole.Task({
 	path             : 'ws:localhost:9000',
 	name             : 'cmd',
 	password         : 'pass',
