@@ -1,3 +1,5 @@
+This project is still very much a work in progress
+
 TO DO
 	ensure Console cant have its permissions changed
 	add multiple database types, or callback like style
