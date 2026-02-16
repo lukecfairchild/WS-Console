@@ -1,6 +1,6 @@
 # This project is still very much a work in progress
 
-## TO DO:
+### TO DO:
 ```
 	ensure Console cant have its permissions changed
 	add multiple database types, or callback like style
@@ -10,7 +10,7 @@
 ```
 
 
-## Structure:
+### Structure:
 ```
 	WSConsole
 		Server
@@ -134,7 +134,7 @@
 					}
 					disconnect {}
 ```
-## Server Commands:
+### Server Commands:
 ```
 	help
 	logout
