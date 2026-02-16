@@ -11,32 +11,33 @@ class Tasks {
 		this.server = options.server;
 	}
 
-	create (name) {
-		Type.assert(name, String);
+	create (taskname) {
+		Type.assert(taskname, String);
 
-		return this.server.Accounts.create(name, 'task');
+		return this.server.Accounts.create(taskname, 'task');
 	}
 
-	delete (name) {
-		Type.assert(name, String);
+	delete (taskname) {
+		Type.assert(taskname, String);
+		const task = this.server.accounts.get(taskname, 'task');
 
-		return this.server.accounts.delete(name, 'task');
+		return task.delete();
 	}
 
-	get (name) {
-		Type.assert(name, String);
+	get (taskname) {
+		Type.assert(taskname, String);
 
-		return this.server.accounts.get(name, 'task');
+		return this.server.accounts.get(taskname, 'task');
 	}
 
 	getAll () {
 		return this.server.accounts.getAll('task');
 	}
 
-	exists (name) {
-		Type.assert(name, String);
+	exists (taskname) {
+		Type.assert(taskname, String);
 
-		return this.server.accounts.exists(name, 'task');
+		return this.server.accounts.exists(taskname, 'task');
 	}
 
 	list () {

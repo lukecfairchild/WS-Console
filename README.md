@@ -1,122 +1,129 @@
+TO DO
+	ensure Console cant have its permissions changed
+	add multiple database types, or callback like style
 
-WSConsole
-	Server
-		.start()
-		.stop()
-		.users
-			.get(username) User
-			.getAll() [User]
-			.create() User
-			.exists(username) Boolean
-			.delete(username) Boolean
-		.tasks
-			.get(taskname) Task
-			.getAll() [Task]
-			.create() Task
-			.exists(taskname) Boolean
-			.delete(taskname) Boolean
+Structure:
+	WSConsole
+		Server
+			.start()
+			.stop()
+			.accounts // Most of the logic for users and tasks is contained within accounts, we may want to move that to their respective classes.
+				.users
+					.get(username) User
+					.getAll() [User]
+					.create() User
+					.exists(username) Boolean
+					.delete(username) Boolean
+				.tasks
+					.create(taskname) Task
+					.delete(taskname) Boolean
+					.get(taskname) Task
+					.getAll() [Task]
+					.exists(taskname) Boolean
+					.list() Boolean
 
-		User
-			.name String
-			.type String
-			.permissions
-				.add(permission)
-				.getAll() [String]
-				.has(permission) Boolean
-				.remove(permission)
-			.connections
-				.add(connection)
-				.disconnect()
-				.getAll() [Connection]
-				.send()
-			.roles
-				.add(role)
-				.getAll()
-				.has(role)
-				.remove(role)
+			User
+				.name String
+				.type String
+				.permissions
+					.add(permission)
+					.getAll() [String]
+					.has(permission) Boolean
+					.remove(permission)
+				.connections
+					.add(connection)
+					.disconnect()
+					.getAll() [Connection]
+					.send()
+				.roles
+					.add(role)
+					.getAll()
+					.has(role)
+					.remove(role)
 
-			.delete()
-			.on(event, callback)
-			.removeEventListener(event, callback)
-			.send(data)
-			.setPassword(password)
-
-
-		Task
-			.name
-			.type
-			.connections
-				.add(connection)
-				.disconnect()
-				.getAll()
+				.delete()
+				.on(event, callback)
+				.removeEventListener(event, callback)
 				.send(data)
-			.delete()
-			.on(event, callback)
-			.removeEventListener(event, callback)
-			.setPassword(password)
+				.setPassword(password)
 
-		Connection
-			.authenticate(credentials)
-			.diconnect()
-			.on()
-			.send(message)
-			.trigger(event, data)
 
-		Permissions
-			help (globalize)
-			logout (globalize)
-			password (globalize)
-			server.create
-			server.delete
-			server.list
-			server.logout
-			server.password
-			user.create
-			user.delete
-			user.list
-			user.logout
-			user.password
-			user.permission.add
-			user.permission
-			user.permission.list
-			user.permission.remove
+			Task
+				.name
+				.type
+				.connections
+					.add(connection)
+					.disconnect()
+					.getAll()
+					.send(data)
+				.delete()
+				.on(event, callback)
+				.removeEventListener(event, callback)
+				.setPassword(password)
 
-			console.[name]
-			console.[name].command
+			Connection
+				.authenticate(credentials)
+				.diconnect()
+				.on()
+				.send(message)
+				.trigger(event, data)
 
-	Task
-		.connect()
-		.disconnect()
-		.log(data)
+			Permissions
+				help (globalize)
+				logout (globalize)
+				password (globalize)
+				server.create
+				server.delete
+				server.list
+				server.logout
+				server.password
+				user.create
+				user.delete
+				user.list
+				user.logout
+				user.password
+				user.permission.add
+				user.permission
+				user.permission.list
+				user.permission.remove
 
-	Client
-		.on(event, callback)
-			connect
-			disconnect
-			taskConnect {
-				Task
-			}
-			taskDisconnect {
-				Task
-			}
-			taskData {
-				Task,
-				data
-			}
-
-		.connect()
-		.disconnect()
-		.Tasks
-			.get(name) Task
-			.getAll() [Task]
+				console.[name]
+				console.[name].command
 
 		Task
-			.send(data)
+			.connect()
+			.disconnect()
+			.log(data)
+
+		Client
 			.on(event, callback)
-				data {
+				connect
+				disconnect
+				taskConnect {
+					Task
+				}
+				taskDisconnect {
+					Task
+				}
+
+				taskData {
+					Task,
 					data
 				}
-				disconnect {}
+
+			.connect()
+			.disconnect()
+			.Tasks
+				.get(name) Task
+				.getAll() [Task]
+
+			Task
+				.send(data)
+				.on(event, callback)
+					data {
+						data
+					}
+					disconnect {}
 
 Server Commands
 	help

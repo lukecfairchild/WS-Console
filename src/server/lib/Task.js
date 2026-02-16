@@ -17,8 +17,9 @@ class Task extends Account {
 		});
 
 		this.on('data', (event) => {
-console.log('pushing to cache', event.data.join(''));
-			this.cache.push(event.data.join(''));
+			const data = event.data instanceof Array ? event.data.join('') : event.data;
+
+			this.cache.push(data);
 
 			const accounts = this.server.accounts.users.getAll();
 			for (let i in accounts) {
@@ -32,10 +33,6 @@ console.log('pushing to cache', event.data.join(''));
 					});
 				}
 			}
-		});
-
-		this.connections.on('data', (event) => {
-			//console.log('task send data', event);
 		});
 
 		this.connections.on('login', () => {
@@ -61,8 +58,6 @@ console.log('pushing to cache', event.data.join(''));
 			}
 		});
 	}
-
-	disconnect () {}
 }
 
 module.exports = Task;

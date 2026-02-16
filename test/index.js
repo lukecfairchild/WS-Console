@@ -3,12 +3,6 @@
 const Path      = require('path');
 const WSConsole = require('../src');
 
-
-/**
- * TO DO
- * add multiple database types, or callback like style
- * documentation
- */
 const server = new WSConsole.server({
 	webSocketPort : 9000,
 	webServerPort : 8081,
@@ -35,37 +29,27 @@ client.on('message', (event) => {
 
 server.start();
 client.start();
-/*
-const task = new WSConsole.task({
+
+const wsl = new WSConsole.task({
 	path             : 'ws:localhost:9000',
-	name             : 'task',
+	name             : 'wsl',
 	password         : 'pass',
 	useStdin         : false,
 	allowRemoteInput : true,
-	command          : [
-		'node',
-		Path.join(__dirname, 'test_process.js')
-	]
+	prependTaskName  : true,
+	command          : 'cmd.exe /c wsl',
 });
 
-task.on('ready', () => {
-	task.send('[Task] Ready');
-});*/
-const task2 = new WSConsole.task({
+const cmd = new WSConsole.task({
 	path             : 'ws:localhost:9000',
-	name             : 'task2',
+	name             : 'cmd',
 	password         : 'pass',
 	useStdin         : false,
 	allowRemoteInput : true,
-	command          : [
-		'cmd.exe'
-	]
+	prependTaskName  : true,
+	command          : 'cmd.exe'
 });
-/*
-task2.on('ready', () => {
-	task2.send('[Task 2] Ready');
-});
-*/
+
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', async (command) => {
@@ -86,14 +70,14 @@ process.stdin.on('data', async (command) => {
 			});
 			return;
 		}
-/*
-		case 'task' : {
-			task.process.stdin.write(targetCommand.join(' ') + '\n');
+
+		case 'wsl' : {
+			wsl.process.stdin.write(targetCommand.join(' ') + '\n');
 			return;
 		}
-*/
-		case 'task2' : {
-			task2.process.stdin.write(targetCommand.join(' ') + '\n');
+
+		case 'cmd' : {
+			cmd.process.stdin.write(targetCommand.join(' ') + '\n');
 			return;
 		}
 	}

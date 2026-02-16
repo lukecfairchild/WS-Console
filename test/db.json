@@ -24,14 +24,14 @@
       "type": "user"
     },
     {
-      "name": "task",
+      "name": "cmd",
       "hash": "$2a$10$NRVmB4ixDT1.FViHGHXa8eiHZNCwAuL/p7On8Gj4dP3Ew3HwjHyYO",
       "permissions": [],
       "roles": [],
       "type": "task"
     },
     {
-      "name": "task2",
+      "name": "wsl",
       "hash": "$2a$10$NRVmB4ixDT1.FViHGHXa8eiHZNCwAuL/p7On8Gj4dP3Ew3HwjHyYO",
       "permissions": [],
       "roles": [],

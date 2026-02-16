@@ -12,6 +12,8 @@ class Task extends EventSystem {
 		this.cache   = new Cache(options.cacheSize);
 		this.options = options;
 
+		if (typeof this.options.command === 'string') this.options.command = this.options.command.split(' ')
+
 		this.#startWebSocket();
 		this.#startTask();
 
@@ -111,7 +113,11 @@ class Task extends EventSystem {
 
 			this.cache.push(data);
 
-			process.stdout.write(data + '\n');
+			const prepend = this.options.prependTaskName ? `[${this.options.name}] ` : '';
+
+			const log = data.replace(/[\n]/g, '\n' + prepend);
+			process.stdout.write(prepend + log + '\n');
+
 			this.websocket.send(JSON.stringify({
 				type   : 'task',
 				action : 'data',

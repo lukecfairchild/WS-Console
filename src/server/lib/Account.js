@@ -47,13 +47,27 @@ class Account extends EventSystem {
 			this.server.database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
+			this.trigger('addPermission', permission);
 		}
 	}
 
 	authenticate (password) {
 		Type.assert(password, String);
 
-		return bcrypt.compareSync(password, this.#hash);
+		const authenticate = bcrypt.compareSync(password, this.#hash);
+
+		this.trigger('addPermission', authenticate);
+
+		return authenticate;
+	}
+
+	delete () {
+		this.disconnect();
+		this.server.accounts.delete(this.name, this.type);
+	}
+
+	disconnect () {
+		this.connections.disconnect();
 	}
 
 	getPermissions () {
@@ -110,6 +124,7 @@ class Account extends EventSystem {
 			this.server.database.get('accounts').find({
 				name : this.name
 			}).set('permissions', this.#permissions).write();
+			this.trigger('removePermission', permission);
 		}
 	}
 
@@ -124,6 +139,7 @@ class Account extends EventSystem {
 		this.server.database.get('accounts').find({
 			name : this.name
 		}).set('hash', hash).write();
+		this.trigger('passwordChange');
 	}
 }
 
