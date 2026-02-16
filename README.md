@@ -1,10 +1,16 @@
-This project is still very much a work in progress
+#This project is still very much a work in progress
 
-TO DO:
+##TO DO:
+```
 	ensure Console cant have its permissions changed
 	add multiple database types, or callback like style
+	account names character restrictions
+	account names character limits
+	account password character limits
+```
 
-Structure:
+
+##Structure:
 ```
 	WSConsole
 		Server
@@ -128,7 +134,7 @@ Structure:
 					}
 					disconnect {}
 ```
-Server Commands:
+##Server Commands:
 ```
 	help
 	logout
@@ -152,11 +158,4 @@ Server Commands:
 	user permission remove <name> <permission>
 	connections list [name]
 	connections logout <connection>
-```
-
-TO DO:
-```
-	account names character restrictions
-	account names character limits
-	account password character limits
 ```
