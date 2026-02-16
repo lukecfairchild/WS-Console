@@ -1,4 +1,4 @@
-# 🚨 **THIS PROJECT IS A WORK IN PROGRESS!** 🚨
+# 🚨**THIS PROJECT IS A WORK IN PROGRESS**🚨
 Things may change or break along the way. Feed back is very welcome!
 
 ### TO DO:
